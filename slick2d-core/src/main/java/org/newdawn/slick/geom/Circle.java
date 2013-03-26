@@ -59,7 +59,7 @@ public strictfp class Circle extends Ellipse {
 	 * 
 	 * @return 2-element array with the center of the circle.
 	 */
-	@Override
+	
 	public float[] getCenter() {
 		return new float[] { getCenterX(), getCenterY() };
 	}
