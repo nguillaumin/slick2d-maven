@@ -8,6 +8,33 @@
 	</parent>
 
 	<artifactId>slick2d-peditor</artifactId>
+	<packaging>jar</packaging>
+
+	<name>Slick2D particle editor</name>
+	<description>GUI tool to edit Slick 2D particle systems</description>
+	<url>https://github.com/nguillaumin/slick2d-maven/</url>
+	<licenses>
+		<license>
+			<name>The BSD 3-Clause License</name>
+			<url>http://www.slick2d.org/documentation/license-bsd/</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<id>nguillaumin</id>
+			<name>Nicolas Guillaumin</name>
+			<url>https://github.com/nguillaumin/</url>
+			<roles>
+				<role>Maven packager</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>slick2d-developers</id>
+			<name>Slick 2D developers</name>
+			<url>https://bitbucket.org/kevglass/slick/</url>
+		</developer>
+	</developers>
 
 	<dependencies>
 		<dependency>

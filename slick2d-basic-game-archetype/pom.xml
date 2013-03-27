@@ -6,8 +6,40 @@
 		<artifactId>slick2d-parent</artifactId>
 		<version>2013.03-SNAPSHOT</version>
 	</parent>
-	
+
 	<artifactId>slick2d-basic-game-archetype</artifactId>
+	<packaging>jar</packaging>
+
+	<name>Slick2D game project archetype</name>
+	<description>Maven archetype for a Slick2D based game</description>
+	<url>https://github.com/nguillaumin/slick2d-maven/</url>
+	<licenses>
+		<license>
+			<name>The BSD 3-Clause License</name>
+			<url>http://www.slick2d.org/documentation/license-bsd/</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<id>nguillaumin</id>
+			<name>Nicolas Guillaumin</name>
+			<url>https://github.com/nguillaumin/</url>
+			<roles>
+				<role>Maven packager</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>slick2d-developers</id>
+			<name>Slick 2D developers</name>
+			<url>https://bitbucket.org/kevglass/slick/</url>
+		</developer>
+	</developers>
+
+	<scm>
+		<url>git@github.com:nguillaumin/slick2d-maven.git</url>
+		<connection>scm:git:git@github.com:nguillaumin/slick2d-maven.git</connection>
+	</scm>
 
 	<build>
 		<resources>
