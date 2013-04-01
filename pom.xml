@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.slick2d</groupId>
 	<artifactId>slick2d-parent</artifactId>
-	<version>2013.03-SNAPSHOT</version>
+	<version>2013.04-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Slick2D Maven distribution - parent</name>
