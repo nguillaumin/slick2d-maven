@@ -10,7 +10,7 @@ Assuming you already have Git, Java and Maven working:
 
 ```
 git clone git://github.com/nguillaumin/slick2d-maven.git
-cd slick-maven
+cd slick2d-maven
 mvn clean install
 ```
 
