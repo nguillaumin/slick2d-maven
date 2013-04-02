@@ -4,7 +4,10 @@ The fastest and simplest way to start a new [Slick 2D](http://www.slick2d.org/) 
 
 ### Quickstart
 
-Assuming you already have Git, Java and Maven working:
+Pre-requisites:
+* Git, Java and Maven working
+* Slick 2D depends on `jnlp.jar` which ships with the "Demo and Samples" package of the JDK. This package must be installed to build the project. With Java 6 it's a box to tick when installing the JDK, and with Java 7 it's a separate download.
+* Won't work with OpenJDK for the reason above (Can be solved by providing `jnlp.jar` separately)
 
 #### Clone and build the project (once)
 
