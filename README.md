@@ -58,7 +58,7 @@ I believe making Slick 2D available through Maven will make life easier for user
 
 Slick 2D is currently using Ant for building and unfortunately there doesn't seem to be much interest in switching to Maven, despite numerous posts in the forums as well as some pull request on the Slick 2D repo to implement that switch.
 
-I've already tried, and I'll try again :) I hope that this project will convince the Slick 2D maintainers that switching Maven is worth it.
+I've already tried, and I'll try again :) I hope that this project will convince the Slick 2D maintainers that switching to Maven is worth it.
 
 ### How ?
 
