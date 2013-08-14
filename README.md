@@ -6,8 +6,8 @@ The fastest and simplest way to start a new [Slick 2D](http://www.slick2d.org/) 
 
 Pre-requisites:
 * Git, Java and Maven working
-* Slick 2D depends on `jnlp.jar` which ships with the "Demo and Samples" package of the JDK (With Java 6 it's a box to tick when installing the JDK, and with Java 7 it's a separate download). This package **must be installed** to build the project, as `jnlp.jar` is not available in the public Maven repositories. The `pom.xml` file references a *local filesystem path* to `jnlp.jar` for that reason.
-* Won't work with OpenJDK for the reason above (Can be solved by providing `jnlp.jar` separately)
+* Slick 2D depends on `javaws.jar` which ships with the Oracle JDK (It's not available in the public Maven repositories). The `pom.xml` file references a *local filesystem path* to `javaws.jar` for that reason.
+* It won't work with OpenJDK for the reason above (Can be solved by providing `javaws.jar` separately). On some Linux distributions you can install [Netx](http://jnlp.sourceforge.net/netx/) and change the system path to point to `netx.jar`. For example on Ubuntu the package to install is `icedtea-netx-common` and the jar is in `/usr/share/icedtea-web/netx.jar`.
 
 #### Clone and build the project (once)
 

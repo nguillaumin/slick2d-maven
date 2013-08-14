@@ -48,7 +48,7 @@
 			<artifactId>jnlp-api</artifactId>
 			<version>5.0</version>
 			<scope>system</scope>
-			<systemPath>${java.home}/../sample/jnlp/servlet/jnlp.jar</systemPath>
+			<systemPath>${java.home}/lib/javaws.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org.jcraft</groupId>
