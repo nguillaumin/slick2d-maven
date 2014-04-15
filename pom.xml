@@ -35,6 +35,7 @@
 	<scm>
 		<url>git@github.com:nguillaumin/slick2d-maven.git</url>
 		<connection>scm:git:git@github.com:nguillaumin/slick2d-maven.git</connection>
+		<developerConnection>scm:git:git@github.com:nguillaumin/slick2d-maven.git</developerConnection>
 	</scm>
 
 	<modules>
