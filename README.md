@@ -23,7 +23,7 @@ mvn clean install
 cd /home/<user>/projects/   -or-   cd C:\Users\<user>\Projects\
 
 # You can omit the last 4 parameters for interactive mode
-mvn archetype:generate -DarchetypeGroupId=org.slick2d -DarchetypeArtifactId=slick2d-basic-game-archetype -DarchetypeVersion=2013.10-SNAPSHOT -DgroupId=com.me.game -DartifactId=game -Dversion=0.0.1-SNAPSHOT -Dpackage=com.me.game
+mvn archetype:generate -DarchetypeGroupId=org.slick2d -DarchetypeArtifactId=slick2d-basic-game-archetype -DarchetypeVersion=2014.04-SNAPSHOT -DgroupId=com.me.game -DartifactId=game -Dversion=0.0.1-SNAPSHOT -Dpackage=com.me.game
 
 cd game
 mvn clean package
