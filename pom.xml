@@ -158,6 +158,7 @@
 					<useReleaseProfile>false</useReleaseProfile>
 					<releaseProfiles>release</releaseProfiles>
 					<pushChanges>false</pushChanges>
+					<tagNameFormat>@{project.version}</tagNameFormat>
 					<goals>deploy</goals>
 				</configuration>
 			</plugin>
