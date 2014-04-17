@@ -2,7 +2,8 @@
 
 ## Next release
 
-* ...
+* Now using Java 7 source level
+* Bumped all plugins / dependencies to latest versions
 
 ## v1.0.0 (2014-04-16)
 
