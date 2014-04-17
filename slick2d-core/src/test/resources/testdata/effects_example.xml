@@ -1,0 +1,4 @@
+<effects>
+  <effect class="org.newdawn.slick.tools.hiero.effects.ColorEffect"/>
+  <effect class="org.newdawn.slick.tools.hiero.effects.GradientEffect"/>
+</effects>

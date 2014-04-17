@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system additive="true" points="false">
+  <emitter imageName="" name="explosion" renderType="inherit">
+    <spawnInterval enabled="false" max="100.0" min="100.0"/>
+    <spawnCount enabled="false" max="5.0" min="5.0"/>
+    <initialLife enabled="false" max="1000.0" min="1000.0"/>
+    <initialSize enabled="false" max="10.0" min="10.0"/>
+    <xOffset enabled="true" max="0.0" min="0.0"/>
+    <yOffset enabled="true" max="0.0" min="0.0"/>
+    <initialDistance enabled="false" max="0.0" min="0.0"/>
+    <speed enabled="false" max="50.0" min="50.0"/>
+    <length enabled="true" max="1500.0" min="0.0"/>
+    <spread linear="false" value="360.0"/>
+    <angularOffset linear="false" value="0.0"/>
+    <growthFactor linear="false" value="88.0"/>
+    <gravityFactor linear="false" value="0.0"/>
+    <windFactor linear="false" value="0.0"/>
+    <startAlpha linear="false" value="255.0"/>
+    <endAlpha linear="false" value="0.0"/>
+    <color>
+      <step b="1.0" g="1.0" offset="0.0" r="1.0"/>
+      <step b="0.0" g="1.0" offset="0.616" r="1.0"/>
+      <step b="0.0" g="0.0" offset="1.0" r="1.0"/>
+    </color>
+  </emitter>
+  <emitter imageName="" name="smallbits" renderType="inherit">
+    <spawnInterval enabled="false" max="100.0" min="100.0"/>
+    <spawnCount enabled="false" max="5.0" min="5.0"/>
+    <initialLife enabled="false" max="1000.0" min="1000.0"/>
+    <initialSize enabled="false" max="10.0" min="10.0"/>
+    <xOffset enabled="true" max="0.0" min="0.0"/>
+    <yOffset enabled="true" max="0.0" min="0.0"/>
+    <initialDistance enabled="false" max="0.0" min="0.0"/>
+    <speed enabled="true" max="80.0" min="80.0"/>
+    <length enabled="true" max="1200.0" min="1000.0"/>
+    <spread linear="false" value="360.0"/>
+    <angularOffset linear="false" value="0.0"/>
+    <growthFactor linear="false" value="19.0"/>
+    <gravityFactor linear="false" value="0.0"/>
+    <windFactor linear="false" value="0.0"/>
+    <startAlpha linear="false" value="255.0"/>
+    <endAlpha linear="false" value="0.0"/>
+    <color>
+      <step b="1.0" g="1.0" offset="0.0" r="1.0"/>
+      <step b="0.0" g="1.0" offset="0.616" r="1.0"/>
+      <step b="0.0" g="0.0" offset="1.0" r="1.0"/>
+    </color>
+  </emitter>
+</system>

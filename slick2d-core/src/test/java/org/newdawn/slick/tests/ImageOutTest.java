@@ -1,5 +1,6 @@
 package org.newdawn.slick.tests;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.newdawn.slick.AppGameContainer;
@@ -98,13 +99,13 @@ public class ImageOutTest extends BasicGame {
 		fire.update(delta);
 		
 		if (container.getInput().isKeyPressed(Input.KEY_P)) {
-			writeTo("ImageOutTest.png");
+			writeTo(System.getProperty("java.io.tmpdir") + File.separator + "ImageOutTest.png");
 		}
 		if (container.getInput().isKeyPressed(Input.KEY_J)) {
-			writeTo("ImageOutTest.jpg");
+			writeTo(System.getProperty("java.io.tmpdir") + File.separator + "ImageOutTest.jpg");
 		}
 		if (container.getInput().isKeyPressed(Input.KEY_T)) {
-			writeTo("ImageOutTest.tga");
+			writeTo(System.getProperty("java.io.tmpdir") + File.separator + "ImageOutTest.tga");
 		}
 	}
 

@@ -1,0 +1,15 @@
+#
+#Sat Apr 26 21:53:09 BST 2008
+texture.width=512
+font.italic=false
+font.bold=false
+padding.bottom=10
+texture.height=512
+charset.name=NEHE
+padding.top=10
+font.size=32
+padding.advance=0
+font.name=Arial
+effects.count=0
+padding.right=10
+padding.left=10

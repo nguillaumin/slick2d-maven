@@ -1,0 +1,21 @@
+<testRoot>
+	<simple>Here is some content that I'd like to be read over
+many lines. And then some more text that could
+be useful in the game.
+	<!-- test comment -->
+Some more text
+    </simple>
+
+	<other x="5.3" y="5.4"/>
+	
+	<parent name="arnold" age="5"> 
+		<child name="sarah" age="8">
+			<grandchild name="bob" age="1">
+			</grandchild>
+			<grandchild name="sam" age="2">
+			</grandchild>
+		</child>
+		<child name="henry" age="44">
+		</child>
+	</parent>
+</testRoot>

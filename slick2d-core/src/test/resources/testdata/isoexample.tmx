@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map SYSTEM "http://mapeditor.org/dtd/1.0/map.dtd">
+<map version="1.0" orientation="isometric" width="10" height="10" tilewidth="64" tileheight="32">
+ <tileset name="Untitled" firstgid="1" tilewidth="64" tileheight="64">
+  <image source="isotiles.png"/>
+ </tileset>
+ <layer name="Layer 0" width="10" height="10">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAAGNkYGBgJBIzEeCTYwYx5pBjDzXMIMetlLoHAAJvucOQAQAA
+  </data>
+ </layer>
+</map>

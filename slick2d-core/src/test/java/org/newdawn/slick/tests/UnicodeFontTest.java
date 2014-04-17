@@ -37,7 +37,7 @@ public class UnicodeFontTest extends BasicGame {
 		container.setShowFPS(false);
 
 		// unicodeFont = new UnicodeFont(Font.decode("Arial Unicode MS"), 25, false, false);
-		unicodeFont = new UnicodeFont("c:/windows/fonts/arial.ttf", 48, false, false);
+		unicodeFont = new UnicodeFont("testdata/Lato-Thin.ttf", 48, false, false);
 //		unicodeFont.setPaddingBottom(10);
 //		unicodeFont.setPaddingRight(10);
 //		unicodeFont.setPaddingAdvanceX(-10);

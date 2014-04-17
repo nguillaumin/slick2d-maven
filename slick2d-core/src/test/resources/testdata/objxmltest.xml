@@ -1,0 +1,19 @@
+<GameData>
+	<Entity x="3.4" y="3.9">
+		<Inventory>
+			<Item name="sword" condition="90"/>
+			<Item name="amulet" condition="30"/>
+			<Bag name="Big Bag">
+				<Item name="wand" condition="100"/>
+			</Bag>
+		</Inventory>
+		<Stats hp="100" mp="100" age="30" exp="10000"/>
+	</Entity>
+	<Entity x="4.5" y="3.7">
+		<Inventory>
+			<Item name="sword" condition="30"/>
+			<Item name="shield" condition="40"/>
+		</Inventory>
+		<Stats hp="60" mp="60" age="20" exp="100"/>
+	</Entity>
+</GameData>

@@ -1,0 +1,35 @@
+#
+#Sun May 13 13:12:53 BST 2007
+effect2.name=BlurShadowEffect (jos)
+effect2.blue=0
+texture.width=512
+effect2.red=0
+effect0.top.red=255
+font.size=39
+padding.bottom=1
+font.bold=false
+effect0.bottom.green=0
+texture.height=256
+effect2.opacity=0.5
+effect0.top.green=153
+effect2.kernelsize=3.0
+effect2.distance=3.0
+effect1.red=0
+padding.left=1
+padding.advance=2
+font.name=Big Truck
+effect2.green=0
+effect0.bottom.blue=0
+effect1.green=0
+charset.name=NEHE
+font.italic=false
+effects.count=3
+effect0.bottom.red=153
+effect0.name=Gradient Effect
+effect1.width=1.0
+padding.right=1
+effect0.top.blue=153
+effect2.passes=1.0
+padding.top=1
+effect1.name=OutlineEffect
+effect1.blue=0
