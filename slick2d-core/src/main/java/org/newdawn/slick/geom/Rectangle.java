@@ -37,6 +37,8 @@ public class Rectangle extends Shape {
 	 * @return True if the point is within the rectangle
 	 */
 	public boolean contains(float xp, float yp) {
+	    checkPoints();
+	    
 		if (xp <= getX()) {
 			return false;
 		}
