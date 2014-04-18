@@ -181,7 +181,7 @@ public class InputTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#mouseMoved(int, int, int, int)
 	 */
-	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
 		if (buttonDown) {
 			lines.add(new Line(oldx,oldy,newx,newy));
 		}
