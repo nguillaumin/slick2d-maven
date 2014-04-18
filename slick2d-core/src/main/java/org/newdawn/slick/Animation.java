@@ -322,6 +322,7 @@ public class Animation implements Renderable {
 	 * @param x The x position to draw the animation at
 	 * @param y The y position to draw the animation at
 	 */
+	@Override
 	public void draw(float x,float y) {
 		draw(x,y,getWidth(),getHeight());
 	}
@@ -333,6 +334,7 @@ public class Animation implements Renderable {
 	 * @param y The y position to draw the animation at
 	 * @param filter The filter to apply
 	 */
+	@Override
 	public void draw(float x,float y, Color filter) {
 		draw(x,y,getWidth(),getHeight(), filter);
 	}
@@ -345,6 +347,7 @@ public class Animation implements Renderable {
 	 * @param width The width to draw the animation at
 	 * @param height The height to draw the animation at
 	 */
+	@Override
 	public void draw(float x,float y,float width,float height) {
 		draw(x,y,width,height,Color.white);
 	}
@@ -358,6 +361,7 @@ public class Animation implements Renderable {
 	 * @param height The height to draw the animation at
 	 * @param col The colour filter to use
 	 */
+	@Override
 	public void draw(float x,float y,float width,float height, Color col) {
 		if (frames.size() == 0) {
 			return;

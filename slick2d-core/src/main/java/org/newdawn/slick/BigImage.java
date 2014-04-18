@@ -292,6 +292,7 @@ public class BigImage extends Image {
 	/**
 	 * @see org.newdawn.slick.Image#draw(float, float, org.newdawn.slick.Color)
 	 */
+	@Override
 	public void draw(float x, float y, Color filter) {
 		draw(x,y,width,height,filter);
 	}
@@ -306,6 +307,7 @@ public class BigImage extends Image {
 	/**
 	 * @see org.newdawn.slick.Image#draw(float, float, float, float, org.newdawn.slick.Color)
 	 */
+	@Override
 	public void draw(float x, float y, float width, float height, Color filter) {
 		float sx = width / realWidth;
 		float sy = height / realHeight;
@@ -363,6 +365,7 @@ public class BigImage extends Image {
 	/**
 	 * @see org.newdawn.slick.Image#draw(float, float, float, float)
 	 */
+	@Override
 	public void draw(float x, float y, float width, float height) {
 		draw(x,y,width,height,Color.white);
 	}
@@ -377,6 +380,7 @@ public class BigImage extends Image {
 	/**
 	 * @see org.newdawn.slick.Image#draw(float, float)
 	 */
+	@Override
 	public void draw(float x, float y) {
 		draw(x,y,Color.white);
 	}

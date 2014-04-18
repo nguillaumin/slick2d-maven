@@ -5,6 +5,7 @@
 * Now using Java 7 source level
 * Bumped all plugins / dependencies to latest versions
 * Moved all `slick2d-core` tests in `src/test/` and added test data. Test classes are not shipped any more in the main JAR
+* Updated `Renderable` to include more `draw()` methods common to all implementations, thanks to [lucas_cimon](https://bitbucket.org/kevglass/slick/pull-request/15/making-renderable-class-more-polymorphic/diff)
 
 ## v1.0.0 (2014-04-16)
 
