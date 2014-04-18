@@ -36,6 +36,7 @@ public class SpriteSheetFontTest extends BasicGame {
       g.setBackground(Color.gray);
       font.drawString(80, 5, "A FONT EXAMPLE", Color.red);
       font.drawString(100, 50, "A MORE COMPLETE LINE");
+      font.drawString(0, 90, "AND WITH INDEXES INDEED", Color.red, 4, 15);
    }
 
    /**
