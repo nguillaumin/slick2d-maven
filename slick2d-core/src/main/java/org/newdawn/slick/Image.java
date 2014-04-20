@@ -1205,6 +1205,7 @@ public class Image implements Renderable {
 	 * 
 	 * @param scale The scale to apply
 	 * @return The new scaled image
+	 * @see {{@link #getScaledCopy(int, int)} for caveats
 	 */
 	public Image getScaledCopy(float scale) {
 		init();
@@ -1212,7 +1213,21 @@ public class Image implements Renderable {
 	}
 	
 	/**
-	 * Get a scaled copy of this image
+	 * <p>Get a scaled copy of this image.</p>
+	 * 
+	 * <p>This will only scale the <strong>canvas</strong>, it will not
+	 * scale the underlying texture data. For a downscale, the texture will
+	 * get clipped. For an upscale, the texture will be repetated on both axis</p>
+	 * 
+	 * <p>Also note that the underlying texture might be bigger than the initial
+	 * image that was loaded because its size is fixed to the next power of two
+	 * of the size of the image. So if a 100x100 image was loaded, the underlying texture
+	 * is 128x128. If it's then scaled to 200x200, there will be a gap
+	 * between 100 to 128 (black), and then the texture will be repeated.</p>
+	 * 
+	 * <img src="doc-files/Image-getScaledCopy.png" />
+	 * 
+	 * <p>This especially has nasty side effects when you scale a flipped image...</p>
 	 * 
 	 * @param width The width of the copy
 	 * @param height The height of the copy
@@ -1225,6 +1240,12 @@ public class Image implements Renderable {
 		image.height = height;
 		image.centerX = width / 2;
 		image.centerY = height / 2;
+		
+		image.textureOffsetX *= (width/(float) this.width);
+		image.textureOffsetY *= (height/(float) this.height);
+		image.textureWidth *= (width/(float) this.width);
+		image.textureHeight *= (height/(float) this.height);
+
 		return image;
 	}
 	
@@ -1244,6 +1265,7 @@ public class Image implements Renderable {
 	 * @param flipHorizontal True if we want to flip the image horizontally
 	 * @param flipVertical True if we want to flip the image vertically
 	 * @return The flipped image instance
+	 * @see {{@link #getScaledCopy(int, int)} for caveats on scaled images
 	 */
 	public Image getFlippedCopy(boolean flipHorizontal, boolean flipVertical) {
 		init();
@@ -1342,9 +1364,11 @@ public class Image implements Renderable {
 	 * @return The Color of the pixel at the specified location
 	 */
 	public Color getColor(int x, int y) {
+	    
 		if (pixelData == null) {
 			pixelData = texture.getTextureData();
 		}
+		
 		
 		int xo = (int) (textureOffsetX * texture.getTextureWidth());
 		int yo = (int) (textureOffsetY * texture.getTextureHeight());
@@ -1361,6 +1385,10 @@ public class Image implements Renderable {
 			y = yo + y;
 		}
 		
+		// Clamp to texture dimensions
+		x %= texture.getTextureWidth();
+		y %= texture.getTextureHeight();
+
 		int offset = x + (y * texture.getTextureWidth());
 		offset *= texture.hasAlpha() ? 4 : 3;
 		

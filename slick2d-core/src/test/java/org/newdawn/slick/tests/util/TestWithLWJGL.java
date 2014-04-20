@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.testng.annotations.BeforeTest;
 
-public class TestWithLWJGL {
+public abstract class TestWithLWJGL {
 
     @BeforeTest
     public void setLWJGLLibraryPath() {

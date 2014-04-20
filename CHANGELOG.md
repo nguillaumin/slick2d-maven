@@ -10,6 +10,7 @@
 * Fixed `AppContainer.setMouseCursor()` by using correct image dimensions thanks to [Peter W](https://bitbucket.org/kevglass/slick/issue/40/using-wrong-variable)
 * Fixed `SpriteSheetFont.drawString()` with indexes thanks to [Emmanuel Rousseau](https://bitbucket.org/kevglass/slick/issue/39/rendering-bug-with-spritesheetfont)
 * Fixed `Music` [not stopping](https://bitbucket.org/kevglass/slick/issue/30/musicfade-stopafterfade-does-not-work) when using `fade(.., ..., true)`
+* Fixed `Image.getColor()` for [scaled images](https://bitbucket.org/kevglass/slick/issue/42/getcolor-crashes-for-a-flipped-image)
 
 ## v1.0.0 (2014-04-16)
 
