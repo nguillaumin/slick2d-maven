@@ -78,15 +78,24 @@ public class SoundStore {
 	private SoundStore() {
 	}
 	
+	
 	/**
-	 * Clear out the sound store contents
+	 * Deletes any sources and clears out the sound store contents
 	 */
 	public void clear() {
+		if (sources!=null && AL.isCreated()) {
+			for (int i=0;i<sourceCount;i++) {
+				int src = sources.get(i);
+				AL10.alSourcei(src, AL10.AL_BUFFER, 0);
+				AL10.alSourceStop(src);
+				AL10.alDeleteSources(src);
+			}
+		}
 		store = new SoundStore();
 	}
 
 	/**
-	 * Disable use of the Sound Store
+	 * Disable use of the Sound Store (must be called before init)
 	 */
 	public void disable() {
 		inited = true;
@@ -440,12 +449,22 @@ public class SoundStore {
 	}
 	
 	/**
+	 * Check if a particle source is paused 
+	 * @param index the index of the source
+	 * @return true if the source is playing
+	 */
+	boolean isPaused(int index) {
+		int state = AL10.alGetSourcei(sources.get(index), AL10.AL_SOURCE_STATE);
+		return (state == AL10.AL_PAUSED);
+	}
+	
+	/**
 	 * Find a free sound source
 	 * 
 	 * @return The index of the free sound source
 	 */
 	private int findFreeSource() {
-		for (int i=1;i<sourceCount-1;i++) {
+		for (int i=1;i<sourceCount;i++) {
 			int state = AL10.alGetSourcei(sources.get(i), AL10.AL_SOURCE_STATE);
 			
 			if ((state != AL10.AL_PLAYING) && (state != AL10.AL_PAUSED)) {
@@ -466,6 +485,10 @@ public class SoundStore {
 	 */
 	void playAsMusic(int buffer,float pitch,float gain, boolean loop) {
 		paused = false;
+		gain *= musicVolume;
+		if (gain == 0) {
+			gain = 0.001f;
+		}
 		
 		setMOD(null);
 		
@@ -476,6 +499,7 @@ public class SoundStore {
 			
 			getMusicSource();
 			
+			AL10.alSourcef(sources.get(0), AL10.AL_GAIN, gain);
 			AL10.alSourcei(sources.get(0), AL10.AL_BUFFER, buffer);
 			AL10.alSourcef(sources.get(0), AL10.AL_PITCH, pitch);
 		    AL10.alSourcei(sources.get(0), AL10.AL_LOOPING, loop ? AL10.AL_TRUE : AL10.AL_FALSE);

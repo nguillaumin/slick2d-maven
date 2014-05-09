@@ -27,14 +27,18 @@ public class SettingsPanel extends ControlPanel {
 	/** The list of emitters to be notified when the name is updated */
 	private EmitterList list;
 	/** Choose used to select image files */
-	private JFileChooser chooser = new JFileChooser(new File("."));
+	private JFileChooser chooser = new JFileChooser(new File(ParticleEditor.prefs.get("filechooser", ".")));
+	
+	public SettingsPanel(EmitterList l) {
+		this(l, null);
+	}
 	
 	/**
 	 * Create a new panel for global settings controls
 	 * 
 	 * @param l The list to be notified when the name changes
 	 */
-	public SettingsPanel(EmitterList l) {
+	public SettingsPanel(EmitterList l, JFileChooser chooser) {
 		setLayout(null);
 		
 		this.list = l;
@@ -87,8 +91,12 @@ public class SettingsPanel extends ControlPanel {
 	 */
 	private void browseForImage() {
 		if (emitter != null) {
+			String p = ParticleEditor.prefs.get("filechooser", null);
+			if (p!=null)
+				chooser.setCurrentDirectory(new File(p));
 			int resp = chooser.showOpenDialog(this);
 			if (resp == JFileChooser.APPROVE_OPTION) {
+				ParticleEditor.prefs.put("filechooser", chooser.getSelectedFile().getParentFile().getPath());
 				File file = chooser.getSelectedFile();
 				String path = file.getParentFile().getAbsolutePath();
 				String name = file.getName();

@@ -10,6 +10,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.opengl.SlickCallable;
+import org.newdawn.slick.opengl.TextureImpl;
 import org.newdawn.slick.util.Log;
 
 /**
@@ -70,6 +71,7 @@ public class TestBox extends BasicGame {
 			currentGame.init(container);
 			currentGame.render(container, container.getGraphics());
 		} catch (Exception e) {
+			e.printStackTrace();
 			Log.error(e);
 		}
 		
@@ -80,6 +82,7 @@ public class TestBox extends BasicGame {
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
 	public void init(GameContainer c) throws SlickException {
+		c.setShowFPS(false);
 		if (games.size() == 0) {
 			currentGame = new BasicGame("NULL") {
 				public void init(GameContainer container) throws SlickException {
@@ -250,8 +253,9 @@ public class TestBox extends BasicGame {
 			box.addGame(FontTest.class);
 			box.addGame(GeomTest.class);
 			box.addGame(GradientTest.class);
-			box.addGame(GraphicsTest.class);
+			//box.addGame(GraphicsTest.class);
 			box.addGame(ImageBufferTest.class);
+      box.addGame(ImageFormatTest.class);
 			box.addGame(ImageReadTest.class);
 			box.addGame(ImageTest.class);
 			box.addGame(KeyRepeatTest.class);

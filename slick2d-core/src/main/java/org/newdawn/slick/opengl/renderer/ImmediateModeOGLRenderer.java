@@ -25,13 +25,14 @@ public class ImmediateModeOGLRenderer implements SGL {
 	protected float alphaScale = 1;
 	
 	/**
+	 * Initializes default states (texturing, shade model, disable depth test, etc).
 	 * @see org.newdawn.slick.opengl.renderer.SGL#initDisplay(int, int)
 	 */
 	public void initDisplay(int width, int height) {
 		this.width = width;
 		this.height = height;
 		
-		String extensions = GL11.glGetString(GL11.GL_EXTENSIONS);
+		//String extensions = GL11.glGetString(GL11.GL_EXTENSIONS);
 		
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glShadeModel(GL11.GL_SMOOTH);        
@@ -49,18 +50,20 @@ public class ImmediateModeOGLRenderer implements SGL {
 	}
 	
 	/**
+	 * Re-initializes the orthographic display to the given size.
 	 * @see org.newdawn.slick.opengl.renderer.SGL#enterOrtho(int, int)
 	 */
 	public void enterOrtho(int xsize, int ysize) {
+		this.width = xsize;
+		this.height = ysize;
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
 		GL11.glOrtho(0, width, height, 0, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		
-		GL11.glTranslatef((width-xsize)/2,
-						  (height-ysize)/2,0);
+		GL11.glLoadIdentity();
+        GL11.glViewport(0,0,width,height);
 	}
-
+	
 	/**
 	 * @see org.newdawn.slick.opengl.renderer.SGL#glBegin(int)
 	 */

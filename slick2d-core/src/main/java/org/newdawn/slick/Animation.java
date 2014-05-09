@@ -40,6 +40,8 @@ public class Animation implements Renderable {
 	private boolean loop = true;
 	/** The spriteSheet backing this animation */
 	private SpriteSheet spriteSheet = null;
+	/** If this animation pauses after completing 1 full cycle. A value of 0 indicates no pausing (avoids an extra boolean)*/
+	private long pauseDuration = 0;
 	
 	/**
 	 * Create an empty animation
@@ -141,18 +143,21 @@ public class Animation implements Renderable {
 	 * @param autoUpdate True if this animation should automatically update based on the render times
 	 */
 	public Animation(SpriteSheet frames, int x1, int y1, int x2, int y2, boolean horizontalScan, int duration, boolean autoUpdate) {
+		this.spriteSheet = frames;
 		this.autoUpdate = autoUpdate;
 		
 		if (!horizontalScan) {
 			for (int x=x1;x<=x2;x++) {
 				for (int y=y1;y<=y2;y++) {
-					addFrame(frames.getSprite(x, y), duration);
+					//addFrame(frames.getSprite(x, y), duration);
+					addFrame(duration, x, y);
 				}
 			}
 		} else {
 			for (int y=y1;y<=y2;y++) {
 				for (int x=x1;x<=x2;x++) {
-					addFrame(frames.getSprite(x, y), duration);
+					//addFrame(frames.getSprite(x, y), duration);
+					addFrame(duration, x, y);
 				}
 			}
 		}
@@ -404,7 +409,36 @@ public class Animation implements Renderable {
 	   }
 	   
 	   Frame frame = (Frame) frames.get(currentFrame);
+	   
 	   spriteSheet.renderInUse(x, y, frame.x, frame.y);
+	} 
+	
+	/**
+	 * Render the appropriate frame when the spriteSheet backing this Animation is in use.
+	 * @param x The x position to draw the animation at
+	 * @param y The y position to draw the animation at
+	 * @param rot the rotation to do on this animation in degrees.
+	 */
+	public void renderInUse(int x, int y, float rot){
+	   if (frames.size() == 0) {
+	      return;
+	   }
+	   
+	   if (autoUpdate) {
+	      long now = getTime();
+	      long delta = now - lastUpdate;
+	      if (firstUpdate) {
+	         delta = 0;
+	         firstUpdate = false;
+	      }
+	      lastUpdate = now;
+	      nextFrame(delta);
+	   }
+	   
+	  
+	   
+	   Frame frame = (Frame) frames.get(currentFrame);
+	   spriteSheet.renderInUse(x, y, rot, frame.x, frame.y);
 	} 
 	
 	/**
@@ -584,8 +618,14 @@ public class Animation implements Renderable {
 					direction = -1;
 				}
 			}
-			int realDuration = (int) (((Frame) frames.get(currentFrame)).duration / speed);
+			int realDuration = (int) (((Frame) frames.get(currentFrame)).duration/ speed);
 			nextChange = nextChange + realDuration;
+			//System.out.println("Before next: " + nextChange);
+			//Pause after the loop is completed - display the first frame for the pauseDuration time.
+			if(pauseDuration >= 0 && currentFrame == 0)
+				nextChange += pauseDuration;
+			
+			//System.out.println("after next: " + nextChange);
 		}
 	}
 	
@@ -649,6 +689,34 @@ public class Animation implements Renderable {
 		}
 		
 		return durations;
+	}
+	
+	/**
+	 * Returns if this animation is pausing or not.
+	 * @return True if this animation will pause after it completes 1 full cycle of animation. False if it does not.
+	 */
+	public boolean isPause ()
+	{
+		return pauseDuration > 0;
+	}
+
+	
+	/**
+	 * Gets the pauseDuration (MS) of this animation.
+	 * @return Returns the pauseDuration.
+	 */
+	public long getPauseDuration ()
+	{
+		return pauseDuration;
+	}
+
+	/**
+	 * Sets the pauseDuration of this animation in MS.
+	 * @param pauseDuration The pauseDuration to set (in MS).
+	 */
+	public void setPauseDuration ( long pauseDuration )
+	{
+		this.pauseDuration = pauseDuration;
 	}
 	
 	

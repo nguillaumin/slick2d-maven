@@ -20,15 +20,21 @@ public class StateBasedTest extends StateBasedGame {
 	 */
 	public StateBasedTest() {
 		super("State Based Test");
+		addState(new TestState1());
+		addState(new TestState2());
+		addState(new TestState3());
+		enterState(TestState1.ID);
 	}
 	
 	/**
 	 * @see org.newdawn.slick.state.StateBasedGame#initStatesList(org.newdawn.slick.GameContainer)
 	 */
 	public void initStatesList(GameContainer container) {
-		addState(new TestState1());
-		addState(new TestState2());
-		addState(new TestState3());
+		
+		
+//		addState(new TestState1());
+//		addState(new TestState2());
+//		addState(new TestState3());
 	}
 	
 	/**

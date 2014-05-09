@@ -11,6 +11,7 @@ import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.transition.EmptyTransition;
 import org.newdawn.slick.state.transition.Transition;
+import org.newdawn.slick.util.Pauseable;
 
 /**
  * A state based game isolated different stages of the game (menu, ingame, hiscores, etc) into 
@@ -18,7 +19,7 @@ import org.newdawn.slick.state.transition.Transition;
  *
  * @author kevin
  */
-public abstract class StateBasedGame implements Game, InputListener {
+public abstract class StateBasedGame implements Game, InputListener, Pauseable {
 	/** The list of states making up this game */
 	private HashMap states = new HashMap();
 	/** The current state */
@@ -34,6 +35,11 @@ public abstract class StateBasedGame implements Game, InputListener {
 	private Transition enterTransition;
 	/** The transition being used to leave the state */
 	private Transition leaveTransition;
+	
+	/** Pause boolean for the update call on the current state */
+	private boolean pauseUpdate = false;
+	/** Pause boolean for the render call on the current state */
+	private boolean pauseRender = false;
 	
 	/**
 	 * Create a new state based game
@@ -187,7 +193,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	/**
 	 * @see org.newdawn.slick.Game#render(org.newdawn.slick.GameContainer, org.newdawn.slick.Graphics)
 	 */
-	public final void render(GameContainer container, Graphics g) throws SlickException {
+	public void render(GameContainer container, Graphics g) throws SlickException {
 		preRenderState(container, g);
 		
 		if (leaveTransition != null) {
@@ -196,7 +202,11 @@ public abstract class StateBasedGame implements Game, InputListener {
 			enterTransition.preRender(this, container, g);
 		}
 		
-		currentState.render(container, this, g);
+		if(!pauseRender) {
+			if(!currentState.isRenderPaused()) {
+				currentState.render(container, this, g);
+			}
+		}
 		
 		if (leaveTransition != null) {
 			leaveTransition.postRender(this, container, g);
@@ -234,7 +244,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	/**
 	 * @see org.newdawn.slick.BasicGame#update(org.newdawn.slick.GameContainer, int)
 	 */
-	public final void update(GameContainer container, int delta) throws SlickException {
+	public void update(GameContainer container, int delta) throws SlickException {
 		preUpdateState(container, delta);
 		
 		if (leaveTransition != null) {
@@ -263,7 +273,11 @@ public abstract class StateBasedGame implements Game, InputListener {
 			}
 		}
 		
-		currentState.update(container, this, delta);
+		if(!pauseUpdate) {
+			if(!currentState.isUpdatePaused()) {
+				currentState.update(container, this, delta);
+			}
+		}
 		
 		postUpdateState(container, delta);
 	}
@@ -293,12 +307,12 @@ public abstract class StateBasedGame implements Game, InputListener {
 	}
 	
 	/**
-	 * Check if the game is transitioning between states
+	 * Check if the game is transitioning between states or if it's paused
 	 * 
-	 * @return True if we're transitioning between states 
+	 * @return True if we're transitioning between states or if it's paused
 	 */
-	private boolean transitioning() {
-		return (leaveTransition != null) || (enterTransition != null);
+	private boolean transitioningOrPaused() {
+		return (leaveTransition != null) || (enterTransition != null) || isUpdatePaused();
 	}
 	
 	/**
@@ -328,7 +342,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * @see org.newdawn.slick.InputListener#controllerButtonPressed(int, int)
 	 */
 	public void controllerButtonPressed(int controller, int button) {
-		if (transitioning()) {
+		if (transitioningOrPaused()) {
 			return;
 		}
 		
@@ -339,7 +353,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * @see org.newdawn.slick.InputListener#controllerButtonReleased(int, int)
 	 */
 	public void controllerButtonReleased(int controller, int button) {
-		if (transitioning()) {
+		if (transitioningOrPaused()) {
 			return;
 		}
 		
@@ -350,7 +364,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * @see org.newdawn.slick.InputListener#controllerDownPressed(int)
 	 */
 	public void controllerDownPressed(int controller) {
-		if (transitioning()) {
+		if (transitioningOrPaused()) {
 			return;
 		}
 		
@@ -361,7 +375,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * @see org.newdawn.slick.InputListener#controllerDownReleased(int)
 	 */
 	public void controllerDownReleased(int controller) {
-		if (transitioning()) {
+		if (transitioningOrPaused()) {
 			return;
 		}
 		
@@ -372,7 +386,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * @see org.newdawn.slick.InputListener#controllerLeftPressed(int)
 	 */
 	public void controllerLeftPressed(int controller) {
-		if (transitioning()) {
+		if (transitioningOrPaused()) {
 			return;
 		}
 		
@@ -383,7 +397,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * @see org.newdawn.slick.InputListener#controllerLeftReleased(int)
 	 */
 	public void controllerLeftReleased(int controller) {
-		if (transitioning()) {
+		if (transitioningOrPaused()) {
 			return;
 		}
 		
@@ -394,7 +408,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * @see org.newdawn.slick.InputListener#controllerRightPressed(int)
 	 */
 	public void controllerRightPressed(int controller) {
-		if (transitioning()) {
+		if (transitioningOrPaused()) {
 			return;
 		}
 		
@@ -405,7 +419,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * @see org.newdawn.slick.InputListener#controllerRightReleased(int)
 	 */
 	public void controllerRightReleased(int controller) {
-		if (transitioning()) {
+		if (transitioningOrPaused()) {
 			return;
 		}
 		
@@ -416,7 +430,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * @see org.newdawn.slick.InputListener#controllerUpPressed(int)
 	 */
 	public void controllerUpPressed(int controller) {
-		if (transitioning()) {
+		if (transitioningOrPaused()) {
 			return;
 		}
 		
@@ -427,7 +441,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * @see org.newdawn.slick.InputListener#controllerUpReleased(int)
 	 */
 	public void controllerUpReleased(int controller) {
-		if (transitioning()) {
+		if (transitioningOrPaused()) {
 			return;
 		}
 		
@@ -438,7 +452,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * @see org.newdawn.slick.InputListener#keyPressed(int, char)
 	 */
 	public void keyPressed(int key, char c) {
-		if (transitioning()) {
+		if (transitioningOrPaused()) {
 			return;
 		}
 		
@@ -449,7 +463,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * @see org.newdawn.slick.InputListener#keyReleased(int, char)
 	 */
 	public void keyReleased(int key, char c) {
-		if (transitioning()) {
+		if (transitioningOrPaused()) {
 			return;
 		}
 		
@@ -460,7 +474,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * @see org.newdawn.slick.InputListener#mouseMoved(int, int, int, int)
 	 */
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-		if (transitioning()) {
+		if (transitioningOrPaused()) {
 			return;
 		}
 		
@@ -471,7 +485,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * @see org.newdawn.slick.InputListener#mouseDragged(int, int, int, int)
 	 */
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-		if (transitioning()) {
+		if (transitioningOrPaused()) {
 			return;
 		}
 		
@@ -481,7 +495,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * @see org.newdawn.slick.InputListener#mouseClicked(int, int, int, int)
 	 */
 	public void mouseClicked(int button, int x, int y, int clickCount) {
-		if (transitioning()) {
+		if (transitioningOrPaused()) {
 			return;
 		}
 		
@@ -492,7 +506,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * @see org.newdawn.slick.InputListener#mousePressed(int, int, int)
 	 */
 	public void mousePressed(int button, int x, int y) {
-		if (transitioning()) {
+		if (transitioningOrPaused()) {
 			return;
 		}
 		
@@ -503,7 +517,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * @see org.newdawn.slick.InputListener#mouseReleased(int, int, int)
 	 */
 	public void mouseReleased(int button, int x, int y) {
-		if (transitioning()) {
+		if (transitioningOrPaused()) {
 			return;
 		}
 		
@@ -514,7 +528,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * @see org.newdawn.slick.InputListener#isAcceptingInput()
 	 */
 	public boolean isAcceptingInput() {		
-		if (transitioning()) {
+		if (transitioningOrPaused()) {
 			return false;
 		}
 
@@ -531,11 +545,60 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * @see org.newdawn.slick.InputListener#mouseWheelMoved(int)
 	 */
 	public void mouseWheelMoved(int newValue) {
-		if (transitioning()) {
+		if (transitioningOrPaused()) {
 			return;
 		}
 		
 		currentState.mouseWheelMoved(newValue);
 	}
 
+	/**
+	 * Pauses the update call on the current state (Transitions are still possible).
+	 */
+	public void pauseUpdate() {
+		pauseUpdate = true;
+	}
+	/**
+	 * Pauses the render call on the current state (Transitions are still possible).
+	 */
+	public void pauseRender() {
+		pauseRender = true;
+	}
+	/**
+	 * Unpauses the update call on the current state (Transitions are still possible).
+	 */
+	public void unpauseUpdate() {
+		pauseUpdate = false;
+	}
+	/**
+	 * Unpauses the render call on the current state (Transitions are still possible).
+	 */
+	public void unpauseRender() {
+		pauseRender = false;
+	}
+	/**
+	 * @see org.newdawn.slick.util.Pauseable#isUpdatePaused()
+	 */
+	public boolean isUpdatePaused() {
+		return pauseUpdate;
+	}
+	/**
+	 * @see org.newdawn.slick.util.Pauseable#isRenderPaused()
+	 */
+	public boolean isRenderPaused() {
+		return pauseRender;
+	}
+	/**
+	 * Pauses the update call on the current state (Transitions are still possible) if <code>pause</code> is true.
+	 */
+	public void setUpdatePaused(boolean pause) {
+		pauseUpdate = pause;
+	}
+	/**
+	 * Pauses the render call on the current state (Transitions are still possible) if <code>pause</code> is true.
+	 */
+	public void setRenderPaused(boolean pause) {
+		pauseRender = pause;
+	}
+	
 }

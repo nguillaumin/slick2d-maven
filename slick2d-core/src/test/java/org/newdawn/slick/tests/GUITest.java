@@ -1,5 +1,9 @@
 package org.newdawn.slick.tests;
 
+import java.awt.event.KeyEvent;
+import java.lang.reflect.Field;
+import java.util.HashMap;
+
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
@@ -15,6 +19,7 @@ import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.util.Log;
+
 
 /**
  * A test for the GUI components available in Slick. Very simple stuff
@@ -57,17 +62,19 @@ public class GUITest extends BasicGame implements ComponentListener {
 			app.setIcon("testdata/icon.tga");
 		}
 		
-		font = new AngelCodeFont("testdata/demo2.fnt","testdata/demo2_00.tga");
+		font = new AngelCodeFont("testdata/demo2.fnt","testdata/demo2.png");
 		field = new TextField(container, font, 150,20,500,35, new ComponentListener() {
 			public void componentActivated(AbstractComponent source) {
 				message = "Entered1: "+field.getText();
 				field2.setFocus(true);
+				System.out.println(message);
 			}
 		});
 		field2 = new TextField(container, font, 150,70,500,35,new ComponentListener() {
 			public void componentActivated(AbstractComponent source) {
 				message = "Entered2: "+field2.getText();
 				field.setFocus(true);
+				System.out.println(message);
 			}
 		});
 		field2.setBorderColor(Color.red);
@@ -83,6 +90,7 @@ public class GUITest extends BasicGame implements ComponentListener {
 			areas[i].setNormalColor(new Color(1,1,1,0.8f));
 			areas[i].setMouseOverColor(new Color(1,1,1,0.9f));
 		}
+		field.setFocus(true);
 	}
 
 	/**
@@ -128,12 +136,14 @@ public class GUITest extends BasicGame implements ComponentListener {
 		}
 	}
 	
+	
+	
 	/**
 	 * Entry point to our test
 	 * 
 	 * @param argv The arguments passed to the test
 	 */
-	public static void main(String[] argv) {
+	public static void main(String[] argv) throws Exception {
 		try {
 			AppGameContainer container = new AppGameContainer(new GUITest());
 			container.setDisplayMode(800,600,false);

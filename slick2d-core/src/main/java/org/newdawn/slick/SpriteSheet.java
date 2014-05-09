@@ -209,7 +209,8 @@ public class SpriteSheet extends Image {
 	}
 	
 	/**
-	 * Get a sprite at a particular cell on the sprite sheet
+	 * Create a new sub-image for a particular cell on the sprite sheet. This
+	 * is generally used internally, getSubImage should be used instead.
 	 * 
 	 * @param x The x position of the cell on the sprite sheet
 	 * @param y The y position of the cell on the sprite sheet
@@ -254,18 +255,78 @@ public class SpriteSheet extends Image {
 	}
 	
 	/**
-	 * Render a sprite when this sprite sheet is in use. 
+	 * Render a sprite when this sprite sheet is in use,
+	 * using the tile width and height given at SpriteSheet
+	 * construction. 
+	 * 
+	 * @see #startUse()
+	 * @see #endUse()
+	 * 
+	 * @param x The x position to render the sprite at
+	 * @param y The y position to render the sprite at
+	 * @param sx The x location of the cell to render
+	 * @param sy The y location of the cell to render
+	 */
+	public void renderInUse(int x,int y,int sx,int sy) {
+		renderInUse(x, y, tw, th, sx, sy);
+	}
+
+	/**
+	 * Render a sprite when this sprite sheet is in use, applying
+	 * a scale transform.
 	 * 
 	 * @see #startUse()
 	 * @see #endUse()
 	 * 
 	 * @param x The x position to render the sprite at
 	 * @param y The y position to render the sprite at 
+	 * @param width the new width for the sprite
+	 * @param height the new height for the sprite
 	 * @param sx The x location of the cell to render
 	 * @param sy The y location of the cell to render
 	 */
-	public void renderInUse(int x,int y,int sx,int sy) {
-		subImages[sx][sy].drawEmbedded(x, y, tw, th);
+	public void renderInUse(int x, int y, int width, int height, int sx, int sy) {
+		subImages[sx][sy].drawEmbedded(x, y, width, height);
+	}
+
+	/**
+	 * Render a sprite when this sprite sheet is in use, applying
+	 * a rotation. The sub-image's center of rotation (by default 
+	 * the center of the image) will be used, and the width and
+	 * height will be that of the tile width / tile height as
+	 * given during SpriteSheet construction.
+	 * 
+	 * @see #startUse()
+	 * @see #endUse()
+	 * 
+	 * @param x The x position to render the sprite at
+	 * @param y The y position to render the sprite at
+	 * @param rotation the rotation to apply to the embedded image  
+	 * @param sx The x location of the cell to render
+	 * @param sy The y location of the cell to render
+	 */
+	public void renderInUse(int x, int y, float rotation, int sx, int sy) {
+		renderInUse(x, y, tw, th, rotation, sx, sy);
+	}
+
+	/**
+	 * Render a sprite when this sprite sheet is in use, applying
+	 * a scale and rotation. The sub-image's center of rotation (by default 
+	 * the center of the image) will be used and scaled accordingly.
+	 * 
+	 * @see #startUse()
+	 * @see #endUse()
+	 * 
+	 * @param x The x position to render the sprite at
+	 * @param y The y position to render the sprite at 
+	 * @param width the new width for the sprite
+	 * @param height the new height for the sprite
+	 * @param rotation the rotation to apply to the embedded image  
+	 * @param sx The x location of the cell to render
+	 * @param sy The y location of the cell to render
+	 */
+	public void renderInUse(int x, int y, int width, int height, float rotation, int sx, int sy) {
+		subImages[sx][sy].drawEmbedded(x, y, width, height, rotation);
 	}
 
 	/**
@@ -300,4 +361,9 @@ public class SpriteSheet extends Image {
 		}
 		target.setTexture(texture);
 	}
+	
+	public void renderInUse(int x, int y, int sx, int sy, byte transform) {
+		subImages[sx][sy].drawEmbedded(x, y, tw, th, transform);
+	}
+
 }

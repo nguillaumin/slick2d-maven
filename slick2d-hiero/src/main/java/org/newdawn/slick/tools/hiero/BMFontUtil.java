@@ -2,13 +2,16 @@
 package org.newdawn.slick.tools.hiero;
 
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.font.GlyphMetrics;
 import java.awt.font.GlyphVector;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.awt.image.RasterFormatException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -39,8 +42,13 @@ public class BMFontUtil {
 	public BMFontUtil (UnicodeFont unicodeFont) {
 		this.unicodeFont = unicodeFont;
 	}
+	
+	public void save(File f) throws IOException, SlickException {
+		save(f, true, true);
+	}
 
-	public void save (File outputBMFontFile) throws IOException, SlickException {
+	public void save (File outputBMFontFile, boolean flip, 
+			boolean antiAliasing) throws IOException, SlickException {
 		File outputDir = outputBMFontFile.getParentFile();
 		String outputName = outputBMFontFile.getName();
 		if (outputName.endsWith(".fnt")) outputName = outputName.substring(0, outputName.length() - 4);
@@ -49,13 +57,18 @@ public class BMFontUtil {
 
 		PrintStream out = new PrintStream(new FileOutputStream(new File(outputDir, outputName + ".fnt")));
 		Font font = unicodeFont.getFont();
+		
+		
+		int lineHeight = unicodeFont.getLineHeight();
+		
 		int pageWidth = unicodeFont.getGlyphPageWidth();
 		int pageHeight = unicodeFont.getGlyphPageHeight();
 		out.println("info face=\"" + font.getFontName() + "\" size=" + font.getSize() + " bold=" + (font.isBold() ? 1 : 0)
 			+ " italic=" + (font.isItalic() ? 1 : 0)
-			+ " charset=\"\" unicode=0 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1");
-		out.println("common lineHeight=" + unicodeFont.getLineHeight() + " base=26 scaleW=" + pageWidth + " scaleH=" + pageHeight
-			+ " pages=" + unicodeFont.getGlyphPages().size() + " packed=0");
+			+ " charset=\"\" unicode=0 stretchH=100 smooth=1 aa="+(antiAliasing?1:0)+" padding=0,0,0,0 spacing=0,0");
+		out.println("common lineHeight=" + lineHeight + " base="+unicodeFont.getAscent()+" scaleW=" + pageWidth + " scaleH=" + pageHeight
+			+ " pages=" + unicodeFont.getGlyphPages().size() + " packed=0 ascent="
+				+unicodeFont.getAscent()+" descent="+unicodeFont.getDescent()+" leading="+unicodeFont.getLeading());
 
 		int pageIndex = 0, glyphCount = 0;
 		for (Iterator pageIter = unicodeFont.getGlyphPages().iterator(); pageIter.hasNext();) {
@@ -160,16 +173,23 @@ public class BMFontUtil {
 			} finally {
 				imageOutput.close();
 			}
+			// TOOD: fix this for all systems!
 			// Flip output image.
-			Image image = new ImageIcon(imageOutputFile.getAbsolutePath()).getImage();
-			BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-			Graphics g = bufferedImage.getGraphics();
-			g.drawImage(image, 0, 0, null);
-			AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-			tx.translate(0, -image.getHeight(null));
-			AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-			bufferedImage = op.filter(bufferedImage, null);
-			ImageIO.write(bufferedImage, "png", imageOutputFile);
+			if (flip) { //flips horizontally and re-saves
+				Image image = new ImageIcon(imageOutputFile.getAbsolutePath()).getImage();
+				BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+				Graphics g = bufferedImage.getGraphics();
+				g.drawImage(image, 0, 0, null);
+				try {
+					AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
+                    tx.translate(0, -image.getHeight(null));
+                    AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+                    bufferedImage = op.filter(bufferedImage, null);
+				} catch (RasterFormatException ex) {
+					Log.error(ex);
+				}
+				ImageIO.write(bufferedImage, "png", imageOutputFile);
+			}
 
 			pageIndex++;
 		}

@@ -53,16 +53,6 @@ public strictfp class Circle extends Ellipse {
 	public float getCenterY() {
 		return getY() + radius;
 	}
-
-	/** 
-	 * Get the coordinates of the center of the circle
-	 * 
-	 * @return 2-element array with the center of the circle.
-	 */
-	
-	public float[] getCenter() {
-		return new float[] { getCenterX(), getCenterY() };
-	}
 	
 	/**
 	 * Set the radius of this circle
@@ -128,8 +118,7 @@ public strictfp class Circle extends Ellipse {
 	 */
     public boolean contains(float x, float y) 
     { 
-        float xDelta = x - getCenterX(), yDelta = y - getCenterY();
-        return xDelta * xDelta + yDelta * yDelta < getRadius() * getRadius();
+        return (x - getCenterX()) * (x - getCenterX()) + (y - getCenterY()) * (y - getCenterY()) < getRadius() * getRadius();
     }
     
     /**

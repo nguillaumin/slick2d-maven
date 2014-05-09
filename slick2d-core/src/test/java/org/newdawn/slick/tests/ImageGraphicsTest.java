@@ -48,13 +48,14 @@ public class ImageGraphicsTest extends BasicGame {
 	 */
 	public void init(GameContainer container) throws SlickException {
 		testImage = new Image("testdata/logo.png");
-		preloaded = new Image("testdata/logo.png");
+		preloaded = Image.createOffscreenImage(testImage.getWidth(), testImage.getHeight());
 		testFont = new AngelCodeFont("testdata/hiero.fnt","testdata/hiero.png");
-		target = new Image(400,300);
-		cut = new Image(100,100);
+		target = Image.createOffscreenImage(400,300);
+		cut = Image.createOffscreenImage(100,100);
 		gTarget = target.getGraphics();
-		offscreenPreload = preloaded.getGraphics();
 		
+		offscreenPreload = preloaded.getGraphics();
+		offscreenPreload.drawImage(testImage, 0, 0);
 		offscreenPreload.drawString("Drawing over a loaded image", 5, 15);
 		offscreenPreload.setLineWidth(5);
 		offscreenPreload.setAntiAlias(true);

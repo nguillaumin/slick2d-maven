@@ -11,11 +11,9 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Cursor;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
-import org.newdawn.slick.openal.SoundStore;
 import org.newdawn.slick.opengl.CursorLoader;
 import org.newdawn.slick.opengl.ImageData;
 import org.newdawn.slick.opengl.ImageIOImageData;
@@ -52,6 +50,10 @@ public class AppGameContainer extends GameContainer {
 	protected boolean updateOnlyOnVisible = true;
 	/** Alpha background supported */
 	protected boolean alphaSupport = false;
+	/** Whether the native display is resizable. */
+	protected boolean resizable = false;
+	/** A flag that indicates whether the display was resized since last frame. */
+	protected boolean wasResized = false;
 	
 	/**
 	 * Create a new container wrapping a game
@@ -99,6 +101,32 @@ public class AppGameContainer extends GameContainer {
 	}
 	
 	/**
+	 * Whether the user can resize the display. 
+	 * @param resizable true if the user can resize the display
+	 */
+	public void setResizable(boolean resizable) {
+		Display.setResizable(resizable);
+	}
+	
+	/**
+	 * Returns true if this display can be resized. 
+	 * @return whether the display is resizable
+	 */
+	public boolean isResizable() {
+		return Display.isResizable();
+	}
+	
+//	TODO: implement with a ContainerListener interface; 
+	// i.e. containerResized, containerActivated, containerDeactivated
+//	/**
+//	 * Returns true if this display was resized since last loop.
+//	 * @return
+//	 */
+//	public boolean wasResized() {
+//		return Display.wasResized();
+//	}
+	
+	/**
 	 * Set the display mode to be used 
 	 * 
 	 * @param width The width of the display required
@@ -109,6 +137,12 @@ public class AppGameContainer extends GameContainer {
 	public void setDisplayMode(int width, int height, boolean fullscreen) throws SlickException {
 		if ((this.width == width) && (this.height == height) && (isFullscreen() == fullscreen)) {
 			return;
+		}
+		Color oldBG = null;
+		Graphics g = getGraphics();
+		if (g!=null) {
+			Graphics.setCurrent(g);
+			oldBG = g.getBackground();
 		}
 		
 		try {
@@ -151,11 +185,18 @@ public class AppGameContainer extends GameContainer {
 
 			Display.setDisplayMode(targetDisplayMode);
 			Display.setFullscreen(fullscreen);
-
+			
+			
 			if (Display.isCreated()) {
 				initGL();
-				enterOrtho();
+				onResize();
 			} 
+			
+			//initGL will reset the clear color... so let's reset it
+			if (oldBG!=null && g!=null) {
+				g.setBackground(oldBG);
+			}
+				
 			
 			if (targetDisplayMode.getBitsPerPixel() == 16) {
 				InternalTextureLoader.get().set16BitMode();
@@ -277,8 +318,7 @@ public class AppGameContainer extends GameContainer {
 	 * @see org.newdawn.slick.GameContainer#reinit()
 	 */
 	public void reinit() throws SlickException {
-		InternalTextureLoader.get().clear();
-		SoundStore.get().clear();
+		destroy();
 		initSystem();
 		enterOrtho();
 		
@@ -380,7 +420,7 @@ public class AppGameContainer extends GameContainer {
 		
 		initSystem();
 		enterOrtho();
-
+		
 		try {
 			getInput().initControllers();
 		} catch (SlickException e) {
@@ -407,6 +447,11 @@ public class AppGameContainer extends GameContainer {
 		if (!Display.isVisible() && updateOnlyOnVisible) {
 			try { Thread.sleep(100); } catch (Exception e) {}
 		} else {
+			if (Display.wasResized()) {
+				width = Display.getWidth();
+				height = Display.getHeight();
+				onResize();
+			}
 			try {
 				updateAndRender(delta);
 			} catch (SlickException e) {
@@ -484,13 +529,6 @@ public class AppGameContainer extends GameContainer {
 		return originalDisplayMode.getWidth();
 	}
 	
-	/**
-	 * Destroy the app game container
-	 */
-	public void destroy() {
-		Display.destroy();
-		AL.destroy();
-	}
 	
 	/**
 	 * A null stream to clear out those horrid errors

@@ -102,6 +102,7 @@ public class GlyphPage {
 		this.pageWidth = pageWidth;
 		this.pageHeight = pageHeight;
 
+		//Note: since we use glTexSubImage2D instead of getGraphics, this doesn't need Image.createOffscreenGraphics
 		pageImage = new Image(pageWidth, pageHeight);
 	}
 

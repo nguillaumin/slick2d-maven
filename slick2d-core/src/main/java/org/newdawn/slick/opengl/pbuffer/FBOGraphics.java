@@ -34,7 +34,7 @@ public class FBOGraphics extends Graphics {
 	 * @throws SlickException Indicates a failure to use pbuffers
 	 */
 	public FBOGraphics(Image image) throws SlickException {
-		super(image.getTexture().getTextureWidth(), image.getTexture().getTextureHeight());
+		super(InternalTextureLoader.get2Fold(image.getWidth()), InternalTextureLoader.get2Fold(image.getHeight()));
 		this.image = image;
 		
 		Log.debug("Creating FBO "+image.getWidth()+"x"+image.getHeight());
@@ -102,13 +102,26 @@ public class FBOGraphics extends Graphics {
 			
 			completeCheck();
 			unbind();
+			if (image.getTexture()!=null) {
+				//clear();
+				//flush();
+				
+				// keep hold of the original content
+				// ( this will end up calling enable() via Graphics.setCurrent )
+				drawImage(image, 0, 0);
+				
+					//OPTION A: flush() FBO after getGraphics
+						//problem -- users need to call Graphics.setCurrent(g)
+							//otherwise image.drawXX or font.drawXX won't work
+				
+					//OPTION B: (old system) Leave it bound
+						//problem -- requires a flush() operation after use,
+							//otherwise things like TWL won't work
+				
+			}
+			//We'll use the "old system" (Option B) until we fully refactor FBOs
+			Graphics.setCurrent(this);
 			
-			// Clear our destination area before using it
-			clear();
-			flush();
-			
-			// keep hold of the original content
-			drawImage(image, 0, 0);
 			image.setTexture(tex);
 			
 		} catch (Exception e) {
@@ -200,6 +213,11 @@ public class FBOGraphics extends Graphics {
 		GL11.glLoadIdentity();
 		GL11.glOrtho(0, screenWidth, 0, screenHeight, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+	}
+	
+	/** glOrtho is called with (0, screenWidth, 0, screenHeight, 1, -1) meaning the Y value is flipped */
+	protected boolean isYFlipped() {
+		return true;
 	}
 	
 	/**

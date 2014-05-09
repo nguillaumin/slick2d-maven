@@ -1,12 +1,19 @@
 package org.newdawn.slick.tests;
 
-import java.awt.Frame;
-import java.awt.GridLayout;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.JFrame;
+
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.CanvasGameContainer;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Game;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -33,6 +40,11 @@ public class CanvasContainerTest extends BasicGame {
 	private Image subImage;
 	/** The current rotation of our test image */
 	private float rot;
+
+	/** The fixed width of our game (but not necessarily our window). */
+	public static final int GAME_WIDTH = 800;
+	/** The fixed height of our game (but not necessarily our window). */
+	public static final int GAME_HEIGHT = 600;
 	
 	/**
 	 * Create a new image rendering test
@@ -45,6 +57,7 @@ public class CanvasContainerTest extends BasicGame {
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
 	public void init(GameContainer container) throws SlickException {
+		container.getGraphics().setBackground(Color.darkGray);
 		image = tga = new Image("testdata/logo.tga");
 		scaleMe = new Image("testdata/logo.tga", true, Image.FILTER_NEAREST);
 		gif = new Image("testdata/logo.gif");
@@ -57,8 +70,11 @@ public class CanvasContainerTest extends BasicGame {
 	 * @see org.newdawn.slick.BasicGame#render(org.newdawn.slick.GameContainer, org.newdawn.slick.Graphics)
 	 */
 	public void render(GameContainer container, Graphics g) {
+		// generally speaking, GAME_WIDTH should be used instead of
+		// container.getWidth(), since our game now expects a fixed resolution
+		image.draw(GAME_WIDTH-image.getWidth(),0);
+		
 		image.draw(0,0);
-		image.draw(500,0,200,100);
 		scaleMe.draw(500,100,200,100);
 		scaled.draw(400,500);
 		Image flipped = scaled.getFlippedCopy(true, false);
@@ -88,6 +104,8 @@ public class CanvasContainerTest extends BasicGame {
 			rot -= 360;
 		}
 	}
+	
+	
 
 	/**
 	 * Entry point to our test
@@ -96,22 +114,85 @@ public class CanvasContainerTest extends BasicGame {
 	 */
 	public static void main(String[] argv) {
 		try {
-			CanvasGameContainer container = new CanvasGameContainer(new CanvasContainerTest());
+			// below we're utilizing Swing layout to keep our game at a fixed
+			// resolution, regardless of JFrame size!
+
+			final Game game = new CanvasContainerTest();
+			final CanvasGameContainer canvasPanel = new CanvasGameContainer(game);
+			final JFrame frame = new JFrame(game.getTitle());
 			
-			Frame frame = new Frame("Test");
-			frame.setLayout(new GridLayout(1,2));
-			frame.setSize(500,500);
-			frame.add(container);
-			
+			// exit on close
+			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
 			frame.addWindowListener(new WindowAdapter() {
-				public void windowClosing(WindowEvent e) {
-					System.exit(0);
+				public void windowClosing(WindowEvent we) {
+					// to avoid ugly flicker when closing, we 
+					// can hide the window before destroying OpenGL
+					frame.setVisible(false);
+					
+					// destroys GL/AL context
+					canvasPanel.getContainer().exit();
 				}
 			});
+			canvasPanel.addKeyListener(new KeyListener() {
+				
+				@Override
+				public void keyTyped(KeyEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void keyReleased(KeyEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+						GameContainer container = canvasPanel.getContainer();
+						if (container.running())
+							container.exit();
+						else {
+							try {
+								canvasPanel.start();
+								System.out.println("starting");
+							} catch (SlickException e1) {
+								container.exit();
+								e1.printStackTrace();
+							}
+						}
+					}
+				}
+			});
+
+			// background color of frame
+			frame.getContentPane().setBackground(java.awt.Color.black);
+
+			// the size of our game
+			Dimension size = new Dimension(GAME_WIDTH, GAME_HEIGHT);
+			canvasPanel.setPreferredSize(size);
+			canvasPanel.setMinimumSize(size);
+			canvasPanel.setMaximumSize(size);
+
+			// layout our game canvas so that it's centred
+			GridBagConstraints c = new GridBagConstraints();
+			c.fill = GridBagConstraints.CENTER;
+			frame.getContentPane().setLayout(new GridBagLayout());
+			frame.getContentPane().add(canvasPanel, c);
+			
+			frame.pack();
+			frame.setResizable(true);
+			// centre the frame to the screen
+			frame.setLocationRelativeTo(null);
+			
+			// request focus so that it begins rendering immediately
+			// alternatively we could use GameContainer.setAlwaysRender(true)
+			canvasPanel.requestFocusInWindow();
 			frame.setVisible(true);
-			container.start();
-		} catch (Exception e) {
-			e.printStackTrace();
+			canvasPanel.start();
+		} catch (SlickException ex) {
+			ex.printStackTrace();
 		}
 	}
 

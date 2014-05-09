@@ -10,11 +10,13 @@ import java.awt.FileDialog;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.LayoutManager;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -38,6 +40,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -81,13 +84,14 @@ import org.newdawn.slick.font.GlyphPage;
 import org.newdawn.slick.font.HieroSettings;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.font.effects.ConfigurableEffect;
+import org.newdawn.slick.font.effects.ConfigurableEffect.Value;
+import org.newdawn.slick.font.effects.DistanceFieldEffect;
 import org.newdawn.slick.font.effects.EffectUtil;
 import org.newdawn.slick.font.effects.GradientEffect;
 import org.newdawn.slick.font.effects.OutlineEffect;
 import org.newdawn.slick.font.effects.OutlineWobbleEffect;
 import org.newdawn.slick.font.effects.OutlineZigzagEffect;
 import org.newdawn.slick.font.effects.ShadowEffect;
-import org.newdawn.slick.font.effects.ConfigurableEffect.Value;
 import org.newdawn.slick.util.Log;
 
 /**
@@ -147,11 +151,16 @@ public class Hiero extends JFrame {
 	JMenuItem saveMenuItem;
 	JMenuItem exitMenuItem;
 	JMenuItem saveBMFontMenuItem;
+
+	JCheckBoxMenuItem antiAliasTextMenuItem;
+	JCheckBoxMenuItem subPixelMenuItem;
+	JCheckBoxMenuItem flipImageMenuItem;
 	File saveBmFontFile;
 
 	public Hiero () throws SlickException {
 		super("Hiero v2.0 - Bitmap Font Tool");
 		Splash splash = new Splash(this, "splash.jpg", 2000);
+		prefs = Preferences.userNodeForPackage(Hiero.class);
 		try {
 			initialize();
 		} catch (SlickException ex) {
@@ -170,7 +179,6 @@ public class Hiero extends JFrame {
 			}
 		});
 		
-		prefs = Preferences.userNodeForPackage(Hiero.class);
 		java.awt.Color backgroundColor = EffectUtil.fromString(prefs.get("background", "000000"));
 		backgroundColorLabel.setIcon(getColorIcon(backgroundColor));
 		renderingBackgroundColor = new Color(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
@@ -186,6 +194,7 @@ public class Hiero extends JFrame {
 		effectsListModel.addElement(new OutlineWobbleEffect());
 		effectsListModel.addElement(new OutlineZigzagEffect());
 		effectsListModel.addElement(new ShadowEffect());
+		effectsListModel.addElement(new DistanceFieldEffect());
 		new EffectPanel(colorEffect);
 
 		setVisible(true);
@@ -241,7 +250,7 @@ public class Hiero extends JFrame {
 				if (saveBmFontFile != null) {
 					try {
 						BMFontUtil bmFont = new BMFontUtil(unicodeFont);
-						bmFont.save(saveBmFontFile);
+						bmFont.save(saveBmFontFile, flipImageMenuItem.isSelected(), antiAliasTextMenuItem.isSelected());
 					} catch (Exception ex) {
 						Log.error("Error saving BMFont files: " + saveBmFontFile.getAbsolutePath(), ex);
 					} finally {
@@ -300,6 +309,20 @@ public class Hiero extends JFrame {
 
 		int fontSize = ((Integer)fontSizeSpinner.getValue()).intValue();
 
+		java.awt.Graphics g = GlyphPage.getScratchGraphics();
+		
+		if (g!=null && g instanceof Graphics2D) {
+			boolean antiAlias = antiAliasTextMenuItem.isSelected();
+			Graphics2D g2d = (Graphics2D)g;
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
+					antiAlias ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
+			g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+					antiAlias ? RenderingHints.VALUE_TEXT_ANTIALIAS_ON : RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+			boolean subPixel = subPixelMenuItem.isSelected();
+			g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, 
+					subPixel ? RenderingHints.VALUE_FRACTIONALMETRICS_ON : RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
+		}
+		
 		File file = new File(fontFileText.getText());
 		if (!ignoreFileText && file.exists() && file.isFile()) {
 			// Load from file.
@@ -309,6 +332,7 @@ public class Hiero extends JFrame {
 			try {
 				unicodeFont = new UnicodeFont(fontFileText.getText(), fontSize, boldCheckBox.isSelected(), italicCheckBox
 					.isSelected());
+				//System.out.println("loaded font "+unicodeFont+" with "+unicodeFont.getFontFile());
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				updateFont(true);
@@ -319,6 +343,7 @@ public class Hiero extends JFrame {
 			fontList.setEnabled(true);
 			systemFontRadio.setEnabled(true);
 			systemFontRadio.setSelected(true);
+			
 			unicodeFont = new UnicodeFont(Font.decode((String)fontList.getSelectedValue()), fontSize, boldCheckBox.isSelected(),
 				italicCheckBox.isSelected());
 		}
@@ -410,6 +435,10 @@ public class Hiero extends JFrame {
 			}
 
 			public void actionPerformed (ActionEvent evt) {
+				if (evt.getSource() == glyphPageWidthCombo)
+					prefs.putInt("glyphpage.width", glyphPageWidthCombo.getSelectedIndex());
+				else if (evt.getSource() == glyphPageHeightCombo)
+					prefs.putInt("glyphpage.height", glyphPageHeightCombo.getSelectedIndex());
 				updateFont();
 			}
 
@@ -589,6 +618,26 @@ public class Hiero extends JFrame {
 			}
 		});
 
+		flipImageMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed (ActionEvent evt) {
+				prefs.putBoolean("flipimage", flipImageMenuItem.isSelected());
+			}
+		});
+		
+		antiAliasTextMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed (ActionEvent evt) {
+				updateFont();
+				prefs.putBoolean("antialias", antiAliasTextMenuItem.isSelected());
+			}
+		});
+		
+		subPixelMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed (ActionEvent evt) {
+				updateFont();
+				prefs.putBoolean("subpixel", subPixelMenuItem.isSelected());
+			}
+		});
+		
 		sampleNeheButton.addActionListener(new ActionListener() {
 			public void actionPerformed (ActionEvent evt) {
 				sampleTextPane.setText(NEHE);
@@ -771,14 +820,14 @@ public class Hiero extends JFrame {
 						new Integer(1024), new Integer(2048)}));
 					glyphCachePanel.add(glyphPageWidthCombo, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.WEST,
 						GridBagConstraints.NONE, new Insets(0, 0, 5, 5), 0, 0));
-					glyphPageWidthCombo.setSelectedIndex(1);
+					glyphPageWidthCombo.setSelectedIndex(prefs.getInt("glyphpage.width", 1));
 				}
 				{
 					glyphPageHeightCombo = new JComboBox(new DefaultComboBoxModel(new Integer[] {new Integer(32), new Integer(64), new Integer(128), new Integer(256), new Integer(512),
 							new Integer(1024), new Integer(2048)}));
 					glyphCachePanel.add(glyphPageHeightCombo, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.WEST,
 						GridBagConstraints.NONE, new Insets(0, 0, 5, 5), 0, 0));
-					glyphPageHeightCombo.setSelectedIndex(1);
+					glyphPageHeightCombo.setSelectedIndex(prefs.getInt("glyphpage.width", 2));
 				}
 				{
 					resetCacheButton = new JButton("Reset Cache");
@@ -913,7 +962,7 @@ public class Hiero extends JFrame {
 					effectsList = new JList();
 					effectsScroll.setViewportView(effectsList);
 					effectsList.setModel(effectsListModel);
-					effectsList.setVisibleRowCount(6);
+					effectsList.setVisibleRowCount(7);
 					effectsScroll.setMinimumSize(effectsList.getPreferredScrollableViewportSize());
 				}
 			}
@@ -975,10 +1024,36 @@ public class Hiero extends JFrame {
 				}
 				fileMenu.addSeparator();
 				{
+					flipImageMenuItem = new JCheckBoxMenuItem("Flip output image");
+					flipImageMenuItem.setSelected(prefs.getBoolean("flipimage", false));
+					flipImageMenuItem.setMnemonic(KeyEvent.VK_I);
+					flipImageMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, KeyEvent.CTRL_MASK));
+					fileMenu.add(flipImageMenuItem);
+				}
+				fileMenu.addSeparator();
+				{
 					exitMenuItem = new JMenuItem("Exit");
 					exitMenuItem.setMnemonic(KeyEvent.VK_X);
 					fileMenu.add(exitMenuItem);
 				}
+				
+				JMenu settings = new JMenu("Settings");
+				settings.setMnemonic(KeyEvent.VK_T);
+				{
+					antiAliasTextMenuItem = new JCheckBoxMenuItem("Anti-aliasing");
+					antiAliasTextMenuItem.setSelected(prefs.getBoolean("antialias", true));
+					antiAliasTextMenuItem.setMnemonic(KeyEvent.VK_A);
+					antiAliasTextMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_MASK));
+					settings.add(antiAliasTextMenuItem);
+					
+					subPixelMenuItem = new JCheckBoxMenuItem("Sub-pixel accuracy");
+					subPixelMenuItem.setSelected(prefs.getBoolean("subpixel", true));
+					subPixelMenuItem.setMnemonic(KeyEvent.VK_P);
+					subPixelMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_MASK));
+					settings.add(subPixelMenuItem);
+				}
+				
+				menuBar.add(settings);
 			}
 		}
 	}

@@ -31,7 +31,7 @@ public class ImageTest extends BasicGame {
 	/** The current rotation of our test image */
 	private float rot;
 	/** True if the test should just exit first time round, used for testing shared contexts */
-	public static boolean exitMe = true;
+	public static boolean exitMe = false;
 	
 	/**
 	 * Create a new image rendering test
@@ -46,8 +46,8 @@ public class ImageTest extends BasicGame {
 	public void init(GameContainer container) throws SlickException {
 		image = tga = new Image("testdata/logo.png");
         rotImage = new Image("testdata/logo.png");
+        //center of rotation will be scaled accordingly
         rotImage = rotImage.getScaledCopy(rotImage.getWidth() / 2, rotImage.getHeight() / 2);
-        //rotImage.setCenterOfRotation(0,0);
         
 		scaleMe = new Image("testdata/logo.tga", true, Image.FILTER_NEAREST);
 		gif = new Image("testdata/logo.gif");
@@ -92,7 +92,11 @@ public class ImageTest extends BasicGame {
 		g.resetTransform();
         
         rotImage.setRotation(rot);
-        rotImage.draw(100, 200);
+        //centerX/centerY is scaled with rotation
+        rotImage.draw(100, 200, 0.25f);
+        rotImage.draw(10, 300, 2f);
+        
+        
 	}
 
 	/**

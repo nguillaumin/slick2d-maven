@@ -3,8 +3,10 @@ package org.newdawn.slick.opengl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 import org.lwjgl.BufferUtils;
+import org.newdawn.slick.util.Log;
 
 /**
  * The PNG imge data source that is pure java reading PNGs
@@ -22,16 +24,16 @@ public class PNGImageData implements LoadableImageData {
 	private int texWidth;
 	/** The decoder used to load the PNG */
 	private PNGDecoder decoder;
-	/** The bit depth of the image */
-	private int bitDepth;
+	/** The data format of this PNG */
+	private Format format;
 	/** The scratch buffer storing the image data */
 	private ByteBuffer scratch;
 	
     /**
-     * @see org.newdawn.slick.opengl.ImageData#getDepth()
+     * @see org.newdawn.slick.opengl.ImageData#getFormat()
      */
-	public int getDepth() {
-		return bitDepth;
+	public Format getFormat() {
+		return format;
 	}
 
 	/**
@@ -75,26 +77,56 @@ public class PNGImageData implements LoadableImageData {
 	public ByteBuffer loadImage(InputStream fis, boolean flipped, boolean forceAlpha, int[] transparent) throws IOException {
 		if (transparent != null) {
 			forceAlpha = true;
-			throw new IOException("Transparent color not support in custom PNG Decoder");
 		}
 		
 		PNGDecoder decoder = new PNGDecoder(fis);
-		
-		if (!decoder.isRGB()) {
-			throw new IOException("Only RGB formatted images are supported by the PNGLoader");
-		}
 		
 		width = decoder.getWidth();
 		height = decoder.getHeight();
 		texWidth = get2Fold(width);
 		texHeight = get2Fold(height);
+
+        final PNGDecoder.Format decoderFormat;
+        if (forceAlpha) {
+            if (decoder.isRGB()) {
+                decoderFormat = decoder.decideTextureFormat(PNGDecoder.Format.RGBA);
+            } else {
+                decoderFormat = decoder.decideTextureFormat(PNGDecoder.Format.LUMINANCE_ALPHA);
+            }
+        } else {
+            decoderFormat = decoder.decideTextureFormat(PNGDecoder.Format.LUMINANCE);
+        }
+
+        switch (decoderFormat) {
+            case RGB:
+                format = Format.RGB;
+                break;
+            case RGBA:
+                format = Format.RGBA;
+                break;
+            case BGRA:
+                format = Format.BGRA;
+                break;
+            case LUMINANCE:
+                format = Format.GRAY;
+                break;
+            case LUMINANCE_ALPHA:
+                format = Format.GRAYALPHA;
+                break;
+            default:
+                throw new IOException("Unsupported Image format.");
+        }
 		
-		int perPixel = decoder.hasAlpha() ? 4 : 3;
-		bitDepth = decoder.hasAlpha() ? 32 : 24;
+		int perPixel = format.getColorComponents();
 		
 		// Get a pointer to the image memory
 		scratch = BufferUtils.createByteBuffer(texWidth * texHeight * perPixel);
-		decoder.decode(scratch, texWidth * perPixel, perPixel == 4 ? PNGDecoder.RGBA : PNGDecoder.RGB);
+
+        if (flipped) {
+            decoder.decodeFlipped(scratch, texWidth * perPixel, decoderFormat);
+        } else {
+		    decoder.decode(scratch, texWidth * perPixel, decoderFormat);
+        }
 
 		if (height < texHeight-1) {
 			int topOffset = (texHeight-1) * (texWidth*perPixel);
@@ -114,44 +146,39 @@ public class PNGImageData implements LoadableImageData {
 				}
 			}
 		}
+
+        scratch.position(0);
 		
-		if (!decoder.hasAlpha() && forceAlpha) {
-			ByteBuffer temp = BufferUtils.createByteBuffer(texWidth * texHeight * 4);
-			for (int x=0;x<texWidth;x++) {
-				for (int y=0;y<texHeight;y++) {
-					int srcOffset = (y*3)+(x*texHeight*3);
-					int dstOffset = (y*4)+(x*texHeight*4);
-					
-					temp.put(dstOffset, scratch.get(srcOffset));
-					temp.put(dstOffset+1, scratch.get(srcOffset+1));
-					temp.put(dstOffset+2, scratch.get(srcOffset+2));
-					if ((x < getHeight()) && (y < getWidth())) {
-						temp.put(dstOffset+3, (byte) 255);
-					} else {
-						temp.put(dstOffset+3, (byte) 0);
-					}
-				}
-			}
-			
-			bitDepth = 32;
-			scratch = temp;
-		}
-			
 		if (transparent != null) {
-	        for (int i=0;i<texWidth*texHeight*4;i+=4) {
-	        	boolean match = true;
-	        	for (int c=0;c<3;c++) {
-	        		if (toInt(scratch.get(i+c)) != transparent[c]) {
-	        			match = false;
-	        		}
-	        	}
-	  
-	        	if (match) {
-	        		scratch.put(i+3, (byte) 0);
-	           	}
-	        }
-	    }
-		
+			// components will now be + 1
+			final int components = format.getColorComponents();
+
+            if (transparent.length != components - 1) {
+                Log.warn("The amount of color components of the transparent color does not fit the number of color components of the actual image.");
+            }
+
+            if (transparent.length < components - 1) {
+                Log.error("Failed to apply transparent color, not enough color values in color definition.");
+            } else {
+
+                final int size = texWidth * texHeight * components;
+                boolean match;
+
+                for (int i = 0; i < size; i += components) {
+                    match = true;
+                    for (int c = 0; c < components - 1; c++) {
+                        if (toInt(scratch.get(i + c)) != transparent[c]) {
+                            match = false;
+                            break;
+                        }
+                    }
+                    if (match) {
+                        scratch.put(i + components - 1, (byte) 0);
+                    }
+                }
+            }
+		}
+
 		scratch.position(0);
 		
 		return scratch;

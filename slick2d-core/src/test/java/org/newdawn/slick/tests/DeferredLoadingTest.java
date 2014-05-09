@@ -66,7 +66,7 @@ public class DeferredLoadingTest extends BasicGame {
 		new Image("testdata/rocket.png");
 		new Image("testdata/testpack.png");
 		
-		font = new AngelCodeFont("testdata/demo.fnt", "testdata/demo_00.tga");
+		font = new AngelCodeFont("testdata/demo.fnt", "testdata/demo.png");
 	}
 
 	/**

@@ -70,6 +70,24 @@ public class ScalableGame implements Game {
 	}
 	
 	/**
+	 * Returns the horizontal scale factor; e.g. target width divided by
+	 * native width.
+	 * @return the x-axis scaling
+	 */
+	public float getScaleX() {
+		return targetWidth / normalWidth;
+	}
+	
+	/**
+	 * Returns the vertical scale factor; e.g. target height divided by
+	 * native height.
+	 * @return the y-axis scaling
+	 */
+	public float getScaleY() {
+		return targetHeight / normalHeight;
+	}
+	
+	/**
 	 * Recalculate the scale of the game
 	 * 
 	 * @throws SlickException Indicates a failure to reinit the game

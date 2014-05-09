@@ -47,7 +47,7 @@ public class Glyph {
 		if (lsb > 0) lsb = 0;
 		int rsb = (int)metrics.getRSB();
 		if (rsb > 0) rsb = 0;
-
+		
 		int glyphWidth = bounds.width - lsb - rsb;
 		int glyphHeight = bounds.height;
 		if (glyphWidth > 0 && glyphHeight > 0) {
@@ -62,7 +62,7 @@ public class Glyph {
 		}
 
 		shape = vector.getGlyphOutline(index, -bounds.x + unicodeFont.getPaddingLeft(), -bounds.y + unicodeFont.getPaddingTop());
-
+		
 		isMissing = !unicodeFont.getFont().canDisplay((char)codePoint);
 	}
 

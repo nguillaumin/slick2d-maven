@@ -36,13 +36,14 @@ public class Rectangle extends Shape {
 	 * @param yp The y coordinate of the point to check
 	 * @return True if the point is within the rectangle
 	 */
+	@Override
 	public boolean contains(float xp, float yp) {
 	    checkPoints();
 	    
 		if (xp <= getX()) {
 			return false;
 		}
-		if (yp <= getY()) {
+		if (yp < getY()) {
 			return false;
 		}
 		if (xp >= maxX) {
@@ -95,6 +96,7 @@ public class Rectangle extends Shape {
 	 * 
 	 * @return The width of the box
 	 */
+	@Override
 	public float getWidth() {
 		return width;
 	}
@@ -104,6 +106,7 @@ public class Rectangle extends Shape {
 	 * 
 	 * @return The height of the box
 	 */
+	@Override
 	public float getHeight() {
 		return height;
 	}
@@ -164,6 +167,7 @@ public class Rectangle extends Shape {
 	 * @param shape The other shape to check against
 	 * @return True if the rectangles touch
 	 */
+	@Override
 	public boolean intersects(Shape shape) {
         if(shape instanceof Rectangle) {
             Rectangle other = (Rectangle)shape;
@@ -183,6 +187,7 @@ public class Rectangle extends Shape {
         }
 	}
 
+	@Override
 	protected void createPoints() {
         float useWidth = width ;
         float useHeight = height;
@@ -222,6 +227,7 @@ public class Rectangle extends Shape {
 	/**
 	 * @see java.lang.Object#toString()
 	 */
+	@Override
 	public String toString() {
 		return "[Rectangle "+width+"x"+height+"]";
 	}
@@ -255,6 +261,7 @@ public class Rectangle extends Shape {
      * @param transform The transform to be applied
      * @return The transformed shape.
      */
+	@Override
     public Shape transform(Transform transform) {
         checkPoints();
         

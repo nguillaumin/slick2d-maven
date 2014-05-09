@@ -17,6 +17,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Cursor;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.PixelFormat;
@@ -93,9 +94,7 @@ public class AppletGameContainer extends Applet {
             }
             catch (Exception e) {
                e.printStackTrace();
-               if (Display.isCreated()) {
-                  Display.destroy();
-               }
+               AppletGameContainer.this.destroy();
                displayParent.setVisible(false);//removeAll();
                add(new ConsolePanel(e));
                validate();
@@ -521,7 +520,7 @@ public class AppletGameContainer extends Applet {
             Display.update();
          }
 
-         Display.destroy();
+         destroy();
       }
    }
    

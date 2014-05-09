@@ -5,8 +5,10 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -17,17 +19,19 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
  *
  * @author kevin
  */
-public class TestState3 extends BasicGameState {
+public class TestState2 extends BasicGameState {
 	/** The ID given to this state */
-	public static final int ID = 3;
+	public static final int ID = 2;
 	/** The font to write the message with */
 	private Font font;
-	/** The menu options */
-	private String[] options = new String[] {"Start Game","Credits","Highscores","Instructions","Exit"};
-	/** The index of the selected option */
-	private int selected;
+	/** The image to be display */
+	private Image image;
+	/** The angle we'll rotate by */
+	private float ang;
 	/** The game holding this state */
 	private StateBasedGame game;
+	
+	private TextField username;
 	
 	/**
 	 * @see org.newdawn.slick.state.BasicGameState#getID()
@@ -40,8 +44,17 @@ public class TestState3 extends BasicGameState {
 	 * @see org.newdawn.slick.state.BasicGameState#init(org.newdawn.slick.GameContainer, org.newdawn.slick.state.StateBasedGame)
 	 */
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
-		font = new AngelCodeFont("testdata/demo2.fnt","testdata/demo2_00.tga");
 		this.game = game;
+		font = new AngelCodeFont("testdata/demo2.fnt","testdata/demo2.png");
+		image = new Image("testdata/logo.tga");
+		
+		username = new TextField(container, container.getDefaultFont(), 500, 500, 200, 20);
+		username.setBorderColor(Color.black);
+		username.setBackgroundColor(Color.white);
+		username.setTextColor(Color.black);
+		// username.setAcceptingInput(true);
+		// username.setCursorVisible(true);
+		// username.setText("Tree");
 	}
 
 	/**
@@ -49,46 +62,33 @@ public class TestState3 extends BasicGameState {
 	 */
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
 		g.setFont(font);
-		g.setColor(Color.blue);
-		g.drawString("This is State 3", 200, 50);
-		g.setColor(Color.white);
+		g.setColor(Color.green);
+		g.drawString("This is State 2", 200, 50);
 		
-		for (int i=0;i<options.length;i++) {
-			g.drawString(options[i], 400 - (font.getWidth(options[i])/2), 200+(i*50));
-			if (selected == i) {
-				g.drawRect(200,190+(i*50),400,50);
-			}
-		}
+
+		username.render(container, g);
+		
+		g.rotate(400,300,ang);
+		g.drawImage(image,400-(image.getWidth()/2),300-(image.getHeight()/2));
+		
 	}
 
 	/**
 	 * @see org.newdawn.slick.state.BasicGameState#update(org.newdawn.slick.GameContainer, org.newdawn.slick.state.StateBasedGame, int)
 	 */
 	public void update(GameContainer container, StateBasedGame game, int delta) {
+		ang += delta * 0.1f;
 	}
-
+	
 	/**
 	 * @see org.newdawn.slick.state.BasicGameState#keyReleased(int, char)
 	 */
 	public void keyReleased(int key, char c) {
-		if (key == Input.KEY_DOWN) {
-			selected++;
-			if (selected >= options.length) {
-				selected = 0;
-			}
-		}
-		if (key == Input.KEY_UP) {
-			selected--;
-			if (selected < 0) {
-				selected = options.length - 1;
-			}
-		}
 		if (key == Input.KEY_1) {
 			game.enterState(TestState1.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
 		}
-		if (key == Input.KEY_2) {
-			game.enterState(TestState2.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
+		if (key == Input.KEY_3) {
+			game.enterState(TestState3.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
 		}
 	}
-
 }

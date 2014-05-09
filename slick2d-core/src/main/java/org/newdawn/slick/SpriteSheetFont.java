@@ -53,23 +53,23 @@ public class SpriteSheetFont implements Font {
 	/**
 	 * @see org.newdawn.slick.Font#drawString(float, float, java.lang.String)
 	 */
-	public void drawString(float x, float y, String text) {
+	public void drawString(float x, float y, CharSequence text) {
 		drawString(x, y, text, Color.white);
 	}
 
 	/**
 	 * @see org.newdawn.slick.Font#drawString(float, float, java.lang.String, org.newdawn.slick.Color)
 	 */
-	public void drawString(float x, float y, String text, Color col) {
+	public void drawString(float x, float y, CharSequence text, Color col) {
 		drawString(x,y,text,col,0,text.length()-1);
 	}
 	
 	/**
 	 * @see Font#drawString(float, float, String, Color, int, int)
 	 */
-	public void drawString(float x, float y, String text, Color col, int startIndex, int endIndex) {
+	public void drawString(float x, float y, CharSequence text, Color col, int startIndex, int endIndex) {
 		try {
-			byte[] data = text.getBytes("US-ASCII");
+			byte[] data = text.toString().getBytes("US-ASCII");
 			for (int i = 0; i < data.length; i++) {
 				int index = data[i] - startingCharacter;
 				if (index < numChars) {
@@ -91,14 +91,14 @@ public class SpriteSheetFont implements Font {
 	/**
 	 * @see org.newdawn.slick.Font#getHeight(java.lang.String)
 	 */
-	public int getHeight(String text) {
+	public int getHeight(CharSequence text) {
 		return charHeight;
 	}
 
 	/**
 	 * @see org.newdawn.slick.Font#getWidth(java.lang.String)
 	 */
-	public int getWidth(String text) {
+	public int getWidth(CharSequence text) {
 		return charWidth * text.length();
 	}
 
