@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.slick2d</groupId>
 	<artifactId>slick2d-parent</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 	<packaging>pom</packaging>
 
 	<name>Slick2D Maven distribution - parent</name>
@@ -35,7 +35,7 @@
 		<url>git@github.com:nguillaumin/slick2d-maven.git</url>
 		<connection>scm:git:git@github.com:nguillaumin/slick2d-maven.git</connection>
 		<developerConnection>scm:git:git@github.com:nguillaumin/slick2d-maven.git</developerConnection>
-	  <tag>HEAD</tag>
+	  <tag>1.0.1</tag>
   </scm>
 
 	<modules>
