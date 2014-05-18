@@ -1,6 +1,6 @@
 # slick2d-maven changelog
 
-## v1.0.1
+## v1.0.1 (2014-05-18)
 
 * Now using Java 7 source level
 * Bumped all plugins / dependencies to latest versions
