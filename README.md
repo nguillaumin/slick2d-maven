@@ -4,6 +4,8 @@ The fastest and simplest way to start a new Slick 2D based game.
 
 ### Quickstart
 
+**You don't need to clone this repository to get started. The project archetype as well as the JARs are published in the official Maven repositories, so you can just follow the steps below from scratch.** Clone this project only if you want to contribute to Slick2D or to the game archetype.
+
 Pre-requisites:
 * Git, Java and Maven working
 * Slick 2D depends on `javaws.jar` which ships with the Oracle JDK (It's not available in the public Maven repositories). The `pom.xml` file references a *local filesystem path* to `javaws.jar` for that reason.
