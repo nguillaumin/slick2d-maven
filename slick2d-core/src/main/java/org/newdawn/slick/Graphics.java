@@ -6,11 +6,12 @@ import java.nio.FloatBuffer;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
-
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.ShapeRenderer;
+import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureImpl;
 import org.newdawn.slick.opengl.renderer.LineStripRenderer;
 import org.newdawn.slick.opengl.renderer.Renderer;
@@ -47,6 +48,12 @@ public class Graphics {
 	
 	/** Draw blending the new image into the old one by a factor of it's colour */
 	public static int MODE_SCREEN = 6;
+	
+	/** Draw adding the existing colour to the new colour including alpha */
+	public static int MODE_ADD_ALPHA = 7;
+	
+	/** Draw multiplying the source and destination colours */
+	public static int MODE_COLOR_MULTIPLY_ALPHA = 8;
 	
 	/** The default number of segments that will be used when drawing an oval */
 	private static final int DEFAULT_SEGMENTS = 50;
@@ -136,6 +143,7 @@ public class Graphics {
 	public Graphics(int width, int height) {
 		if (DEFAULT_FONT == null) {
 			AccessController.doPrivileged(new PrivilegedAction() {
+				@Override
 				public Object run() {
 					try {
 						DEFAULT_FONT = new AngelCodeFont(
@@ -206,6 +214,16 @@ public class Graphics {
 			GL.glEnable(SGL.GL_BLEND);
 			GL.glColorMask(true, true, true, true);
 			GL.glBlendFunc(SGL.GL_ONE, SGL.GL_ONE_MINUS_SRC_COLOR);
+		}
+		if (currentDrawingMode == MODE_ADD_ALPHA) {
+			GL.glEnable(SGL.GL_BLEND);
+			GL.glColorMask(true, true, true, true);
+			GL.glBlendFunc(SGL.GL_SRC_ALPHA, SGL.GL_ONE);
+		}
+		if (currentDrawingMode == MODE_COLOR_MULTIPLY_ALPHA) {
+			GL.glEnable(SGL.GL_BLEND);
+			GL.glColorMask(true, true, true, true);
+			GL.glBlendFunc(SGL.GL_ONE_MINUS_SRC_COLOR, SGL.GL_ONE_MINUS_SRC_ALPHA);
 		}
 		postdraw();
 	}
@@ -1271,10 +1289,8 @@ public class Graphics {
 
 		fillRect(x + cornerRadius, y, width - d, cornerRadius);
 		fillRect(x, y + cornerRadius, cornerRadius, height - d);
-		fillRect(x + width - cornerRadius, y + cornerRadius, cornerRadius,
-				height - d);
-		fillRect(x + cornerRadius, y + height - cornerRadius, width - d,
-				cornerRadius);
+		fillRect(x + width - cornerRadius, y + cornerRadius, cornerRadius, height - d);
+		fillRect(x + cornerRadius, y + height - cornerRadius, width - d, cornerRadius);
 		fillRect(x + cornerRadius, y + cornerRadius, width - d, height - d);
 
 		// bottom right - 0, 90
@@ -1499,7 +1515,8 @@ public class Graphics {
 
 	/**
 	 * Copy an area of the rendered screen into an image. The width and height
-	 * of the area are assumed to match that of the image
+	 * of the area are assumed to match that of the image, and the destination
+	 * offset is (0, 0).
 	 * 
 	 * @param target
 	 *            The target image
@@ -1509,12 +1526,37 @@ public class Graphics {
 	 *            The y position to copy from
 	 */
 	public void copyArea(Image target, int x, int y) {
-		int format = target.getTexture().hasAlpha() ? SGL.GL_RGBA : SGL.GL_RGB;
+		copyArea(target, x, y, 0, 0, target.getWidth(), target.getHeight());
+	}
+	
+	/**
+	 * Copies a sub-section of the rendered screen into the given image. The x/y offset determines where
+	 * on the target image to place the copied data; the width/height values determine how much to copy
+	 * from the screen.
+	 *
+	 * Note that invalid values, such as a height that is larger than the image's texture, may lead to
+	 * unexpected results.
+	 *
+	 * @param target the target image to copy the screen into
+	 * @param x the x position of the screen to start copying
+	 * @param y the y position of the screen to start copying
+	 * @param xoff the x destination on the target at which to place the copied data
+	 * @param yoff the y destination on the target at which to place the copied data
+	 * @param width the width of the data to copy from the screen
+	 * @param height the height of the data to copy from the screen
+	 */
+	public void copyArea(Image target, int x, int y, int xoff, int yoff, int width, int height) {
+		predraw();
+		Texture tex = target.getTexture();
 		target.bind();
-		GL.glCopyTexImage2D(SGL.GL_TEXTURE_2D, 0, format, x, screenHeight
-				- (y + target.getHeight()), target.getTexture()
-				.getTextureWidth(), target.getTexture().getTextureHeight(), 0);
-		target.ensureInverted();
+		if (isYFlipped()) {
+			GL11.glCopyTexSubImage2D(SGL.GL_TEXTURE_2D, 0, xoff, yoff, x, y, width, height);
+		} else {
+			int yoff2 = target.getHeight()-height-yoff;
+			GL11.glCopyTexSubImage2D(SGL.GL_TEXTURE_2D, 0, xoff, yoff2, x, screenHeight - (y+height), width, height);
+			target.ensureInverted();
+		}
+		postdraw();
 	}
 
 	/**
@@ -1776,5 +1818,9 @@ public class Graphics {
 	 */
 	public void destroy() {
 		
+	}
+
+	protected boolean isYFlipped() {
+		return false;
 	}
 }

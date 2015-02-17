@@ -13,6 +13,7 @@ import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.particles.ConfigurableEmitter;
@@ -203,6 +204,16 @@ public class ParticleGame extends BasicGame {
 			emitters.add(system.getEmitter(i));
 		}
 	}
+	
+	public void resetSystem() {
+		system.reset();
+		
+//		emitters.clear();
+//		system.setRemoveCompletedEmitters(true);
+//		for (int i = 0; i < system.getEmitterCount(); i++) {
+//			emitters.add(system.getEmitter(i));
+//		}
+	}
 
 	/**
 	 * Reset the counts held in this canvas (maximum particles for instance)
@@ -254,6 +265,13 @@ public class ParticleGame extends BasicGame {
 		}
 
 		Display.sync(100);
+	}
+	
+	public void keyPressed(int key, char c) {
+		if (key == Input.KEY_SPACE) {
+			System.out.println("resetting");
+			resetSystem();
+		}
 	}
 
 	public void render(GameContainer container, Graphics g)

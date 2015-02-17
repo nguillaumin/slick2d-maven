@@ -11,6 +11,12 @@ import org.newdawn.slick.SlickException;
  * @author kevin
  */
 public abstract class BasicGameState implements GameState {
+	
+	/** Pause boolean for the update call on the current state */
+	private boolean pauseUpdate = false;
+	/** Pause boolean for the render call on the current state */
+	private boolean pauseRender = false;
+	
 	/**
 	 * @see org.newdawn.slick.ControlledInputReciever#inputStarted()
 	 */
@@ -163,4 +169,53 @@ public abstract class BasicGameState implements GameState {
 	public void mouseWheelMoved(int newValue) {
 	}
 
+	/**
+	 * Pauses the update call on the this state.
+	 */
+	public void pauseUpdate() {
+		pauseUpdate = true;
+	}
+	/**
+	 * Pauses the render call on the this state.
+	 */
+	public void pauseRender() {
+		pauseRender = true;
+	}
+	/**
+	 * Unpauses the update call on the this state.
+	 */
+	public void unpauseUpdate() {
+		pauseUpdate = false;
+	}
+	/**
+	 * Unpauses the render call on the this state.
+	 */
+	public void unpauseRender() {
+		pauseRender = false;
+	}
+	/**
+	 * @see org.newdawn.slick.util.Pauseable#isUpdatePaused()
+	 */
+	public boolean isUpdatePaused() {
+		return pauseUpdate;
+	}
+	/**
+	 * @see org.newdawn.slick.util.Pauseable#isRenderPaused()
+	 */
+	public boolean isRenderPaused() {
+		return pauseRender;
+	}
+	/**
+	 * Pauses the update call on the this state if <code>pause</code> is true.
+	 */
+	public void setUpdatePaused(boolean pause) {
+		pauseUpdate = pause;
+	}
+	/**
+	 * Pauses the render call on the this state if <code>pause</code> is true.
+	 */
+	public void setRenderPaused(boolean pause) {
+		pauseRender = pause;
+	}
+	
 }

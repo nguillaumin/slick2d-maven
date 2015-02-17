@@ -31,8 +31,8 @@ public class CopyAreaAlphaTest extends BasicGame {
 	 */
 	public void init(GameContainer container) throws SlickException {
 		textureMap = new Image("testdata/grass.png");
-		container.getGraphics().setBackground(Color.black);
-		copy = new Image(100,100);
+		container.getGraphics().setBackground(Color.lightGray);
+		copy = new Image(300,200);
 	}
 
 	/**
@@ -49,11 +49,12 @@ public class CopyAreaAlphaTest extends BasicGame {
 			throws SlickException {
 		g.clearAlphaMap();
 		g.setDrawMode(Graphics.MODE_NORMAL);
+		
 		g.setColor(Color.white);
 		g.fillOval(100,100,150,150);
 		textureMap.draw(10,50);
 		
-		g.copyArea(copy, 100,100);
+		g.copyArea(copy, 10, 50);
 		g.setColor(Color.red);
 		g.fillRect(300,100,200,200);
 		copy.draw(350,150);

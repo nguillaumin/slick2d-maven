@@ -769,7 +769,7 @@ public class Input {
 	 * @return The absolute y position of the mouse cursor
 	 */
 	public int getAbsoluteMouseY() {
-		return height - Mouse.getY();
+		return height - Mouse.getY() - 1;
 	}
 	   
 	/**
@@ -787,7 +787,7 @@ public class Input {
 	 * @return The y position of the mouse cursor
 	 */
 	public int getMouseY() {
-		return (int) (((height-Mouse.getY()) * scaleY)+yoffset);
+		return (int) (((height-Mouse.getY() - 1) * scaleY)+yoffset);
 	}
 	
 	/**

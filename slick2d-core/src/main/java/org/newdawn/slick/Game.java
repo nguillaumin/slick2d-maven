@@ -52,4 +52,9 @@ public interface Game {
 	 * @return The title of the game
 	 */
 	public String getTitle();
+//	we really need this...
+//	/**
+//	 * Called to cleanup any resources that this game may own.
+//	 */
+//	public void cleanup();
 }

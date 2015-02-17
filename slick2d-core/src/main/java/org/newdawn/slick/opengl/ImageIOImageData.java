@@ -26,17 +26,17 @@ import javax.imageio.ImageIO;
  * @author kevin
  */
 public class ImageIOImageData implements LoadableImageData {
-	/** The colour model including alpha for the GL image */
-    private static final ColorModel glAlphaColorModel = 
+	/** The colour model for a image with the RGBA format. */
+    private static final ColorModel glColorModelRGBA = 
     		new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB),
 	            new int[] {8,8,8,8},
 	            true,
 	            false,
 	            ComponentColorModel.TRANSLUCENT,
 	            DataBuffer.TYPE_BYTE);
-    
-    /** The colour model for the GL image */
-    private static final  ColorModel glColorModel =
+
+    /** The colour model for a image with the RGB format. */
+    private static final  ColorModel glColorModelRGB =
     		new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB),
                 new int[] {8,8,8,0},
                 false,
@@ -44,8 +44,26 @@ public class ImageIOImageData implements LoadableImageData {
                 ComponentColorModel.OPAQUE,
                 DataBuffer.TYPE_BYTE);
     
-    /** The bit depth of the image */
-    private int depth;
+    /** The colour model for a image with the GRAY+ALPHA format. */
+    private static final ColorModel glColorModelGRAYALPHA = 
+            new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_GRAY),
+                new int[] {8,8,0,0},
+                true,
+                false,
+                ComponentColorModel.TRANSLUCENT,
+                DataBuffer.TYPE_BYTE);
+
+    /** The colour model for a image with the GRAY format. */
+    private static final  ColorModel glColorModelGRAY =
+            new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_GRAY),
+                new int[] {8,0,0,0},
+                false,
+                false,
+                ComponentColorModel.OPAQUE,
+                DataBuffer.TYPE_BYTE);
+    
+    /** The format of this image */
+    private Format format;
     /** The height of the image */
     private int height;
     /** The width of the image */
@@ -58,10 +76,10 @@ public class ImageIOImageData implements LoadableImageData {
     private boolean edging = true;
     
     /**
-     * @see org.newdawn.slick.opengl.ImageData#getDepth()
+     * @see org.newdawn.slick.opengl.ImageData#getFormat()
      */
-	public int getDepth() {
-		return depth;
+	public Format getFormat() {
+		return format;
 	}
 
 	/**
@@ -143,17 +161,30 @@ public class ImageIOImageData implements LoadableImageData {
         
         // create a raster that can be used by OpenGL as a source
         // for a texture
-        boolean useAlpha = image.getColorModel().hasAlpha() || forceAlpha; 
+        boolean useAlpha = image.getColorModel().hasAlpha() || forceAlpha;
+        boolean isRGB = image.getColorModel().getNumColorComponents() == 3;
         
-        if (useAlpha) {
-        	depth = 32;
-            raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE,texWidth,texHeight,4,null);
-            texImage = new BufferedImage(glAlphaColorModel,raster,false,new Hashtable());
+        ColorModel usedModel;
+        if (isRGB) {
+            if (useAlpha) {
+                usedModel = glColorModelRGBA;
+                format = Format.RGBA;
+            } else {
+                usedModel = glColorModelRGB;
+                format = Format.RGB;
+            }
         } else {
-        	depth = 24;
-            raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE,texWidth,texHeight,3,null);
-            texImage = new BufferedImage(glColorModel,raster,false,new Hashtable());
+            if (useAlpha) {
+                usedModel = glColorModelGRAYALPHA;
+                format = Format.GRAYALPHA;
+            } else {
+                usedModel = glColorModelGRAY;
+                format = Format.GRAY;
+            }
         }
+        
+        raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE,texWidth,texHeight,format.getColorComponents(),null);
+        texImage = new BufferedImage(usedModel,raster,false,new Hashtable());
             
         // copy the source image into the produced image
         Graphics2D g = (Graphics2D) texImage.getGraphics();
@@ -186,20 +217,24 @@ public class ImageIOImageData implements LoadableImageData {
         // that be used by OpenGL to produce a texture.
         byte[] data = ((DataBufferByte) texImage.getRaster().getDataBuffer()).getData(); 
         
-        if (transparent != null) {
-	        for (int i=0;i<data.length;i+=4) {
-	        	boolean match = true;
-	        	for (int c=0;c<3;c++) {
-	        		int value = data[i+c] < 0 ? 256 + data[i+c] : data[i+c];
-	        		if (value != transparent[c]) {
-	        			match = false;
-	        		}
-	        	}
-	  
-	        	if (match) {
-	         		data[i+3] = 0;
-	           	}
-	        }
+        if (!format.hasAlpha() && transparent != null) {
+            final int components = format.getColorComponents();
+            final int size = texWidth*texHeight*components;
+            boolean match;
+            
+            for (int i = 0; i < size; i += components) {
+                match = true;
+                for (int c=0;c<components;c++) {
+                    if (toInt(data[i+c]) != transparent[c]) {
+                        match = false;
+                        break;
+                    }
+                }
+      
+                if (match) {
+                    data[i+components] = 0;
+                }
+            }
         }
         
         imageBuffer = ByteBuffer.allocateDirect(data.length); 
@@ -210,6 +245,20 @@ public class ImageIOImageData implements LoadableImageData {
         
         return imageBuffer; 
 	}
+    
+    /**
+     * Safe convert byte to int
+     *  
+     * @param b The byte to convert
+     * @return The converted byte
+     */
+    private int toInt(byte b) {
+        if (b < 0) {
+            return 256+b;
+        }
+        
+        return b;
+    }
 	
 	/**
 	 * @see org.newdawn.slick.opengl.ImageData#getImageBufferData()

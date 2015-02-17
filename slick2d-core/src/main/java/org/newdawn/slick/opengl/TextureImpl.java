@@ -41,7 +41,7 @@ public class TextureImpl implements Texture {
     /** The GL target type */
     private int target; 
     /** The GL texture ID */
-    private int textureID;
+    private int textureID = 0;
     /** The height of the image */
     private int height;
     /** The width of the image */
@@ -54,8 +54,8 @@ public class TextureImpl implements Texture {
     private float widthRatio;
     /** The ratio of the height of the image to the texture */
     private float heightRatio;
-    /** If this texture has alpha */
-    private boolean alpha;
+    /** The format of this image. */
+    private ImageData.Format format;
     /** The reference this texture was loaded from */
     private String ref;
     /** The name the texture has in the cache */
@@ -97,7 +97,7 @@ public class TextureImpl implements Texture {
 	 * @see org.newdawn.slick.opengl.Texture#hasAlpha()
 	 */
     public boolean hasAlpha() {
-    	return alpha;
+    	return format.hasAlpha();
     }
     
     /**
@@ -106,14 +106,14 @@ public class TextureImpl implements Texture {
     public String getTextureRef() {
     	return ref;
     }
-    
-    /** 
-     * If this texture has alpha
-     * 
-     * @param alpha True, If this texture has alpha
-     */
-    public void setAlpha(boolean alpha) {
-    	this.alpha = alpha;
+
+  /**
+   * Set the format of the image
+   * 
+   * @param imageFormat the format of the image this texture displays
+   */
+    public void setImageFormat(final ImageData.Format imageFormat) {
+      format = imageFormat;
     }
     
     /**
@@ -162,6 +162,10 @@ public class TextureImpl implements Texture {
     public void setWidth(int width) {
         this.width = width;
         setWidth();
+    }
+    
+    public ImageData.Format getImageFormat() {
+    	return format;
     }
     
     /**
@@ -250,11 +254,9 @@ public class TextureImpl implements Texture {
 	 * @see org.newdawn.slick.opengl.Texture#release()
 	 */
     public void release() {
-        IntBuffer texBuf = createIntBuffer(1); 
-        texBuf.put(textureID);
-        texBuf.flip();
-        
-    	GL.glDeleteTextures(texBuf);
+    	if (textureID == 0) 
+    		return;
+    	InternalTextureLoader.deleteTextureID(textureID);
     	
         if (lastBind == this) {
         	bindNone();
@@ -265,6 +267,7 @@ public class TextureImpl implements Texture {
         } else {
         	InternalTextureLoader.get().clear(ref);
         }
+        textureID = 0;
     }
     
     /**
@@ -301,9 +304,9 @@ public class TextureImpl implements Texture {
 	 * @see org.newdawn.slick.opengl.Texture#getTextureData()
 	 */
     public byte[] getTextureData() {
-    	ByteBuffer buffer = BufferUtils.createByteBuffer((hasAlpha() ? 4 : 3) * texWidth * texHeight);
+    	ByteBuffer buffer = BufferUtils.createByteBuffer(format.getColorComponents() * texWidth * texHeight);
     	bind();
-    	GL.glGetTexImage(SGL.GL_TEXTURE_2D, 0, hasAlpha() ? SGL.GL_RGBA : SGL.GL_RGB, SGL.GL_UNSIGNED_BYTE, 
+    	GL.glGetTexImage(SGL.GL_TEXTURE_2D, 0, format.getOGLType(), SGL.GL_UNSIGNED_BYTE,
     					   buffer);
     	byte[] data = new byte[buffer.limit()];
     	buffer.get(data);
@@ -341,15 +344,16 @@ public class TextureImpl implements Texture {
 	}
 	
 	/**
-	 * Reload this texture
+	 * Reload this texture if it is holding texture data (release() should be called before this).
+	 * This is generally done internally (i.e. for use with context switches in Android / OpenGL ES)
 	 */
 	public void reload() {
 		if (reloadData != null) {
 			textureID = reloadData.reload();
 		}
 	}
-	
-	/** 
+
+  /** 
 	 * Reload this texture from it's original source data
 	 */
 	private class ReloadData {

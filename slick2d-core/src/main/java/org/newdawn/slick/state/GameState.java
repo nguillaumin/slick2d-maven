@@ -4,6 +4,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.util.Pauseable;
 
 /**
  * A single state building up part of the game. The state include rendering, logic and input handling
@@ -11,7 +12,7 @@ import org.newdawn.slick.SlickException;
  *
  * @author kevin
  */
-public interface GameState extends InputListener {
+public interface GameState extends InputListener, Pauseable {
 	/**
 	 * Get the ID of this state
 	 * 

@@ -6,6 +6,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.opengl.InternalTextureLoader;
+import org.newdawn.slick.util.Log;
 
 /**
  * A test for basic image rendering
@@ -26,11 +28,14 @@ public class ImageMemTest extends BasicGame {
 	 */
 	public void init(GameContainer container) throws SlickException {
 		try {
-            Image img = new Image(2400, 2400);
+            Image img = Image.createOffscreenImage(2400, 2400);
             img.getGraphics();
             img.destroy();
-            img = new Image(2400, 2400);
+            img = Image.createOffscreenImage(2400, 2400);
             img.getGraphics();
+            img.destroy();
+
+            Log.info("Total active textures: "+InternalTextureLoader.get().getTextureCount());
         } catch (Exception ex) {
         	ex.printStackTrace();
         }

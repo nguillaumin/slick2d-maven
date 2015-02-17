@@ -33,20 +33,6 @@ public class BigImage extends Image {
 	/** The renderer to use for all GL operations */
 	protected static SGL GL = Renderer.get();
 	
-	/**
-	 * Get the maximum size of an image supported by the underlying
-	 * hardware.
-	 * 
-	 * @return The maximum size of the textures supported by the underlying
-	 * hardware.
-	 */
-	public static final int getMaxSingleImageSize() {
-		IntBuffer buffer = BufferUtils.createIntBuffer(16);
-		GL.glGetInteger(SGL.GL_MAX_TEXTURE_SIZE, buffer);
-		
-		return buffer.get(0);
-	}
-	
 	/** The last image that we put into "in use" mode */
 	private static Image lastBind;
 	
@@ -172,8 +158,8 @@ public class BigImage extends Image {
 		if ((dataWidth <= tileSize) && (dataHeight <= tileSize)) {
 			images = new Image[1][1];
 			ImageData tempData = new ImageData() {
-				public int getDepth() {
-					return data.getDepth();
+				public Format getFormat() {
+					return data.getFormat();
 				}
 
 				public int getHeight() {
@@ -207,7 +193,7 @@ public class BigImage extends Image {
 		ycount = ((realHeight-1) / tileSize) + 1;
 		
 		images = new Image[xcount][ycount];
-		int components = data.getDepth() / 8;
+		int components = data.getFormat().getColorComponents();
 		
 		for (int x=0;x<xcount;x++) {
 			for (int y=0;y<ycount;y++) {
@@ -233,8 +219,8 @@ public class BigImage extends Image {
 				
 				subBuffer.flip();
 				ImageData imgData = new ImageData() {
-					public int getDepth() {
-						return data.getDepth();
+					public Format getFormat() {
+						return data.getFormat();
 					}
 
 					public int getHeight() {

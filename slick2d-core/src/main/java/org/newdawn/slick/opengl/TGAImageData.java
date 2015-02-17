@@ -28,8 +28,8 @@ public class TGAImageData implements LoadableImageData {
 	private int width;
 	/** The height of the TGA image */
 	private int height;
-	/** The bit depth of the image */
-	private short pixelDepth;
+	/** The format of this image */
+	private Format format;
 
 	/**
 	 * Create a new TGA Loader
@@ -49,10 +49,10 @@ public class TGAImageData implements LoadableImageData {
 	}
 	
 	/**
-	 * @see org.newdawn.slick.opengl.ImageData#getDepth()
+	 * @see org.newdawn.slick.opengl.ImageData#getFormat()
 	 */
-	public int getDepth() {
-		return pixelDepth;
+	public Format getFormat() {
+		return format;
 	}
 	
 	/**
@@ -128,7 +128,7 @@ public class TGAImageData implements LoadableImageData {
 		
 		width = flipEndian(dis.readShort());
 		height = flipEndian(dis.readShort());
-		pixelDepth = (short) dis.read();
+		short pixelDepth = (short) dis.read();
 		if (pixelDepth == 32) {
 			forceAlpha = false;
 		}
@@ -149,8 +149,10 @@ public class TGAImageData implements LoadableImageData {
 		byte[] rawData = null;
 		if ((pixelDepth == 32) || (forceAlpha)) {
 			pixelDepth = 32;
+			format = Format.RGBA;
 			rawData = new byte[texWidth * texHeight * 4];
 		} else if (pixelDepth == 24) {
+            format = Format.RGB;
 			rawData = new byte[texWidth * texHeight * 3];
 		} else {
 			throw new RuntimeException("Only 24 and 32 bit TGAs are supported");

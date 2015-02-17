@@ -21,6 +21,7 @@ import org.w3c.dom.NodeList;
  * A holder for tileset information
  * 
  * @author kevin
+ * @author liamzebedee
  */
 public class TileSet {
 	/** The map this tileset was loaded as part of */
@@ -45,12 +46,16 @@ public class TileSet {
 	/** The number of tiles down the sprite sheet */
 	public int tilesDown;
 
+	/** The properties for this tileset */
+	Properties tilesetProperties = new Properties();
 	/** The properties for each tile */
-	private HashMap props = new HashMap();
+	private HashMap<Integer, Properties> tileProperties = new HashMap<Integer, Properties>();
 	/** The padding of the tiles */
-	protected int tileSpacing = 0;
+	public int tileSpacing = 0;
 	/** The margin of the tileset */
-	protected int tileMargin = 0;
+	public int tileMargin = 0;
+	/** The image for this tileset */
+	public String imageref;
 
 	/**
 	 * Create a tile set based on an XML definition
@@ -60,14 +65,14 @@ public class TileSet {
 	 * @param map
 	 *            The map this tileset was loaded from (gives context to paths)
 	 * @param loadImage
-	 *            True if we should load the image (useful in headless mode)
+	 *            True if the images should be loaded, false if we're running
+	 *            somewhere images can't be loaded
 	 * @throws SlickException
 	 *             Indicates a failure to parse the tileset
 	 */
 	public TileSet(TiledMap map, Element element, boolean loadImage)
 			throws SlickException {
 		this.map = map;
-		name = element.getAttribute("name");
 		firstGID = Integer.parseInt(element.getAttribute("firstgid"));
 		String source = element.getAttribute("source");
 
@@ -88,6 +93,7 @@ public class TileSet {
 								+ this.map.tilesLocation + "/" + source);
 			}
 		}
+		name = element.getAttribute("name");
 		String tileWidthString = element.getAttribute("tilewidth");
 		String tileHeightString = element.getAttribute("tileheight");
 		if (tileWidthString.length() == 0 || tileHeightString.length() == 0) {
@@ -121,6 +127,7 @@ public class TileSet {
 		}
 
 		if (loadImage) {
+			imageref = map.getTilesLocation() + "/" + ref;
 			Image image = new Image(map.getTilesLocation() + "/" + ref, false,
 					Image.FILTER_NEAREST, trans);
 			setTileSetImage(image);
@@ -136,9 +143,10 @@ public class TileSet {
 
 			Element propsElement = (Element) tileElement.getElementsByTagName(
 					"properties").item(0);
-			NodeList properties = propsElement.getElementsByTagName("property");
-			for (int p = 0; p < properties.getLength(); p++) {
-				Element propElement = (Element) properties.item(p);
+			NodeList tilePropertiesList = propsElement
+					.getElementsByTagName("property");
+			for (int p = 0; p < tilePropertiesList.getLength(); p++) {
+				Element propElement = (Element) tilePropertiesList.item(p);
 
 				String name = propElement.getAttribute("name");
 				String value = propElement.getAttribute("value");
@@ -146,7 +154,22 @@ public class TileSet {
 				tileProps.setProperty(name, value);
 			}
 
-			props.put(new Integer(id), tileProps);
+			tileProperties.put(new Integer(id), tileProps);
+		}
+
+		Properties tileProps = new Properties();
+
+		Element propsElement = (Element) element.getElementsByTagName(
+				"properties").item(0);
+		if (propsElement != null) {
+			NodeList properties = propsElement.getElementsByTagName("property");
+			for (int p = 0; p < properties.getLength(); p++) {
+				Element propElement = (Element) properties.item(p);
+
+				String name = propElement.getAttribute("name");
+				String value = propElement.getAttribute("value");
+				tilesetProperties.setProperty(name, value);
+			}
 		}
 	}
 
@@ -193,6 +216,7 @@ public class TileSet {
 	 *            The image to use for this tileset
 	 */
 	public void setTileSetImage(Image image) {
+
 		tiles = new SpriteSheet(image, tileWidth, tileHeight, tileSpacing,
 				tileMargin);
 		tilesAcross = tiles.getHorizontalCount();
@@ -217,7 +241,7 @@ public class TileSet {
 	 *         are defined
 	 */
 	public Properties getProperties(int globalID) {
-		return (Properties) props.get(new Integer(globalID));
+		return (Properties) tileProperties.get(new Integer(globalID));
 	}
 
 	/**

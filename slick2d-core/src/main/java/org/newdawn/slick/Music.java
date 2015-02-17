@@ -309,6 +309,11 @@ public class Music {
 		return (currentMusic == this) && (playing);
 	}
 	
+	public boolean paused() {
+		return sound.isPaused();
+	}
+	
+	
 	/**
 	 * Set the volume of the music as a factor of the global volume setting
 	 * 
@@ -409,5 +414,14 @@ public class Music {
 	 */
 	public float getPosition () {
 		return sound.getPosition();
+	}
+	
+
+	/**
+	 * Stops the sound, removes any queued buffers,
+	 * and closes the stream. 
+	 */
+	public void release() {
+		sound.release();
 	}
 }

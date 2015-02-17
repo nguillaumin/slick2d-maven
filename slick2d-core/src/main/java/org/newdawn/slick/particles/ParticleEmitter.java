@@ -33,6 +33,12 @@ public interface ParticleEmitter {
 	public void wrapUp();
 	
 	/**
+	 * Resumes a particle emitter if it is not completed, after wrapUp() was invoked
+	 * @author liamzebedee
+	 */
+	public void resume();
+	
+	/**
 	 * Update a single particle that this emitter produced
 	 * 
 	 * @param particle The particle to be updated

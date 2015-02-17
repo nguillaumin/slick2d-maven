@@ -112,6 +112,16 @@ public class OpenALStreamPlayer {
 		return (url == null) ? ref : url.toString();
 	}
 	
+	
+	public void close() {
+		removeBuffers();
+		if (audio!=null) {
+			try {audio.close();}
+			catch (IOException e) {}
+		}
+		done = true;
+	}
+	
 	/**
 	 * Clean up the buffers applied to the sound source
 	 */

@@ -28,6 +28,7 @@ import org.xml.sax.SAXException;
  * 
  * @author kevin
  * @author Tiago Costa
+ * @author liamzebedee
  * @author Loads of others!
  */
 public class TiledMap {
@@ -41,8 +42,12 @@ public class TiledMap {
 	 * @param h
 	 *            True if we're running on a headless system
 	 */
-	private static void setHeadless(boolean h) {
+	public static void setHeadless(boolean h) {
 		headless = h;
+	}
+	
+	public static boolean isHeadless() {
+		return headless;
 	}
 
 	/** The width of the map */
@@ -61,12 +66,13 @@ public class TiledMap {
 	protected Properties props;
 
 	/** The list of tilesets defined in the map */
-	protected ArrayList tileSets = new ArrayList();
+	protected ArrayList<TileSet> tileSets = new ArrayList<TileSet>();
 	/** The list of layers defined in the map */
-	protected ArrayList layers = new ArrayList();
+	protected ArrayList<Layer> layers = new ArrayList<Layer>();
 	/** The list of object-groups defined in the map */
-	protected ArrayList objectGroups = new ArrayList();
+	protected ArrayList<ObjectGroup> objectGroups = new ArrayList<ObjectGroup>();
 
+	// TODO Change to enums? Maybe more efficient and designed for this purpose?
 	/** Indicates a orthogonal map */
 	protected static final int ORTHOGONAL = 1;
 	/** Indicates an isometric map */
@@ -436,6 +442,7 @@ public class TiledMap {
 	/**
 	 * Render a section of the tile map
 	 * 
+	 * @author liamzebedee
 	 * @param x
 	 *            The x location to render at
 	 * @param y
@@ -545,9 +552,6 @@ public class TiledMap {
 				allCount++;
 			}
 
-			// System.out.println("Line : " + counter++ + " - " + count +
-			// "allcount : " + allCount);
-
 			if (startLineTileY < (height - 1)) {
 				startLineTileY += 1;
 				initialLineX -= tileWidth / 2;
@@ -570,21 +574,6 @@ public class TiledMap {
 	 */
 	public int getLayerCount() {
 		return layers.size();
-	}
-
-	/**
-	 * Save parser for strings to ints
-	 * 
-	 * @param value
-	 *            The string to parse
-	 * @return The integer to parse or zero if the string isn't an int
-	 */
-	private int parseInt(String value) {
-		try {
-			return Integer.parseInt(value);
-		} catch (NumberFormatException e) {
-			return 0;
-		}
 	}
 
 	/**
@@ -617,20 +606,17 @@ public class TiledMap {
 			Document doc = builder.parse(in);
 			Element docElement = doc.getDocumentElement();
 
-			if (docElement.getAttribute("orientation").equals("orthogonal"))
+			if (docElement.getAttribute("orientation").equals("orthogonal")) {
 				orientation = ORTHOGONAL;
-			else
+			} else {
 				orientation = ISOMETRIC;
-			/*
-			 * if (!orient.equals("orthogonal")) { throw new
-			 * SlickException("Only orthogonal maps supported, found: "+orient);
-			 * }
-			 */
+			}
 
-			width = parseInt(docElement.getAttribute("width"));
-			height = parseInt(docElement.getAttribute("height"));
-			tileWidth = parseInt(docElement.getAttribute("tilewidth"));
-			tileHeight = parseInt(docElement.getAttribute("tileheight"));
+			width = Integer.parseInt(docElement.getAttribute("width"));
+			height = Integer.parseInt(docElement.getAttribute("height"));
+			tileWidth = Integer.parseInt(docElement.getAttribute("tilewidth"));
+			tileHeight = Integer
+					.parseInt(docElement.getAttribute("tileheight"));
 
 			// now read the map properties
 			Element propsElement = (Element) docElement.getElementsByTagName(
@@ -675,7 +661,6 @@ public class TiledMap {
 				Element current = (Element) layerNodes.item(i);
 				Layer layer = new Layer(this, current);
 				layer.index = i;
-
 				layers.add(layer);
 			}
 
@@ -685,7 +670,7 @@ public class TiledMap {
 
 			for (int i = 0; i < objectGroupNodes.getLength(); i++) {
 				Element current = (Element) objectGroupNodes.item(i);
-				ObjectGroup objectGroup = new ObjectGroup(current);
+				ObjectGroup objectGroup = new ObjectGroup(current, this);
 				objectGroup.index = i;
 
 				objectGroups.add(objectGroup);
@@ -973,136 +958,6 @@ public class TiledMap {
 			}
 		}
 		return def;
-	}
-
-	/**
-	 * A group of objects on the map (objects layer)
-	 * 
-	 * @author kulpae
-	 */
-	protected class ObjectGroup {
-		/** The index of this group */
-		public int index;
-		/** The name of this group - read from the XML */
-		public String name;
-		/** The Objects of this group */
-		public ArrayList objects;
-		/** The width of this layer */
-		public int width;
-		/** The height of this layer */
-		public int height;
-
-		/** the properties of this group */
-		public Properties props;
-
-		/**
-		 * Create a new group based on the XML definition
-		 * 
-		 * @param element
-		 *            The XML element describing the layer
-		 * @throws SlickException
-		 *             Indicates a failure to parse the XML group
-		 */
-		public ObjectGroup(Element element) throws SlickException {
-			name = element.getAttribute("name");
-			width = Integer.parseInt(element.getAttribute("width"));
-			height = Integer.parseInt(element.getAttribute("height"));
-			objects = new ArrayList();
-
-			// now read the layer properties
-			Element propsElement = (Element) element.getElementsByTagName(
-					"properties").item(0);
-			if (propsElement != null) {
-				NodeList properties = propsElement
-						.getElementsByTagName("property");
-				if (properties != null) {
-					props = new Properties();
-					for (int p = 0; p < properties.getLength(); p++) {
-						Element propElement = (Element) properties.item(p);
-
-						String name = propElement.getAttribute("name");
-						String value = propElement.getAttribute("value");
-						props.setProperty(name, value);
-					}
-				}
-			}
-
-			NodeList objectNodes = element.getElementsByTagName("object");
-			for (int i = 0; i < objectNodes.getLength(); i++) {
-				Element objElement = (Element) objectNodes.item(i);
-				GroupObject object = new GroupObject(objElement);
-				object.index = i;
-				objects.add(object);
-			}
-		}
-	}
-
-	/**
-	 * An object from a object-group on the map
-	 * 
-	 * @author kulpae
-	 */
-	protected class GroupObject {
-		/** The index of this object */
-		public int index;
-		/** The name of this object - read from the XML */
-		public String name;
-		/** The type of this object - read from the XML */
-		public String type;
-		/** The x-coordinate of this object */
-		public int x;
-		/** The y-coordinate of this object */
-		public int y;
-		/** The width of this object */
-		public int width;
-		/** The height of this object */
-		public int height;
-		/** The image source */
-		private String image;
-
-		/** the properties of this group */
-		public Properties props;
-
-		/**
-		 * Create a new group based on the XML definition
-		 * 
-		 * @param element
-		 *            The XML element describing the layer
-		 * @throws SlickException
-		 *             Indicates a failure to parse the XML group
-		 */
-		public GroupObject(Element element) throws SlickException {
-			name = element.getAttribute("name");
-			type = element.getAttribute("type");
-			x = Integer.parseInt(element.getAttribute("x"));
-			y = Integer.parseInt(element.getAttribute("y"));
-			width = Integer.parseInt(element.getAttribute("width"));
-			height = Integer.parseInt(element.getAttribute("height"));
-
-			Element imageElement = (Element) element.getElementsByTagName(
-					"image").item(0);
-			if (imageElement != null) {
-				image = imageElement.getAttribute("source");
-			}
-
-			// now read the layer properties
-			Element propsElement = (Element) element.getElementsByTagName(
-					"properties").item(0);
-			if (propsElement != null) {
-				NodeList properties = propsElement
-						.getElementsByTagName("property");
-				if (properties != null) {
-					props = new Properties();
-					for (int p = 0; p < properties.getLength(); p++) {
-						Element propElement = (Element) properties.item(p);
-
-						String name = propElement.getAttribute("name");
-						String value = propElement.getAttribute("value");
-						props.setProperty(name, value);
-					}
-				}
-			}
-		}
 	}
 
 }

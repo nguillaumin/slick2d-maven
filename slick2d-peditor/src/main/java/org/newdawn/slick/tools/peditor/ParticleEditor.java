@@ -8,6 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.prefs.Preferences;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -91,13 +92,15 @@ public class ParticleEditor extends JFrame {
 	/** The currently selected particle emitter */
 	private ConfigurableEmitter selected;
 	/** Chooser used to load/save/import/export */
-	private JFileChooser chooser = new JFileChooser(new File("."));
+	private JFileChooser chooser;
 	/** Reset the particle counts on the canvas */
 	private JButton reset = new JButton("Reset Max");
 	/** Play or Pause the current rendering */
 	private JButton pause = new JButton("Play/Pause");
 	/** The slider defining the movement of the system */
 	private JSlider systemMove = new JSlider(-100,100,0);
+	
+	static Preferences prefs = Preferences.userNodeForPackage(ParticleEditor.class);
 	
 	/** The graph editor frame **/
 	private JFrame graphEditorFrame;
@@ -112,7 +115,9 @@ public class ParticleEditor extends JFrame {
 	 */
 	public ParticleEditor() throws LWJGLException, SlickException {
 		super("Pedigree - Whiskas flavoured");
-
+		
+		chooser = new JFileChooser(new File(prefs.get("filechooser", ".")));
+		
 		xmlFileFilter = new FileFilter() {
 			public boolean accept(File f) {
 				if (f.isDirectory()) {
@@ -143,7 +148,7 @@ public class ParticleEditor extends JFrame {
 		emitters = new EmitterList(this);
 		emissionControls = new EmissionControls();
 		positionControls = new PositionControls();
-		settingsPanel = new SettingsPanel(emitters);
+		settingsPanel = new SettingsPanel(emitters, chooser);
 		colorPanel = new ColorPanel();
 		limitPanel = new LimitPanel(emitters);
 		whiskasPanel= new WhiskasPanel( emitters, colorPanel, emissionControls );
@@ -337,7 +342,7 @@ public class ParticleEditor extends JFrame {
 		
 		try {
 			container.start();
-		} catch (SlickException e1) {
+		} catch (Exception e1) {
 			Log.error(e1);
 		}
 	}
@@ -346,10 +351,13 @@ public class ParticleEditor extends JFrame {
 	 * Load a background image to display behind the particle system
 	 */
 	private void loadBackground() {
-		JFileChooser chooser = new JFileChooser(".");
 		chooser.setDialogTitle("Open");
+		String p = prefs.get("filechooser", null);
+		if (p!=null)
+			chooser.setCurrentDirectory(new File(p));
 		int resp = chooser.showOpenDialog(this);
 		if (resp == JFileChooser.APPROVE_OPTION) {
+			prefs.put("filechooser", chooser.getSelectedFile().getParentFile().getPath());
 			game.setBackgroundImage(chooser.getSelectedFile());
 		}
 	}
@@ -402,8 +410,12 @@ public class ParticleEditor extends JFrame {
 	 */
 	public void importEmitter() {
 		chooser.setDialogTitle("Open");
+		String p = prefs.get("filechooser", null);
+		if (p!=null)
+			chooser.setCurrentDirectory(new File(p));
 		int resp = chooser.showOpenDialog(this);
 		if (resp == JFileChooser.APPROVE_OPTION) {
+			prefs.put("filechooser", chooser.getSelectedFile().getParentFile().getPath());
 			File file = chooser.getSelectedFile();
 			File path = file.getParentFile();
 			
@@ -434,6 +446,7 @@ public class ParticleEditor extends JFrame {
 						};
 						chooser.addChoosableFileFilter(filter);
 						if (resp == JFileChooser.APPROVE_OPTION) {
+							prefs.put("filechooser", chooser.getSelectedFile().getParentFile().getPath());
 							File image = chooser.getSelectedFile();
 							emitter.setImageName(image.getAbsolutePath());
 							path = image.getParentFile();
@@ -484,6 +497,9 @@ public class ParticleEditor extends JFrame {
 		}
 
 		chooser.setDialogTitle("Save");
+		String p = prefs.get("filechooser", null);
+		if (p!=null)
+			chooser.setCurrentDirectory(new File(p));
 		int resp = chooser.showSaveDialog(this);
 		if (resp == JFileChooser.APPROVE_OPTION) {
 			File file = chooser.getSelectedFile();
@@ -514,8 +530,12 @@ public class ParticleEditor extends JFrame {
 	 */
 	public void loadSystem() {
 		chooser.setDialogTitle("Open");
+		String p = prefs.get("filechooser", null);
+		if (p!=null)
+			chooser.setCurrentDirectory(new File(p));
 		int resp = chooser.showOpenDialog(this);
 		if (resp == JFileChooser.APPROVE_OPTION) {
+			prefs.put("filechooser", chooser.getSelectedFile().getParentFile().getPath());
 			File file = chooser.getSelectedFile();
 			File path = file.getParentFile();
 			
@@ -550,6 +570,7 @@ public class ParticleEditor extends JFrame {
 							chooser.addChoosableFileFilter(filter);
 							resp = chooser.showOpenDialog(this);
 							if (resp == JFileChooser.APPROVE_OPTION) {
+								prefs.put("filechooser", chooser.getSelectedFile().getParentFile().getPath());
 								File image = chooser.getSelectedFile();
 								emitter.setImageName(image.getAbsolutePath());
 								path = image.getParentFile();
@@ -577,8 +598,12 @@ public class ParticleEditor extends JFrame {
 	 * Save a complete particle system XML description
 	 */
 	public void saveSystem() {
-		int resp = chooser.showSaveDialog(this);
+		String p = prefs.get("filechooser", null);
+		if (p!=null)
+			chooser.setCurrentDirectory(new File(p));
+		int resp = chooser.showSaveDialog(this);		
 		if (resp == JFileChooser.APPROVE_OPTION) {
+			prefs.put("filechooser", chooser.getSelectedFile().getParentFile().getPath());
 			File file = chooser.getSelectedFile();
 			if (!file.getName().endsWith(".xml")) {
 				file = new File(file.getAbsolutePath()+".xml");

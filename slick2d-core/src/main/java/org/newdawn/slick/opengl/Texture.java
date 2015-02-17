@@ -27,42 +27,46 @@ public interface Texture {
 	public void bind();
 
 	/**
-	 * Get the height of the original image
+	 * Get the height of the original image (in pixels; e.g. 200px)
 	 *
 	 * @return The height of the original image
 	 */
 	public int getImageHeight();
 
 	/** 
-	 * Get the width of the original image
+	 * Get the width of the original image (in pixels; e.g. 200px)
 	 *
 	 * @return The width of the original image
 	 */
 	public int getImageWidth();
 
 	/**
-	 * Get the height of the physical texture
+	 * Get the height of the physical texture (the normalized value 
+	 * between 0.0 and 1.0, attained by dividing the image height
+	 * by the texture height).
 	 *
 	 * @return The height of physical texture
 	 */
 	public float getHeight();
 
 	/**
-	 * Get the width of the physical texture
+	 * Get the width of the physical texture (the normalized value 
+	 * between 0.0 and 1.0, attained by dividing the image width
+	 * by the texture width).
 	 *
 	 * @return The width of physical texture
 	 */
 	public float getWidth();
 
 	/**
-	 * Get the height of the actual texture
+	 * Get the power-of-two height of the actual texture (in pixels, e.g. 256)
 	 * 
 	 * @return The height of the actual texture
 	 */
 	public int getTextureHeight();
 
 	/**
-	 * Get the width of the actual texture
+	 * Get the power-of-two width of the actual texture (in pixels, e.g. 256)
 	 * 
 	 * @return The width of the actual texture
 	 */

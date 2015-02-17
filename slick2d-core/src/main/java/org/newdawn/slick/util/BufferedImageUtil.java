@@ -77,7 +77,7 @@ public class BufferedImageUtil {
 	 * @param target
 	 *            The GL target to load the texture against
 	 * @param dstPixelFormat
-	 *            The pixel format of the screen
+	 *            The pixel format of the screen (internalFormat for glTexImage)
 	 * @param minFilter
 	 *            The minimising filter
 	 * @param magFilter
@@ -93,8 +93,9 @@ public class BufferedImageUtil {
 
 		// create the texture ID for this texture
 		int textureID = InternalTextureLoader.createTextureID();
+		TextureImpl.unbind();
 		TextureImpl texture = new TextureImpl(resourceName, target, textureID);
-
+		
 		// Enable texturing
 		Renderer.get().glEnable(SGL.GL_TEXTURE_2D);
 
@@ -105,18 +106,14 @@ public class BufferedImageUtil {
 		texture.setWidth(bufferedImage.getWidth());
 		texture.setHeight(bufferedImage.getHeight());
 
-		if (bufferedImage.getColorModel().hasAlpha()) {
-			srcPixelFormat = SGL.GL_RGBA;
-		} else {
-			srcPixelFormat = SGL.GL_RGB;
-		}
-
 		// convert that image into a byte buffer of texture data
 		ByteBuffer textureBuffer = data.imageToByteBuffer(bufferedImage, false, false, null);
 		texture.setTextureHeight(data.getTexHeight());
 		texture.setTextureWidth(data.getTexWidth());
-		texture.setAlpha(data.getDepth() == 32);
-		
+		texture.setImageFormat(data.getFormat());
+
+		srcPixelFormat = data.getFormat().getOGLType();
+
 		if (target == SGL.GL_TEXTURE_2D) {
 			Renderer.get().glTexParameteri(target, SGL.GL_TEXTURE_MIN_FILTER, minFilter);
 			Renderer.get().glTexParameteri(target, SGL.GL_TEXTURE_MAG_FILTER, magFilter);

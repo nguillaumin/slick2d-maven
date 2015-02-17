@@ -1,6 +1,7 @@
 package org.newdawn.slick.gui;
 
 import org.lwjgl.Sys;
+import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
@@ -245,7 +246,7 @@ public class TextField extends AbstractComponent {
 		}
 		g.setColor(text.multiply(clr));
 		Font temp = g.getFont();
-
+		
 		int cpos = font.getWidth(value.substring(0, cursorPos));
 		int tx = 0;
 		if (cpos > width) {
@@ -364,6 +365,9 @@ public class TextField extends AbstractComponent {
 		}
 	}
 	
+	
+	
+	
 	/**
 	 * @see org.newdawn.slick.gui.AbstractComponent#keyPressed(int, char)
 	 */
@@ -387,13 +391,14 @@ public class TextField extends AbstractComponent {
 					return;
 				}
 				
-				// alt and control keys don't come through here
+				// control keys don't come through here
 				if (input.isKeyDown(Input.KEY_LCONTROL) || input.isKeyDown(Input.KEY_RCONTROL)) {
 					return;
 				}
-				if (input.isKeyDown(Input.KEY_LALT) || input.isKeyDown(Input.KEY_RALT)) {
-					return;
-				}
+				//alt is used on mac for symbols and accents
+				//if (input.isKeyDown(Input.KEY_LALT) || input.isKeyDown(Input.KEY_RALT)) {
+				//	return;
+				//}
 			}
 			
 			if (lastKey != key) {
@@ -442,7 +447,13 @@ public class TextField extends AbstractComponent {
 				if (consume) {
 					container.getInput().consumeEvent();
 				}
-			} else if ((c < 127) && (c > 31) && (value.length() < maxCharacter)) {
+			} else if (key == Input.KEY_RETURN) {
+				notifyListeners();
+				// Nobody more will be notified
+				if (consume) {
+					container.getInput().consumeEvent();
+				}
+			} else if (c!=Keyboard.CHAR_NONE && key != Input.KEY_TAB && value.length() < maxCharacter) {
 				if (cursorPos < value.length()) {
 					value = value.substring(0, cursorPos) + c
 							+ value.substring(cursorPos);
@@ -450,12 +461,6 @@ public class TextField extends AbstractComponent {
 					value = value.substring(0, cursorPos) + c;
 				}
 				cursorPos++;
-				// Nobody more will be notified
-				if (consume) {
-					container.getInput().consumeEvent();
-				}
-			} else if (key == Input.KEY_RETURN) {
-				notifyListeners();
 				// Nobody more will be notified
 				if (consume) {
 					container.getInput().consumeEvent();

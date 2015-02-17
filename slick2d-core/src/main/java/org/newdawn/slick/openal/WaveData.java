@@ -45,6 +45,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
 import org.lwjgl.openal.AL10;
+import org.newdawn.slick.util.Log;
 
 /**
  *
@@ -96,7 +97,7 @@ public class WaveData {
 				AudioSystem.getAudioInputStream(
 					new BufferedInputStream(path.openStream())));
 		} catch (Exception e) {
-			org.lwjgl.LWJGLUtil.log("Unable to create from: " + path);
+			Log.info("Unable to create from: " + path);
 			e.printStackTrace();
 			return null;
 		}		

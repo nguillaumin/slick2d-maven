@@ -1,5 +1,5 @@
 info face="Courier New Bold" size=16 bold=1 italic=0 charset="" unicode=0 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1
-common lineHeight=19 base=26 scaleW=256 scaleH=256 pages=1 packed=0
+common lineHeight=19 base=14 scaleW=256 scaleH=256 pages=1 packed=0 ascent=14 descent=5 leading=0
 page id=0 file="defaultfont.png"
 chars count=189
 char id=32   x=0     y=0     width=0     height=0     xoffset=0     yoffset=14    xadvance=9     page=0  chnl=0 
