@@ -1,5 +1,10 @@
 # slick2d-maven changelog
 
+## Next release
+
+* Bump LWJGL to v2.9.3 to fix a build problem on Mac OS X
+* Fix Javadoc for JDK 8 thanks to cdlm
+
 ## v1.0.1 (2014-05-18)
 
 * Now using Java 7 source level
