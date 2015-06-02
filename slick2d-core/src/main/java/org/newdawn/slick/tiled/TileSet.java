@@ -136,17 +136,19 @@ public class TileSet {
 
 			Element propsElement = (Element) tileElement.getElementsByTagName(
 					"properties").item(0);
-			NodeList properties = propsElement.getElementsByTagName("property");
-			for (int p = 0; p < properties.getLength(); p++) {
-				Element propElement = (Element) properties.item(p);
+			if(propsElement != null) {
+				NodeList properties = propsElement.getElementsByTagName("property");
+				for (int p = 0; p < properties.getLength(); p++) {
+					Element propElement = (Element) properties.item(p);
 
-				String name = propElement.getAttribute("name");
-				String value = propElement.getAttribute("value");
+					String name = propElement.getAttribute("name");
+					String value = propElement.getAttribute("value");
 
-				tileProps.setProperty(name, value);
+					tileProps.setProperty(name, value);
+				}
+
+				props.put(new Integer(id), tileProps);
 			}
-
-			props.put(new Integer(id), tileProps);
 		}
 	}
 
