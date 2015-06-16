@@ -2,6 +2,7 @@
 
 ## Next release
 
+* Fix off-by-one bug for y-position of mouse cursor
 * Fix NullPointerException when loading Tiled maps with terraintypes
 * Bump LWJGL to v2.9.3 to fix a build problem on Mac OS X
 * Fix Javadoc for JDK 8 thanks to cdlm
