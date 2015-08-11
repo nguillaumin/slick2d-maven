@@ -604,6 +604,7 @@ public class Input {
 	 */
 	public void removeKeyListener(KeyListener listener) {
 		keyListeners.remove(listener);
+		keyListenersToAdd.remove(listener);
 		
 		if (!mouseListeners.contains(listener) && !controllerListeners.contains(listener)) {
 			allListeners.remove(listener);
@@ -630,6 +631,7 @@ public class Input {
 	 */
 	public void removeMouseListener(MouseListener listener) {
 		mouseListeners.remove(listener);
+		mouseListenersToAdd.remove(listener);
 		
 		if (!controllerListeners.contains(listener) && !keyListeners.contains(listener)) {
 			allListeners.remove(listener);

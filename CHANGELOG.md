@@ -6,6 +6,7 @@
 * Fix NullPointerException when loading Tiled maps with terraintypes
 * Bump LWJGL to v2.9.3 to fix a build problem on Mac OS X
 * Fix Javadoc for JDK 8 thanks to cdlm
+* Fix issue with Nifty GUI where the listeners are being removed before the addition.
 
 ## v1.0.1 (2014-05-18)
 
