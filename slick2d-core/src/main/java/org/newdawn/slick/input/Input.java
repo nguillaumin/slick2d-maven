@@ -1,21 +1,19 @@
-package org.newdawn.slick.input;
+package org.newdawn.slick;
 
-import java.nio.DoubleBuffer;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import org.lwjgl.glfw.GLFW;
-import org.newdawn.slick.ControlledInputReciever;
-import org.newdawn.slick.InputListener;
-import org.newdawn.slick.KeyListener;
-import org.newdawn.slick.MouseListener;
-
-import static org.lwjgl.glfw.GLFW.GLFW_FOCUSED;
-import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
-import static org.newdawn.slick.GameContainer.GAME_WINDOW;
-import static org.newdawn.slick.GameContainer.isMouseGrabbed;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Controller;
+import org.lwjgl.input.Controllers;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
+import org.newdawn.slick.util.Log;
 
 /**
  * A wrapped for all keyboard, mouse and controller input
@@ -320,7 +318,7 @@ public class Input {
 	public static final int MOUSE_MIDDLE_BUTTON = 2;
 	
 	/** True if the controllers system has been initialised */
-	private static boolean controllersInitialized = false;
+	private static boolean controllersInited = false;
 	/** The list of controllers */
 	private static ArrayList controllers = new ArrayList();
 
@@ -345,18 +343,17 @@ public class Input {
 	/** True if the event has been consumed */
 	protected boolean consumed = false;
 	/** A list of listeners to be notified of input events */
-	protected HashSet<ControlledInputReciever> allListeners = new HashSet<>();
+	protected HashSet allListeners = new HashSet();
 	/** The listeners to notify of key events */
-	protected ArrayList<KeyListener> keyListeners = new ArrayList<>();
+	protected ArrayList keyListeners = new ArrayList();
 	/** The listener to add */
-	protected ArrayList<KeyListener> keyListenersToAdd = new ArrayList<>();
+	protected ArrayList keyListenersToAdd = new ArrayList();
 	/** The listeners to notify of mouse events */
-	protected ArrayList<MouseListener> mouseListeners = new ArrayList<>();
+	protected ArrayList mouseListeners = new ArrayList();
 	/** The listener to add */
-	protected ArrayList<MouseListener> mouseListenersToAdd = new ArrayList<>();
-// FIXME eventually need this for controllers
-//	/** The listener to nofiy of controller events */
-//	protected ArrayList controllerListeners = new ArrayList();
+	protected ArrayList mouseListenersToAdd = new ArrayList();
+	/** The listener to nofiy of controller events */
+	protected ArrayList controllerListeners = new ArrayList();
 	/** The current value of the wheel */
 	private int wheel;
 	/** The height of the display */
@@ -409,7 +406,7 @@ public class Input {
 	 * are not required.
 	 */
 	public static void disableControllers() {
-	   controllersInitialized = true;
+	   controllersInited = true;
 	}
 	
 	/**
@@ -480,8 +477,7 @@ public class Input {
 	public void addListener(InputListener listener) {
 		addKeyListener(listener);
 		addMouseListener(listener);
-		//FIXME when adding controllers back
-//		addControllerListener(listener);
+		addControllerListener(listener);
 	}
 
 	/**
@@ -527,20 +523,19 @@ public class Input {
 		mouseListeners.add(listener);
 		allListeners.add(listener);
 	}
-
-	// FIXME when adding controllers back
-//	/**
-//	 * Add a controller listener to be notified of controller input events
-//	 *
-//	 * @param listener The listener to be notified
-//	 */
-//	public void addControllerListener(ControllerListener listener) {
-//		if (controllerListeners.contains(listener)) {
-//			return;
-//		}
-//		controllerListeners.add(listener);
-//		allListeners.add(listener);
-//	}
+	
+	/**
+	 * Add a controller listener to be notified of controller input events
+	 * 
+	 * @param listener The listener to be notified
+	 */
+	public void addControllerListener(ControllerListener listener) {
+		if (controllerListeners.contains(listener)) {
+			return;
+		}
+		controllerListeners.add(listener);
+		allListeners.add(listener);
+	}
 	
 	/**
 	 * Remove all the listeners from this input
@@ -548,8 +543,7 @@ public class Input {
 	public void removeAllListeners() {
 		removeAllKeyListeners();
 		removeAllMouseListeners();
-		// FIXME when adding controllers back
-//		removeAllControllerListeners();
+		removeAllControllerListeners();
 	}
 
 	/**
@@ -568,14 +562,13 @@ public class Input {
 		mouseListeners.clear();
 	}
 
-	// FIXME when adding controllers back
-//	/**
-//	 * Remove all the controller listeners from this input
-//	 */
-//	public void removeAllControllerListeners() {
-//		allListeners.removeAll(controllerListeners);
-//		controllerListeners.clear();
-//	}
+	/**
+	 * Remove all the controller listeners from this input
+	 */
+	public void removeAllControllerListeners() {
+		allListeners.removeAll(controllerListeners);
+		controllerListeners.clear();
+	}
 	
 	/**
 	 * Add a listener to be notified of input events. This listener
@@ -588,48 +581,48 @@ public class Input {
 		
 		keyListeners.add(0, listener);
 		mouseListeners.add(0, listener);
-		// FIXME when adding controllers back
-//		controllerListeners.add(0, listener);
+		controllerListeners.add(0, listener);
 		
 		allListeners.add(listener);
 	}
-
+	
 	/**
 	 * Remove a listener that will no longer be notified
-	 *
+	 * 
 	 * @param listener The listen to be removed
 	 */
 	public void removeListener(InputListener listener) {
 		removeKeyListener(listener);
 		removeMouseListener(listener);
-		// FIXME when adding controller support
-//		removeControllerListener(listener);
+		removeControllerListener(listener);
 	}
 
 	/**
 	 * Remove a key listener that will no longer be notified
-	 *
+	 * 
 	 * @param listener The listen to be removed
 	 */
 	public void removeKeyListener(KeyListener listener) {
 		keyListeners.remove(listener);
 		keyListenersToAdd.remove(listener);
-		allListeners.remove(listener);
+		
+		if (!mouseListeners.contains(listener) && !controllerListeners.contains(listener)) {
+			allListeners.remove(listener);
+		}
 	}
 
-	// FIXME when adding controller support
-//	/**
-//	 * Remove a controller listener that will no longer be notified
-//	 *
-//	 * @param listener The listen to be removed
-//	 */
-//	public void removeControllerListener(ControllerListener listener) {
-//		controllerListeners.remove(listener);
-//
-//		if (!mouseListeners.contains(listener) && !keyListeners.contains(listener)) {
-//			allListeners.remove(listener);
-//		}
-//	}
+	/**
+	 * Remove a controller listener that will no longer be notified
+	 * 
+	 * @param listener The listen to be removed
+	 */
+	public void removeControllerListener(ControllerListener listener) {
+		controllerListeners.remove(listener);
+		
+		if (!mouseListeners.contains(listener) && !keyListeners.contains(listener)) {
+			allListeners.remove(listener);
+		}
+	}
 
 	/**
 	 * Remove a mouse listener that will no longer be notified
@@ -639,7 +632,10 @@ public class Input {
 	public void removeMouseListener(MouseListener listener) {
 		mouseListeners.remove(listener);
 		mouseListenersToAdd.remove(listener);
-		allListeners.remove(listener);
+		
+		if (!controllerListeners.contains(listener) && !keyListeners.contains(listener)) {
+			allListeners.remove(listener);
+		}
 	}
 	
 	/**
@@ -647,7 +643,7 @@ public class Input {
 	 * 
 	 * @param height The height of the window
 	 */
-	public void init(int height) {
+	void init(int height) {
 		this.height = height;
 		lastMouseX = getMouseX();
 		lastMouseY = getMouseY();
@@ -660,8 +656,7 @@ public class Input {
 	 * @return The name or character representation of the key requested
 	 */
 	public static String getKeyName(int code) {
-		// FIXME this could be severely wrong
-		return GLFW.glfwGetKeyName(code, 0);
+		return Keyboard.getKeyName(code);
 	}
 	
 	/**
@@ -722,17 +717,16 @@ public class Input {
 		
 		return false;
 	}
-
-	// FIXME when adding controllers back
-//	/**
-//	 * Clear the state for isControlPressed method. This will reset all
-//	 * controls to not pressed
-//	 */
-//	public void clearControllerPressedRecord() {
-//		for (int i=0;i<controllers.size();i++) {
-//			Arrays.fill(controllerPressed[i], false);
-//		}
-//	}
+	
+	/**
+	 * Clear the state for isControlPressed method. This will reset all
+	 * controls to not pressed
+	 */
+	public void clearControlPressedRecord() {
+		for (int i=0;i<controllers.size();i++) {
+			Arrays.fill(controllerPressed[i], false);
+		}
+	}
 	
 	/**
 	 * Clear the state for the <code>isKeyPressed</code> method. This will
@@ -743,270 +737,355 @@ public class Input {
 		Arrays.fill(pressed, false);
 	}
 
+	/**
+	 * Clear the state for the <code>isMousePressed</code> method. This will
+	 * resort in all mouse buttons returning that they haven't been pressed, until
+	 * they are pressed again
+	 */
 	public void clearMousePressedRecord() {
 		Arrays.fill(mousePressed, false);
 	}
-
+	
+	/**
+	 * Check if a particular key is down
+	 * 
+	 * @param code The key code of the key to check
+	 * @return True if the key is down
+	 */
 	public boolean isKeyDown(int code) {
-		return GLFW.glfwGetKey(GAME_WINDOW, code) == GLFW.GLFW_PRESS;
+		return Keyboard.isKeyDown(code);
 	}
 
-	private static final DoubleBuffer MOUSE_X = DoubleBuffer.allocate(1);
-	private static final DoubleBuffer MOUSE_Y = DoubleBuffer.allocate(1);
-
+	/**
+	 * Get the absolute x position of the mouse cursor within the container
+	 * 
+	 * @return The absolute x position of the mouse cursor
+	 */
 	public int getAbsoluteMouseX() {
-		return 0;
-//		GLFW.glfwGetCursorPos(GAME_WINDOW, MOUSE_X, MOUSE_Y);
-//		return (int) Math.floor(MOUSE_X.get());
+		return Mouse.getX();
 	}
 
+	/**
+	 * Get the absolute y position of the mouse cursor within the container
+	 * 
+	 * @return The absolute y position of the mouse cursor
+	 */
 	public int getAbsoluteMouseY() {
-		return 0;
-//		GLFW.glfwGetCursorPos(GAME_WINDOW, MOUSE_X, MOUSE_Y);
-//		return height - (int) Math.floor(MOUSE_X.get()) - 1;
+		return height - Mouse.getY() - 1;
 	}
-
+	   
+	/**
+	 * Get the x position of the mouse cursor
+	 * 
+	 * @return The x position of the mouse cursor
+	 */
 	public int getMouseX() {
 		return (int) ((getAbsoluteMouseX() * scaleX)+xoffset);
 	}
-
+	
+	/**
+	 * Get the y position of the mouse cursor
+	 * 
+	 * @return The y position of the mouse cursor
+	 */
 	public int getMouseY() {
 		return (int) ((getAbsoluteMouseY() * scaleY)+yoffset);
 	}
-
+	
+	/**
+	 * Check if a given mouse button is down
+	 * 
+	 * @param button The index of the button to check (starting at 0)
+	 * @return True if the mouse button is down
+	 */
 	public boolean isMouseButtonDown(int button) {
-		return GLFW.glfwGetMouseButton(GAME_WINDOW, button) == GLFW.GLFW_PRESS;
+		return Mouse.isButtonDown(button);
 	}
 	
+	/**
+	 * Check if any mouse button is down
+	 * 
+	 * @return True if any mouse button is down
+	 */
 	private boolean anyMouseDown() {
 		for (int i=0;i<3;i++) {
-			if (isMouseButtonDown(i)) {
+			if (Mouse.isButtonDown(i)) {
 				return true;
 			}
 		}
 		
 		return false;
 	}
-
-	// FIXME disabling controllers for now -- eventually rebind to jxinput
-//	public int getControllerCount() {
-//		try {
-//			initControllers();
-//		} catch (SlickException e) {
-//			throw new RuntimeException("Failed to initialise controllers");
-//		}
-//
-//		return controllers.size();
-//	}
-//
-//	public int getAxisCount(int controller) {
-//		return ((Controller) controllers.get(controller)).getAxisCount();
-//	}
-//
-//	public float getAxisValue(int controller, int axis) {
-//		return ((Controller) controllers.get(controller)).getAxisValue(axis);
-//	}
-//
-//	public String getAxisName(int controller, int axis) {
-//		return ((Controller) controllers.get(controller)).getAxisName(axis);
-//	}
-//
-//	/**
-//	 * Check if the controller has the left direction pressed
-//	 *
-//	 * @param controller The index of the controller to check
-//	 * @return True if the controller is pressed to the left
-//	 */
-//	public boolean isControllerLeft(int controller) {
-//		if (controller >= getControllerCount()) {
-//			return false;
-//		}
-//
-//		if (controller == ANY_CONTROLLER) {
-//			for (int i=0;i<controllers.size();i++) {
-//				if (isControllerLeft(i)) {
-//					return true;
-//				}
-//			}
-//
-//			return false;
-//		}
-//
-//		return ((Controller) controllers.get(controller)).getXAxisValue() < -0.5f
-//				|| ((Controller) controllers.get(controller)).getPovX() < -0.5f;
-//	}
-//
-//	/**
-//	 * Check if the controller has the right direction pressed
-//	 *
-//	 * @param controller The index of the controller to check
-//	 * @return True if the controller is pressed to the right
-//	 */
-//	public boolean isControllerRight(int controller) {
-//		if (controller >= getControllerCount()) {
-//			return false;
-//		}
-//
-//		if (controller == ANY_CONTROLLER) {
-//			for (int i=0;i<controllers.size();i++) {
-//				if (isControllerRight(i)) {
-//					return true;
-//				}
-//			}
-//
-//			return false;
-//		}
-//
-//		return ((Controller) controllers.get(controller)).getXAxisValue() > 0.5f
-//   				|| ((Controller) controllers.get(controller)).getPovX() > 0.5f;
-//	}
-//
-//	/**
-//	 * Check if the controller has the up direction pressed
-//	 *
-//	 * @param controller The index of the controller to check
-//	 * @return True if the controller is pressed to the up
-//	 */
-//	public boolean isControllerUp(int controller) {
-//		if (controller >= getControllerCount()) {
-//			return false;
-//		}
-//
-//		if (controller == ANY_CONTROLLER) {
-//			for (int i=0;i<controllers.size();i++) {
-//				if (isControllerUp(i)) {
-//					return true;
-//				}
-//			}
-//
-//			return false;
-//		}
-//		return ((Controller) controllers.get(controller)).getYAxisValue() < -0.5f
-//		   		|| ((Controller) controllers.get(controller)).getPovY() < -0.5f;
-//	}
-//
-//	/**
-//	 * Check if the controller has the down direction pressed
-//	 *
-//	 * @param controller The index of the controller to check
-//	 * @return True if the controller is pressed to the down
-//	 */
-//	public boolean isControllerDown(int controller) {
-//		if (controller >= getControllerCount()) {
-//			return false;
-//		}
-//
-//		if (controller == ANY_CONTROLLER) {
-//			for (int i=0;i<controllers.size();i++) {
-//				if (isControllerDown(i)) {
-//					return true;
-//				}
-//			}
-//
-//			return false;
-//		}
-//
-//		return ((Controller) controllers.get(controller)).getYAxisValue() > 0.5f
-//			   || ((Controller) controllers.get(controller)).getPovY() > 0.5f;
-//
-//	}
-//
-//	/**
-//	 * Check if controller button is pressed
-//	 *
-//	 * @param controller The index of the controller to check
-//	 * @param index The index of the button to check
-//	 * @return True if the button is pressed
-//	 */
-//	public boolean isButtonPressed(int index, int controller) {
-//		if (controller >= getControllerCount()) {
-//			return false;
-//		}
-//
-//		if (controller == ANY_CONTROLLER) {
-//			for (int i=0;i<controllers.size();i++) {
-//				if (isButtonPressed(index, i)) {
-//					return true;
-//				}
-//			}
-//
-//			return false;
-//		}
-//
-//		return ((Controller) controllers.get(controller)).isButtonPressed(index);
-//	}
-//
-//	/**
-//	 * Check if button 1 is pressed
-//	 *
-//	 * @param controller The index of the controller to check
-//	 * @return True if the button is pressed
-//	 */
-//	public boolean isButton1Pressed(int controller) {
-//		return isButtonPressed(0, controller);
-//	}
-//
-//	/**
-//	 * Check if button 2 is pressed
-//	 *
-//	 * @param controller The index of the controller to check
-//	 * @return True if the button is pressed
-//	 */
-//	public boolean isButton2Pressed(int controller) {
-//		return isButtonPressed(1, controller);
-//	}
-//
-//	/**
-//	 * Check if button 3 is pressed
-//	 *
-//	 * @param controller The index of the controller to check
-//	 * @return True if the button is pressed
-//	 */
-//	public boolean isButton3Pressed(int controller) {
-//		return isButtonPressed(2, controller);
-//	}
-//
-//	/**
-//	 * Initialise the controllers system
-//	 *
-//	 * @throws SlickException Indicates a failure to use the hardware
-//	 */
-//	public void initControllers() throws SlickException {
-//		if (controllersInited) {
-//			return;
-//		}
-//
-//		controllersInited = true;
-//		try {
-//			Controllers.create();
-//			int count = Controllers.getControllerCount();
-//
-//			for (int i = 0; i < count; i++) {
-//				Controller controller = Controllers.getController(i);
-//
-//				if ((controller.getButtonCount() >= 3) && (controller.getButtonCount() < MAX_BUTTONS)) {
-//					controllers.add(controller);
-//				}
-//			}
-//
-//			Log.info("Found "+controllers.size()+" controllers");
-//			for (int i=0;i<controllers.size();i++) {
-//				Log.info(i+" : "+((Controller) controllers.get(i)).getName());
-//			}
-//		} catch (LWJGLException e) {
-//			if (e.getCause() instanceof ClassNotFoundException) {
-//				throw new SlickException("Unable to create controller - no jinput found - add jinput.jar to your classpath");
-//			}
-//			throw new SlickException("Unable to create controllers");
-//		} catch (NoClassDefFoundError e) {
-//			// forget it, no jinput availble
-//		}
-//	}
 	
+	/**
+	 * Get a count of the number of controlles available
+	 * 
+	 * @return The number of controllers available
+	 */
+	public int getControllerCount() {
+		try {
+			initControllers();
+		} catch (SlickException e) {
+			throw new RuntimeException("Failed to initialise controllers");
+		}
+		
+		return controllers.size();
+	}
+	
+	/**
+	 * Get the number of axis that are avaiable on a given controller
+	 * 
+	 * @param controller The index of the controller to check
+	 * @return The number of axis available on the controller
+	 */
+	public int getAxisCount(int controller) {
+		return ((Controller) controllers.get(controller)).getAxisCount();
+	}
+	
+	/**
+	 * Get the value of the axis with the given index
+	 *  
+	 * @param controller The index of the controller to check
+	 * @param axis The index of the axis to read
+	 * @return The axis value at time of reading
+	 */ 
+	public float getAxisValue(int controller, int axis) {
+		return ((Controller) controllers.get(controller)).getAxisValue(axis);
+	}
+
+	/**
+	 * Get the name of the axis with the given index
+	 *  
+	 * @param controller The index of the controller to check
+	 * @param axis The index of the axis to read
+	 * @return The name of the specified axis
+	 */ 
+	public String getAxisName(int controller, int axis) {
+		return ((Controller) controllers.get(controller)).getAxisName(axis);
+	}
+	
+	/**
+	 * Check if the controller has the left direction pressed
+	 * 
+	 * @param controller The index of the controller to check
+	 * @return True if the controller is pressed to the left
+	 */
+	public boolean isControllerLeft(int controller) {
+		if (controller >= getControllerCount()) {
+			return false;
+		}
+		
+		if (controller == ANY_CONTROLLER) {
+			for (int i=0;i<controllers.size();i++) {
+				if (isControllerLeft(i)) {
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		return ((Controller) controllers.get(controller)).getXAxisValue() < -0.5f
+				|| ((Controller) controllers.get(controller)).getPovX() < -0.5f;
+	}
+
+	/**
+	 * Check if the controller has the right direction pressed
+	 * 
+	 * @param controller The index of the controller to check
+	 * @return True if the controller is pressed to the right
+	 */
+	public boolean isControllerRight(int controller) {
+		if (controller >= getControllerCount()) {
+			return false;
+		}
+
+		if (controller == ANY_CONTROLLER) {
+			for (int i=0;i<controllers.size();i++) {
+				if (isControllerRight(i)) {
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		return ((Controller) controllers.get(controller)).getXAxisValue() > 0.5f
+   				|| ((Controller) controllers.get(controller)).getPovX() > 0.5f;
+	}
+
+	/**
+	 * Check if the controller has the up direction pressed
+	 * 
+	 * @param controller The index of the controller to check
+	 * @return True if the controller is pressed to the up
+	 */
+	public boolean isControllerUp(int controller) {
+		if (controller >= getControllerCount()) {
+			return false;
+		}
+
+		if (controller == ANY_CONTROLLER) {
+			for (int i=0;i<controllers.size();i++) {
+				if (isControllerUp(i)) {
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		return ((Controller) controllers.get(controller)).getYAxisValue() < -0.5f
+		   		|| ((Controller) controllers.get(controller)).getPovY() < -0.5f;
+	}
+
+	/**
+	 * Check if the controller has the down direction pressed
+	 * 
+	 * @param controller The index of the controller to check
+	 * @return True if the controller is pressed to the down
+	 */
+	public boolean isControllerDown(int controller) {
+		if (controller >= getControllerCount()) {
+			return false;
+		}
+
+		if (controller == ANY_CONTROLLER) {
+			for (int i=0;i<controllers.size();i++) {
+				if (isControllerDown(i)) {
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		return ((Controller) controllers.get(controller)).getYAxisValue() > 0.5f
+			   || ((Controller) controllers.get(controller)).getPovY() > 0.5f;
+	       
+	}
+
+	/**
+	 * Check if controller button is pressed
+	 * 
+	 * @param controller The index of the controller to check
+	 * @param index The index of the button to check
+	 * @return True if the button is pressed
+	 */
+	public boolean isButtonPressed(int index, int controller) {
+		if (controller >= getControllerCount()) {
+			return false;
+		}
+
+		if (controller == ANY_CONTROLLER) {
+			for (int i=0;i<controllers.size();i++) {
+				if (isButtonPressed(index, i)) {
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		return ((Controller) controllers.get(controller)).isButtonPressed(index);
+	}
+	
+	/**
+	 * Check if button 1 is pressed
+	 * 
+	 * @param controller The index of the controller to check
+	 * @return True if the button is pressed
+	 */
+	public boolean isButton1Pressed(int controller) {
+		return isButtonPressed(0, controller);
+	}
+
+	/**
+	 * Check if button 2 is pressed
+	 * 
+	 * @param controller The index of the controller to check
+	 * @return True if the button is pressed
+	 */
+	public boolean isButton2Pressed(int controller) {
+		return isButtonPressed(1, controller);
+	}
+
+	/**
+	 * Check if button 3 is pressed
+	 * 
+	 * @param controller The index of the controller to check
+	 * @return True if the button is pressed
+	 */
+	public boolean isButton3Pressed(int controller) {
+		return isButtonPressed(2, controller);
+	}
+	
+	/**
+	 * Initialise the controllers system
+	 * 
+	 * @throws SlickException Indicates a failure to use the hardware
+	 */
+	public void initControllers() throws SlickException {
+		if (controllersInited) {
+			return;
+		}
+		
+		controllersInited = true;
+		try {
+			Controllers.create();
+			int count = Controllers.getControllerCount();
+			
+			for (int i = 0; i < count; i++) {
+				Controller controller = Controllers.getController(i);
+
+				if ((controller.getButtonCount() >= 3) && (controller.getButtonCount() < MAX_BUTTONS)) {
+					controllers.add(controller);
+				}
+			}
+			
+			Log.info("Found "+controllers.size()+" controllers");
+			for (int i=0;i<controllers.size();i++) {
+				Log.info(i+" : "+((Controller) controllers.get(i)).getName());
+			}
+		} catch (LWJGLException e) {
+			if (e.getCause() instanceof ClassNotFoundException) {
+				throw new SlickException("Unable to create controller - no jinput found - add jinput.jar to your classpath");
+			}
+			throw new SlickException("Unable to create controllers");
+		} catch (NoClassDefFoundError e) {
+			// forget it, no jinput availble
+		}
+	}
+	
+	/**
+	 * Notification from an event handle that an event has been consumed
+	 */
 	public void consumeEvent() {
 		consumed = true;
 	}
-
+	
+	/**
+	 * A null stream to clear out those horrid errors
+	 *
+	 * @author kevin
+	 */
+	private class NullOutputStream extends OutputStream {
+		/**
+		 * @see java.io.OutputStream#write(int)
+		 */
+		public void write(int b) throws IOException {
+			// null implemetnation
+		}
+		
+	}
+	
+	/**
+	 * Hook to allow us to translate any key character into special key 
+	 * codes for easier use.
+	 * 
+	 * @param key The original key code
+	 * @param c The character that was fired
+	 * @return The key code to fire
+	 */
 	private int resolveEventKey(int key, char c) {
 		// BUG with LWJGL - equals comes back with keycode = 0
 		// See: http://slick.javaunlimited.net/viewtopic.php?t=617
@@ -1017,6 +1096,14 @@ public class Input {
 		return key;
 	}
 	
+	/**
+	 * Notification that the mouse has been pressed and hence we
+	 * should consider what we're doing with double clicking
+	 * 
+	 * @param button The button pressed/released
+	 * @param x The location of the mouse
+	 * @param y The location of the mouse
+	 */
 	public void considerDoubleClick(int button, int x, int y) {
 		if (doubleClickTimeout == 0) {
 			clickX = x;
@@ -1034,33 +1121,36 @@ public class Input {
 		}
 	}
 	
+	/**
+	 * Poll the state of the input
+	 * 
+	 * @param width The width of the game view
+	 * @param height The height of the game view
+	 */
 	public void poll(int width, int height) {
 		if (paused) {
-			// FIXME when adding controllers back
-//			clearControllerPressedRecord();
+			clearControlPressedRecord();
 			clearKeyPressedRecord();
 			clearMousePressedRecord();
-
-			// todo since I'm polling keys when checking maybe i dont do this? dont think there's a queue
-//			while (Keyboard.next()) {}
-//			while (Mouse.next()) {}
+			
+			while (Keyboard.next()) {}
+			while (Mouse.next()) {}
 			return;
 		}
 
-		if (!(GLFW.glfwGetWindowAttrib(GAME_WINDOW, GLFW_FOCUSED) == GLFW_TRUE)) {
-			// FIXME when adding controllers back
-//			clearControllerPressedRecord();
+		if (!Display.isActive()) {
+			clearControlPressedRecord();
 			clearKeyPressedRecord();
 			clearMousePressedRecord();
 		}
 		
 		// add any listeners requested since last time
 		for (int i=0;i<keyListenersToAdd.size();i++) {
-			addKeyListenerImpl(keyListenersToAdd.get(i));
+			addKeyListenerImpl((KeyListener) keyListenersToAdd.get(i));
 		}
 		keyListenersToAdd.clear();
 		for (int i=0;i<mouseListenersToAdd.size();i++) {
-			addMouseListenerImpl(mouseListenersToAdd.get(i));
+			addMouseListenerImpl((MouseListener) mouseListenersToAdd.get(i));
 		}
 		mouseListenersToAdd.clear();
 		
@@ -1072,137 +1162,136 @@ public class Input {
 		
 		this.height = height;
 
-		Iterator<ControlledInputReciever> allStarts = allListeners.iterator();
+		Iterator allStarts = allListeners.iterator();
 		while (allStarts.hasNext()) {
-			ControlledInputReciever listener = allStarts.next();
+			ControlledInputReciever listener = (ControlledInputReciever) allStarts.next();
 			listener.inputStarted();
 		}
+		
+		while (Keyboard.next()) {
+			if (Keyboard.getEventKeyState()) {
+				int eventKey = resolveEventKey(Keyboard.getEventKey(), Keyboard.getEventCharacter());
+				
+				keys[eventKey] = Keyboard.getEventCharacter();
+				pressed[eventKey] = true;
+				nextRepeat[eventKey] = System.currentTimeMillis() + keyRepeatInitial;
+				
+				consumed = false;
+				for (int i=0;i<keyListeners.size();i++) {
+					KeyListener listener = (KeyListener) keyListeners.get(i);
+					
+					if (listener.isAcceptingInput()) {
+						listener.keyPressed(eventKey, Keyboard.getEventCharacter());
+						if (consumed) {
+							break;
+						}
+					}
+				}
+			} else {
+				int eventKey = resolveEventKey(Keyboard.getEventKey(), Keyboard.getEventCharacter());
+				nextRepeat[eventKey] = 0;
+				
+				consumed = false;
+				for (int i=0;i<keyListeners.size();i++) {
+					KeyListener listener = (KeyListener) keyListeners.get(i);
+					if (listener.isAcceptingInput()) {
+						listener.keyReleased(eventKey, keys[eventKey]);
+						if (consumed) {
+							break;
+						}
+					}
+				}
+			}
+		}
+		
+		while (Mouse.next()) {
+			if (Mouse.getEventButton() >= 0) {
+				if (Mouse.getEventButtonState()) {
+					consumed = false;
+					mousePressed[Mouse.getEventButton()] = true;
 
-		// TODO disabling input to see if we event compile
-//		while (Keyboard.next()) {
-//			if (Keyboard.getEventKeyState()) {
-//				int eventKey = resolveEventKey(Keyboard.getEventKey(), Keyboard.getEventCharacter());
-//
-//				keys[eventKey] = Keyboard.getEventCharacter();
-//				pressed[eventKey] = true;
-//				nextRepeat[eventKey] = System.currentTimeMillis() + keyRepeatInitial;
-//
-//				consumed = false;
-//				for (int i=0;i<keyListeners.size();i++) {
-//					KeyListener listener = (KeyListener) keyListeners.get(i);
-//
-//					if (listener.isAcceptingInput()) {
-//						listener.keyPressed(eventKey, Keyboard.getEventCharacter());
-//						if (consumed) {
-//							break;
-//						}
-//					}
-//				}
-//			} else {
-//				int eventKey = resolveEventKey(Keyboard.getEventKey(), Keyboard.getEventCharacter());
-//				nextRepeat[eventKey] = 0;
-//
-//				consumed = false;
-//				for (int i=0;i<keyListeners.size();i++) {
-//					KeyListener listener = (KeyListener) keyListeners.get(i);
-//					if (listener.isAcceptingInput()) {
-//						listener.keyReleased(eventKey, keys[eventKey]);
-//						if (consumed) {
-//							break;
-//						}
-//					}
-//				}
-//			}
-//		}
-//
-//		while (Mouse.next()) {
-//			if (Mouse.getEventButton() >= 0) {
-//				if (Mouse.getEventButtonState()) {
-//					consumed = false;
-//					mousePressed[Mouse.getEventButton()] = true;
-//
-//					pressedX = (int) (xoffset + (Mouse.getEventX() * scaleX));
-//					pressedY =  (int) (yoffset + ((height-Mouse.getEventY()-1) * scaleY));
-//
-//					for (int i=0;i<mouseListeners.size();i++) {
-//						MouseListener listener = (MouseListener) mouseListeners.get(i);
-//						if (listener.isAcceptingInput()) {
-//							listener.mousePressed(Mouse.getEventButton(), pressedX, pressedY);
-//							if (consumed) {
-//								break;
-//							}
-//						}
-//					}
-//				} else {
-//					consumed = false;
-//					mousePressed[Mouse.getEventButton()] = false;
-//
-//					int releasedX = (int) (xoffset + (Mouse.getEventX() * scaleX));
-//					int releasedY = (int) (yoffset + ((height-Mouse.getEventY()-1) * scaleY));
-//					if ((pressedX != -1) &&
-//					    (pressedY != -1) &&
-//						(Math.abs(pressedX - releasedX) < mouseClickTolerance) &&
-//						(Math.abs(pressedY - releasedY) < mouseClickTolerance)) {
-//						considerDoubleClick(Mouse.getEventButton(), releasedX, releasedY);
-//						pressedX = pressedY = -1;
-//					}
-//
-//					for (int i=0;i<mouseListeners.size();i++) {
-//						MouseListener listener = (MouseListener) mouseListeners.get(i);
-//						if (listener.isAcceptingInput()) {
-//							listener.mouseReleased(Mouse.getEventButton(), releasedX, releasedY);
-//							if (consumed) {
-//								break;
-//							}
-//						}
-//					}
-//				}
-//			} else {
-//				if (isMouseGrabbed() && displayActive) {
-//					if ((Mouse.getEventDX() != 0) || (Mouse.getEventDY() != 0)) {
-//						consumed = false;
-//						for (int i=0;i<mouseListeners.size();i++) {
-//							MouseListener listener = (MouseListener) mouseListeners.get(i);
-//							if (listener.isAcceptingInput()) {
-//								if (anyMouseDown()) {
-//									listener.mouseDragged(0, 0, Mouse.getEventDX(), -Mouse.getEventDY());
-//								} else {
-//									listener.mouseMoved(0, 0, Mouse.getEventDX(), -Mouse.getEventDY());
-//								}
-//
-//								if (consumed) {
-//									break;
-//								}
-//							}
-//						}
-//					}
-//				}
-//
-//				int dwheel = Mouse.getEventDWheel();
-//				wheel += dwheel;
-//				if (dwheel != 0) {
-//					consumed = false;
-//					for (int i=0;i<mouseListeners.size();i++) {
-//						MouseListener listener = (MouseListener) mouseListeners.get(i);
-//						if (listener.isAcceptingInput()) {
-//							listener.mouseWheelMoved(dwheel);
-//							if (consumed) {
-//								break;
-//							}
-//						}
-//					}
-//				}
-//			}
-//		}
-//
-		if (!displayActive || isMouseGrabbed()) {
+					pressedX = (int) (xoffset + (Mouse.getEventX() * scaleX));
+					pressedY =  (int) (yoffset + ((height-Mouse.getEventY()-1) * scaleY));
+
+					for (int i=0;i<mouseListeners.size();i++) {
+						MouseListener listener = (MouseListener) mouseListeners.get(i);
+						if (listener.isAcceptingInput()) {
+							listener.mousePressed(Mouse.getEventButton(), pressedX, pressedY);
+							if (consumed) {
+								break;
+							}
+						}
+					}
+				} else {
+					consumed = false;
+					mousePressed[Mouse.getEventButton()] = false;
+					
+					int releasedX = (int) (xoffset + (Mouse.getEventX() * scaleX));
+					int releasedY = (int) (yoffset + ((height-Mouse.getEventY()-1) * scaleY));
+					if ((pressedX != -1) && 
+					    (pressedY != -1) &&
+						(Math.abs(pressedX - releasedX) < mouseClickTolerance) && 
+						(Math.abs(pressedY - releasedY) < mouseClickTolerance)) {
+						considerDoubleClick(Mouse.getEventButton(), releasedX, releasedY);
+						pressedX = pressedY = -1;
+					}
+
+					for (int i=0;i<mouseListeners.size();i++) {
+						MouseListener listener = (MouseListener) mouseListeners.get(i);
+						if (listener.isAcceptingInput()) {
+							listener.mouseReleased(Mouse.getEventButton(), releasedX, releasedY);
+							if (consumed) {
+								break;
+							}
+						}
+					}
+				}
+			} else {
+				if (Mouse.isGrabbed() && displayActive) {
+					if ((Mouse.getEventDX() != 0) || (Mouse.getEventDY() != 0)) {
+						consumed = false;
+						for (int i=0;i<mouseListeners.size();i++) {
+							MouseListener listener = (MouseListener) mouseListeners.get(i);
+							if (listener.isAcceptingInput()) {
+								if (anyMouseDown()) {
+									listener.mouseDragged(0, 0, Mouse.getEventDX(), -Mouse.getEventDY());	
+								} else {
+									listener.mouseMoved(0, 0, Mouse.getEventDX(), -Mouse.getEventDY());
+								}
+								
+								if (consumed) {
+									break;
+								}
+							}
+						}
+					}
+				}
+				
+				int dwheel = Mouse.getEventDWheel();
+				wheel += dwheel;
+				if (dwheel != 0) {
+					consumed = false;
+					for (int i=0;i<mouseListeners.size();i++) {
+						MouseListener listener = (MouseListener) mouseListeners.get(i);
+						if (listener.isAcceptingInput()) {
+							listener.mouseWheelMoved(dwheel);
+							if (consumed) {
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		if (!displayActive || Mouse.isGrabbed()) {
 			lastMouseX = getMouseX();
 			lastMouseY = getMouseY();
 		} else {
 			if ((lastMouseX != getMouseX()) || (lastMouseY != getMouseY())) {
 				consumed = false;
 				for (int i=0;i<mouseListeners.size();i++) {
-					MouseListener listener = mouseListeners.get(i);
+					MouseListener listener = (MouseListener) mouseListeners.get(i);
 					if (listener.isAcceptingInput()) {
 						if (anyMouseDown()) {
 							listener.mouseDragged(lastMouseX ,  lastMouseY, getMouseX(), getMouseY());
@@ -1218,24 +1307,23 @@ public class Input {
 				lastMouseY = getMouseY();
 			}
 		}
-
-		// FIXME re-add once controllers enabled
-//		if (controllersInitialized) {
-//			for (int i=0;i<getControllerCount();i++) {
-//				int count = ((Controller) controllers.get(i)).getButtonCount()+3;
-//				count = Math.min(count, 24);
-//				for (int c=0;c<=count;c++) {
-//					if (controls[i][c] && !isControlDwn(c, i)) {
-//						controls[i][c] = false;
-//						fireControlRelease(c, i);
-//					} else if (!controls[i][c] && isControlDwn(c, i)) {
-//						controllerPressed[i][c] = true;
-//						controls[i][c] = true;
-//						fireControlPress(c, i);
-//					}
-//				}
-//			}
-//		}
+		
+		if (controllersInited) {
+			for (int i=0;i<getControllerCount();i++) {
+				int count = ((Controller) controllers.get(i)).getButtonCount()+3;
+				count = Math.min(count, 24);
+				for (int c=0;c<=count;c++) {
+					if (controls[i][c] && !isControlDwn(c, i)) {
+						controls[i][c] = false;
+						fireControlRelease(c, i);
+					} else if (!controls[i][c] && isControlDwn(c, i)) {
+						controllerPressed[i][c] = true;
+						controls[i][c] = true;
+						fireControlPress(c, i);
+					}
+				}
+			}
+		}
 		
 		if (keyRepeat) {
 			for (int i=0;i<1024;i++) {
@@ -1259,152 +1347,150 @@ public class Input {
 		}
 
 		
-		Iterator<ControlledInputReciever> all = allListeners.iterator();
+		Iterator all = allListeners.iterator();
 		while (all.hasNext()) {
-			ControlledInputReciever listener = all.next();
+			ControlledInputReciever listener = (ControlledInputReciever) all.next();
 			listener.inputEnded();
 		}
 		
-		if (GAME_WINDOW != -1L) {
-			displayActive = true;
+		if (Display.isCreated()) {
+			displayActive = Display.isActive();
+		}
+	}
+	
+	/**
+	 * Enable key repeat for this input context. This will cause keyPressed to get called repeatedly
+	 * at a set interval while the key is pressed
+	 * 
+	 * @param initial The interval before key repreating starts after a key press
+	 * @param interval The interval between key repeats in ms
+	 * @deprecated
+	 */
+	public void enableKeyRepeat(int initial, int interval) {
+		Keyboard.enableRepeatEvents(true);
+	}
+
+	/**
+	 * Enable key repeat for this input context. Uses the system settings for repeat
+	 * interval configuration.
+	 */
+	public void enableKeyRepeat() {
+		Keyboard.enableRepeatEvents(true);
+	}
+	
+	/**
+	 * Disable key repeat for this input context
+	 */
+	public void disableKeyRepeat() {
+		Keyboard.enableRepeatEvents(false);
+	}
+	
+	/**
+	 * Check if key repeat is enabled
+	 * 
+	 * @return True if key repeat is enabled
+	 */
+	public boolean isKeyRepeatEnabled() {
+		return Keyboard.areRepeatEventsEnabled();
+	}
+	
+	/**
+	 * Fire an event indicating that a control has been pressed
+	 * 
+	 * @param index The index of the control pressed
+	 * @param controllerIndex The index of the controller on which the control was pressed
+	 */
+	private void fireControlPress(int index, int controllerIndex) {
+		consumed = false;
+		for (int i=0;i<controllerListeners.size();i++) {
+			ControllerListener listener = (ControllerListener) controllerListeners.get(i);
+			if (listener.isAcceptingInput()) {
+				switch (index) {
+				case LEFT:
+					listener.controllerLeftPressed(controllerIndex);
+					break;
+				case RIGHT:
+					listener.controllerRightPressed(controllerIndex);
+					break;
+				case UP:
+					listener.controllerUpPressed(controllerIndex);
+					break;
+				case DOWN:
+					listener.controllerDownPressed(controllerIndex);
+					break;
+				default:
+					// assume button pressed
+					listener.controllerButtonPressed(controllerIndex, (index - BUTTON1) + 1);
+					break;
+				}
+				if (consumed) {
+					break;
+				}
+			}
 		}
 	}
 
-	// TODO key repeats is going to be bothersome -- come back to this
-//	/**
-//	 * Enable key repeat for this input context. This will cause keyPressed to get called repeatedly
-//	 * at a set interval while the key is pressed
-//	 *
-//	 * @param initial The interval before key repreating starts after a key press
-//	 * @param interval The interval between key repeats in ms
-//	 * @deprecated
-//	 */
-//	public void enableKeyRepeat(int initial, int interval) {
-//		Keyboard.enableRepeatEvents(true);
-//	}
-//
-//	/**
-//	 * Enable key repeat for this input context. Uses the system settings for repeat
-//	 * interval configuration.
-//	 */
-//	public void enableKeyRepeat() {
-//		Keyboard.enableRepeatEvents(true);
-//	}
-//
-//	/**
-//	 * Disable key repeat for this input context
-//	 */
-//	public void disableKeyRepeat() {
-//		Keyboard.enableRepeatEvents(false);
-//	}
-//
-//	/**
-//	 * Check if key repeat is enabled
-//	 *
-//	 * @return True if key repeat is enabled
-//	 */
-//	public boolean isKeyRepeatEnabled() {
-//		return Keyboard.areRepeatEventsEnabled();
-//	}
+	/**
+	 * Fire an event indicating that a control has been released
+	 * 
+	 * @param index The index of the control released
+	 * @param controllerIndex The index of the controller on which the control was released
+	 */
+	private void fireControlRelease(int index, int controllerIndex) {
+		consumed = false;
+		for (int i=0;i<controllerListeners.size();i++) {
+			ControllerListener listener = (ControllerListener) controllerListeners.get(i);
+			if (listener.isAcceptingInput()) {
+				switch (index) {
+				case LEFT:
+					listener.controllerLeftReleased(controllerIndex);
+					break;
+				case RIGHT:
+					listener.controllerRightReleased(controllerIndex);
+					break;
+				case UP:
+					listener.controllerUpReleased(controllerIndex);
+					break;
+				case DOWN:
+					listener.controllerDownReleased(controllerIndex);
+					break;
+				default:
+					// assume button release
+					listener.controllerButtonReleased(controllerIndex, (index - BUTTON1) + 1);
+					break;
+				}
+				if (consumed) {
+					break;
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Check if a particular control is currently pressed
+	 * 
+	 * @param index The index of the control
+	 * @param controllerIndex The index of the control to which the control belongs
+	 * @return True if the control is pressed
+	 */
+	private boolean isControlDwn(int index, int controllerIndex) {
+		switch (index) {
+		case LEFT:
+			return isControllerLeft(controllerIndex);
+		case RIGHT:
+			return isControllerRight(controllerIndex);
+		case UP:
+			return isControllerUp(controllerIndex);
+		case DOWN:
+			return isControllerDown(controllerIndex);
+		}
+		
+		if (index >= BUTTON1) {
+			return isButtonPressed((index-BUTTON1), controllerIndex);
+		}
 
-	// FIXME when enabling controller support
-//	/**
-//	 * Fire an event indicating that a control has been pressed
-//	 *
-//	 * @param index The index of the control pressed
-//	 * @param controllerIndex The index of the controller on which the control was pressed
-//	 */
-//	private void fireControlPress(int index, int controllerIndex) {
-//		consumed = false;
-//		for (int i=0;i<controllerListeners.size();i++) {
-//			ControllerListener listener = (ControllerListener) controllerListeners.get(i);
-//			if (listener.isAcceptingInput()) {
-//				switch (index) {
-//				case LEFT:
-//					listener.controllerLeftPressed(controllerIndex);
-//					break;
-//				case RIGHT:
-//					listener.controllerRightPressed(controllerIndex);
-//					break;
-//				case UP:
-//					listener.controllerUpPressed(controllerIndex);
-//					break;
-//				case DOWN:
-//					listener.controllerDownPressed(controllerIndex);
-//					break;
-//				default:
-//					// assume button pressed
-//					listener.controllerButtonPressed(controllerIndex, (index - BUTTON1) + 1);
-//					break;
-//				}
-//				if (consumed) {
-//					break;
-//				}
-//			}
-//		}
-//	}
-//
-//	/**
-//	 * Fire an event indicating that a control has been released
-//	 *
-//	 * @param index The index of the control released
-//	 * @param controllerIndex The index of the controller on which the control was released
-//	 */
-//	private void fireControlRelease(int index, int controllerIndex) {
-//		consumed = false;
-//		for (int i=0;i<controllerListeners.size();i++) {
-//			ControllerListener listener = (ControllerListener) controllerListeners.get(i);
-//			if (listener.isAcceptingInput()) {
-//				switch (index) {
-//				case LEFT:
-//					listener.controllerLeftReleased(controllerIndex);
-//					break;
-//				case RIGHT:
-//					listener.controllerRightReleased(controllerIndex);
-//					break;
-//				case UP:
-//					listener.controllerUpReleased(controllerIndex);
-//					break;
-//				case DOWN:
-//					listener.controllerDownReleased(controllerIndex);
-//					break;
-//				default:
-//					// assume button release
-//					listener.controllerButtonReleased(controllerIndex, (index - BUTTON1) + 1);
-//					break;
-//				}
-//				if (consumed) {
-//					break;
-//				}
-//			}
-//		}
-//	}
-//
-//	/**
-//	 * Check if a particular control is currently pressed
-//	 *
-//	 * @param index The index of the control
-//	 * @param controllerIndex The index of the control to which the control belongs
-//	 * @return True if the control is pressed
-//	 */
-//	private boolean isControlDwn(int index, int controllerIndex) {
-//		switch (index) {
-//		case LEFT:
-//			return isControllerLeft(controllerIndex);
-//		case RIGHT:
-//			return isControllerRight(controllerIndex);
-//		case UP:
-//			return isControllerUp(controllerIndex);
-//		case DOWN:
-//			return isControllerDown(controllerIndex);
-//		}
-//
-//		if (index >= BUTTON1) {
-//			return isButtonPressed((index-BUTTON1), controllerIndex);
-//		}
-//
-//		throw new RuntimeException("Unknown control index");
-//	}
+		throw new RuntimeException("Unknown control index");
+	}
 	
 
 	/**
@@ -1416,8 +1502,7 @@ public class Input {
 		// Reset all polling arrays
 		clearKeyPressedRecord();
 		clearMousePressedRecord();
-		// FIXME when adding controllers back
-//		clearControllerPressedRecord();
+		clearControlPressedRecord();
 	}
 
 	/**
@@ -1437,7 +1522,8 @@ public class Input {
 	 */
 	private void fireMouseClicked(int button, int x, int y, int clickCount) {
 		consumed = false;
-		for (MouseListener listener : mouseListeners) {
+		for (int i=0;i<mouseListeners.size();i++) {
+			MouseListener listener = (MouseListener) mouseListeners.get(i);
 			if (listener.isAcceptingInput()) {
 				listener.mouseClicked(button, x, y, clickCount);
 				if (consumed) {
