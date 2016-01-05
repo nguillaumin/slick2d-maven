@@ -1,0 +1,11 @@
+sudo: false
+
+language: java
+
+env:
+    - TRAVIS_CI=true
+
+# Start xvfb for AWT to work, required for sound unit tests
+before_script:
+      - export DISPLAY=:99.0
+      - sh -e /etc/init.d/xvfb start

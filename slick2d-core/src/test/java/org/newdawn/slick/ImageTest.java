@@ -4,7 +4,7 @@ import org.newdawn.slick.tests.util.TestWithDisplay;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-@Test
+@Test(groups="display")
 public class ImageTest extends TestWithDisplay {
 
     public void testGetColor() throws SlickException {
