@@ -2,6 +2,8 @@
 
 The fastest and simplest way to start a new Slick 2D based game.
 
+[![Build Status](https://travis-ci.org/nguillaumin/slick2d-maven.svg?branch=travis-ci)](https://travis-ci.org/nguillaumin/slick2d-maven)
+
 ### Quickstart
 
 **You don't need to clone this repository to get started. The project archetype as well as the JARs are published in the official Maven repositories, so you can just follow the steps below from scratch.** Clone this project only if you want to contribute to Slick2D or to the game archetype.
