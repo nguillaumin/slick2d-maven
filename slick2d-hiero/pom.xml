@@ -35,6 +35,11 @@
 		</developer>
 	</developers>
 
+	<properties>
+		<!-- default for command line (start Hiero with "mvn exec:exec"), overwritten by Netbeans -->
+		<exec.args>-jar ${basedir}/target/${project.artifactId}-${project.version}.jar</exec.args>
+	</properties>
+  
 	<dependencies>
 		<dependency>
 			<groupId>org.slick2d</groupId>

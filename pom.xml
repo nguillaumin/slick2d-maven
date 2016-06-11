@@ -86,6 +86,10 @@
 					<version>2.4</version>
 				</plugin>
 				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.19.1</version>
+				</plugin>
+				<plugin>
 					<artifactId>maven-dependency-plugin</artifactId>
 					<version>2.8</version>
 				</plugin>
@@ -168,6 +172,21 @@
 					<tagNameFormat>@{project.version}</tagNameFormat>
 					<goals>deploy</goals>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>  
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.5.0</version>
+				<executions>  
+					<execution>
+						<id>default-cli</id>
+						<configuration>
+							<executable>java</executable>
+							<!-- this way it works with netbeans "run file" out of the box: -->
+							<commandlineArgs>-Djava.library.path=${basedir}/target/natives ${exec.args}</commandlineArgs>
+						</configuration>  
+					</execution>  
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

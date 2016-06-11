@@ -57,6 +57,7 @@ import javax.swing.JWindow;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.EmptyBorder;
@@ -161,12 +162,11 @@ public class Hiero extends JFrame {
 		splash.close();
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
-			public void windowClosed(WindowEvent e) {
-				System.exit(0);
-			}
-
 			public void windowClosing(WindowEvent e) {
-				System.exit(0);
+				// stop slick2d event loop; maybe slick2d should use awt timer for that:
+				// http://www.pushing-pixels.org/2008/07/17/awt-shutdown-and-daemon-threads.html
+				canvasContainer.setVisible(false);
+				dispose();
 			}
 		});
 		
@@ -585,6 +585,7 @@ public class Hiero extends JFrame {
 
 		exitMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed (ActionEvent evt) {
+				canvasContainer.setVisible(false); // <- stop slick2d event loop
 				dispose();
 			}
 		});
@@ -1182,17 +1183,26 @@ public class Hiero extends JFrame {
 		}
 	}
 
-	public static void main (String[] args) throws Exception {
-		LookAndFeelInfo[] lookAndFeels = UIManager.getInstalledLookAndFeels();
-		for (int i = 0, n = lookAndFeels.length; i < n; i++) {
-			if ("Nimbus".equals(lookAndFeels[i].getName())) {
-				try {
-					UIManager.setLookAndFeel(lookAndFeels[i].getClassName());
-				} catch (Exception ignored) {
+	public static void main(String[] args) throws Exception {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				LookAndFeelInfo[] lookAndFeels = UIManager.getInstalledLookAndFeels();
+				for (int i = 0, n = lookAndFeels.length; i < n; i++) {
+					if ("Nimbus".equals(lookAndFeels[i].getName())) {
+						try {
+							UIManager.setLookAndFeel(lookAndFeels[i].getClassName());
+						} catch (Exception ignored) {
+						}
+						break;
+					}
 				}
-				break;
+				try {
+					new Hiero();
+				} catch (SlickException ex) {
+					throw new RuntimeException(ex);
+				}
 			}
-		}
-		new Hiero();
+		});
 	}
 }
