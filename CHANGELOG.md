@@ -1,6 +1,6 @@
 # slick2d-maven changelog
 
-## Next release
+## v1.0.2 (2016-09-09)
 
 * Fix off-by-one bug for y-position of mouse cursor
 * Fix NullPointerException when loading Tiled maps with terraintypes
