@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.slick2d</groupId>
 		<artifactId>slick2d-parent</artifactId>
-		<version>1.0.2-SNAPSHOT</version>
+		<version>1.0.2</version>
 	</parent>
 
 	<artifactId>slick2d-packulike</artifactId>
