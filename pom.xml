@@ -146,10 +146,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.9.1</version>
-				<configuration>
-					<docfilessubdirs>true</docfilessubdirs>
-					<additionalparam>-Xdoclint:none</additionalparam>
-				</configuration>
 				<executions>
 					<execution>
 						<goals>
@@ -174,18 +170,18 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>  
+				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.5.0</version>
-				<executions>  
+				<executions>
 					<execution>
 						<id>default-cli</id>
 						<configuration>
 							<executable>java</executable>
 							<!-- this way it works with netbeans "run file" out of the box: -->
 							<commandlineArgs>-Djava.library.path=${basedir}/target/natives ${exec.args}</commandlineArgs>
-						</configuration>  
-					</execution>  
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>
@@ -220,7 +216,8 @@
 			</build>
 		</profile>
 		<profile>
-			<!-- Disable unit tests that require a display when run under Travis CI-->
+			<!-- Disable unit tests that require a display when run under Travis CI -->
+			<id>travis-ci</id>
 			<activation>
 				<property>
 					<name>env.TRAVIS_CI</name>
@@ -233,6 +230,25 @@
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
 							<excludedGroups>display</excludedGroups>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<!-- Relax Javadoc check on Java 8 -->
+			<id>jdk-8-javadoc</id>
+			<activation>
+				<jdk>[1.8,)</jdk>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<configuration>
+							<docfilessubdirs>true</docfilessubdirs>
+							<additionalparam>-Xdoclint:none</additionalparam>
 						</configuration>
 					</plugin>
 				</plugins>
