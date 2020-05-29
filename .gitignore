@@ -4,3 +4,4 @@ test-output/
 hs_err_*
 *.releaseBackup
 release.properties
+/slick2d-parent.iml

@@ -43,13 +43,6 @@
 			<version>2.9.3</version>
 		</dependency>
 		<dependency>
-			<groupId>javax.jnlp</groupId>
-			<artifactId>jnlp-api</artifactId>
-			<version>5.0</version>
-			<scope>system</scope>
-			<systemPath>${java.home}/lib/javaws.jar</systemPath>
-		</dependency>
-		<dependency>
 			<groupId>org.jcraft</groupId>
 			<artifactId>jorbis</artifactId>
 			<version>0.0.17</version>
