@@ -3,14 +3,14 @@
 	<parent>
 		<groupId>org.slick2d</groupId>
 		<artifactId>slick2d-parent</artifactId>
-		<version>1.0.4-SNAPSHOT</version>
+		<version>1.0.3-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>slick2d-basic-game-archetype</artifactId>
+	<artifactId>slick2d-packulike</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Slick2D game project archetype</name>
-	<description>Maven archetype for a Slick2D based game</description>
+	<name>Slick2D Pack-U-Like</name>
+	<description>Slick 2D sprite packer</description>
 	<url>https://github.com/nguillaumin/slick2d-maven/</url>
 	<licenses>
 		<license>
@@ -36,33 +36,18 @@
 	</developers>
 
 	<build>
-		<resources>
-			<resource>
-				<directory>${project.basedir}/src/main/resources</directory>
-				<filtering>true</filtering>
-				<includes>
-					<include>archetype-resources/pom.xml</include>
-				</includes>
-			</resource>
-			<resource>
-				<directory>${project.basedir}/src/main/resources</directory>
-				<filtering>false</filtering>
-				<excludes>
-					<exclude>archetype-resources/pom.xml</exclude>
-				</excludes>
-			</resource>
-		</resources>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.6</version>
-					<configuration>
-						<escapeString>\</escapeString>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
+		<plugins>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>org.newdawn.slick.tools.packulike.Packer</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
+
 </project>
