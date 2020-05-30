@@ -174,7 +174,7 @@ public class CanvasGameContainer extends Canvas {
 				
 				try {
 					setDisplayMode(CanvasGameContainer.this.getWidth(), 
-								   CanvasGameContainer.this.getHeight(), false);
+								   CanvasGameContainer.this.getHeight(), DisplayMode.Opt.WINDOWED);
 				} catch (SlickException e) {
 					Log.error(e);
 				}

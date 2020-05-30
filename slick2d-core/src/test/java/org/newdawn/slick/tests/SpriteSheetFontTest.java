@@ -54,7 +54,7 @@ public class SpriteSheetFontTest extends BasicGame {
       }
       if (key == Input.KEY_SPACE) {
          try {
-            container.setDisplayMode(640, 480, false);
+            container.setDisplayMode(640, 480, DisplayMode.Opt.WINDOWED);
          } catch (SlickException e) {
             Log.error(e);
          }
@@ -74,7 +74,7 @@ public class SpriteSheetFontTest extends BasicGame {
    public static void main(String[] argv) {
       try {
          container = new AppGameContainer(new SpriteSheetFontTest());
-         container.setDisplayMode(800, 600, false);
+         container.setDisplayMode(800, 600, DisplayMode.Opt.WINDOWED);
          container.start();
       } catch (SlickException e) {
          e.printStackTrace();

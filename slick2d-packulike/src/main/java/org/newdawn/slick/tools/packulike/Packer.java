@@ -359,6 +359,12 @@ public class Packer extends JFrame {
 	 * @param argv The arguments to the program
 	 */
 	public static void main(String[] argv) {
+		File JGLLib = new File("./natives");
+		System.setProperty("org.lwjgl.librarypath", JGLLib.getAbsolutePath());
+		System.setProperty(
+				"net.java.games.input.librarypath",
+				JGLLib.getAbsolutePath()
+		);
 		new Packer();
 	}
 }

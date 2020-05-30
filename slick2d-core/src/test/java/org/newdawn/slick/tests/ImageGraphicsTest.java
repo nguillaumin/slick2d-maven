@@ -1,20 +1,13 @@
 package org.newdawn.slick.tests;
 
-import org.newdawn.slick.AngelCodeFont;
-import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 import org.newdawn.slick.opengl.pbuffer.GraphicsFactory;
 
 /**
  * A test for rendering to an image
  *
  * @author kevin
+ * @author tyler
  */
 public class ImageGraphicsTest extends BasicGame {
 	/** The image loaded and then rendered to */
@@ -66,8 +59,6 @@ public class ImageGraphicsTest extends BasicGame {
 		
 		if (GraphicsFactory.usingFBO()) {
 			using = "FBO (Frame Buffer Objects)";
-		} else if (GraphicsFactory.usingPBuffer()) {
-			using = "Pbuffer (Pixel Buffers)";
 		}
 		
 		System.out.println(preloaded.getColor(50,50));
@@ -158,7 +149,7 @@ public class ImageGraphicsTest extends BasicGame {
 			GraphicsFactory.setUseFBO(false);
 			
 			AppGameContainer container = new AppGameContainer(new ImageGraphicsTest());
-			container.setDisplayMode(800,600,false);
+			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {
 			e.printStackTrace();

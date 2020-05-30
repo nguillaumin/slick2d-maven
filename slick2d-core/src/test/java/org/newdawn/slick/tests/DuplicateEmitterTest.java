@@ -2,12 +2,7 @@ package org.newdawn.slick.tests;
 
 import java.io.IOException;
 
-import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 import org.newdawn.slick.particles.ConfigurableEmitter;
 import org.newdawn.slick.particles.ParticleIO;
 import org.newdawn.slick.particles.ParticleSystem;
@@ -101,7 +96,7 @@ public class DuplicateEmitterTest extends BasicGame {
 	public static void main(String[] argv) {
 		try {
 			AppGameContainer container = new AppGameContainer(new DuplicateEmitterTest());
-			container.setDisplayMode(800,600,false);
+			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {
 			e.printStackTrace();

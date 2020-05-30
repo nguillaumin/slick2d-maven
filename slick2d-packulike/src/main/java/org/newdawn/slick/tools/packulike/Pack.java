@@ -146,6 +146,12 @@ public class Pack {
 	 * @throws IOException Indicates a failure to write out files
 	 */
 	public static void main(String[] argv) throws IOException {
+		File JGLLib = new File("./natives");
+		System.setProperty("org.lwjgl.librarypath", JGLLib.getAbsolutePath());
+		System.setProperty(
+				"net.java.games.input.librarypath",
+				JGLLib.getAbsolutePath()
+		);
 		File dir = new File(".");
 		dir = new File("C:\\eclipse\\grobot-workspace\\anon\\res\\tiles\\indoor1");
 		

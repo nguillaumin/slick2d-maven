@@ -1184,6 +1184,12 @@ public class Hiero extends JFrame {
 	}
 
 	public static void main(String[] args) throws Exception {
+		File JGLLib = new File("./natives");
+		System.setProperty("org.lwjgl.librarypath", JGLLib.getAbsolutePath());
+		System.setProperty(
+				"net.java.games.input.librarypath",
+				JGLLib.getAbsolutePath()
+		);
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {

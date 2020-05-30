@@ -3,16 +3,8 @@ package org.newdawn.slick.tests;
 
 import java.io.IOException;
 
-import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.*;
 import org.newdawn.slick.font.effects.ColorEffect;
-import org.newdawn.slick.font.effects.ShadowEffect;
 
 /**
  * A simple test of the unicode font functionality provided
@@ -92,7 +84,7 @@ public class UnicodeFontTest extends BasicGame {
 	public static void main(String[] args) throws SlickException, IOException {
 		Input.disableControllers();
 		AppGameContainer container = new AppGameContainer(new UnicodeFontTest());
-		container.setDisplayMode(512, 600, false);
+		container.setDisplayMode(512, 600, DisplayMode.Opt.WINDOWED);
 		container.setTargetFrameRate(20);
 		container.start();
 	}

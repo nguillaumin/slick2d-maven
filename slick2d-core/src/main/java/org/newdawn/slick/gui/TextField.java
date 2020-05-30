@@ -1,16 +1,19 @@
 package org.newdawn.slick.gui;
 
-import org.lwjgl.Sys;
+import org.lwjgl.glfw.GLFW;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Rectangle;
 
+import static org.newdawn.slick.GameContainer.GAME_WINDOW;
+
 /**
  * A single text field supporting text entry
  * 
  * @author kevin
+ * @author tyler
  */
 public class TextField extends AbstractComponent {
 	/** The key repeat interval */
@@ -373,7 +376,7 @@ public class TextField extends AbstractComponent {
 			{
 				if ((key == Input.KEY_V) && 
 				   ((input.isKeyDown(Input.KEY_LCONTROL)) || (input.isKeyDown(Input.KEY_RCONTROL)))) {
-					String text = Sys.getClipboard();
+					String text = GLFW.glfwGetClipboardString(GAME_WINDOW);
 					if (text != null) {
 						doPaste(text);
 					}

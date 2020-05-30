@@ -1,5 +1,6 @@
 package org.newdawn.slick.examples.lights;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.newdawn.slick.BasicGame;
@@ -240,6 +241,12 @@ public class LightTest extends BasicGame {
 	 * @param argv The arguments provided at the command line
 	 */
 	public static void main(String[] argv) {
+		File JGLLib = new File("./natives");
+		System.setProperty("org.lwjgl.librarypath", JGLLib.getAbsolutePath());
+		System.setProperty(
+				"net.java.games.input.librarypath",
+				JGLLib.getAbsolutePath()
+		);
 		Bootstrap.runAsApplication(new LightTest(), 600, 600, false);
 	}
 }

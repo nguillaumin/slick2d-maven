@@ -12,7 +12,6 @@ import org.lwjgl.opengl.Pbuffer;
 import org.lwjgl.opengl.PixelFormat;
 import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.openal.SoundStore;
-import org.newdawn.slick.opengl.CursorLoader;
 import org.newdawn.slick.opengl.ImageData;
 import org.newdawn.slick.opengl.renderer.Renderer;
 import org.newdawn.slick.opengl.renderer.SGL;
@@ -24,8 +23,11 @@ import org.newdawn.slick.util.ResourceLoader;
  * managing the input system
  *
  * @author kevin
+ * @author tyler
  */
 public abstract class GameContainer implements GUIContext {
+	public static long GAME_WINDOW = -1L;
+
 	/** The renderer to use for all GL operations */
 	protected static SGL GL = Renderer.get();
 	/** The shared drawable if any */
@@ -192,10 +194,10 @@ public abstract class GameContainer implements GUIContext {
 	 * Indicate whether we want to be in fullscreen mode. Note that the current
 	 * display mode must be valid as a fullscreen mode for this to work
 	 * 
-	 * @param fullscreen True if we want to be in fullscreen mode
-	 * @throws SlickException Indicates we failed to change the display mode
+	 *
+	 * @param displayType@throws SlickException Indicates we failed to change the display mode
 	 */
-	public void setFullscreen(boolean fullscreen) throws SlickException {
+	public void setFullscreen(DisplayMode.Opt displayType) throws SlickException {
 	}
 	
 	/**
@@ -237,7 +239,7 @@ public abstract class GameContainer implements GUIContext {
 	 * 
 	 * @throws SlickException Indicates a failure rerun initialisation routines
 	 */
-	public void reinit() throws SlickException {
+	public void reInit() throws SlickException {
 	}
 	
 	/**
@@ -443,14 +445,15 @@ public abstract class GameContainer implements GUIContext {
 	 * @throws SlickException Indicates a failure to load the icon
 	 */
 	public abstract void setIcons(String[] refs) throws SlickException;
-	
+
+	// TODO still dont know if i can really use system time?-
 	/**
 	 * Get the accurate system time
 	 * 
 	 * @return The system time in milliseconds
 	 */
 	public long getTime() {
-		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
+		return System.currentTimeMillis();
 	}
 
 	/**
@@ -510,7 +513,7 @@ public abstract class GameContainer implements GUIContext {
 	 * @param hotSpotY The y coordinate of the hotspot within the cursor image
 	 * @throws SlickException Indicates a failure to load the cursor image or create the hardware cursor
 	 */
-	public abstract void setMouseCursor(Cursor cursor, int hotSpotX, int hotSpotY) throws SlickException;
+	public abstract void setMouseCursor(long cursor, int hotSpotX, int hotSpotY) throws SlickException;
 	
 	/**
 	 * Get a cursor based on a image reference on the classpath. The image 
@@ -529,12 +532,10 @@ public abstract class GameContainer implements GUIContext {
 	public void setAnimatedMouseCursor(String ref, int x, int y, int width, int height, int[] cursorDelays) throws SlickException
 	{
 		try {
-			Cursor cursor;
+			long cursor;
 			cursor = CursorLoader.get().getAnimatedCursor(ref, x, y, width, height, cursorDelays);
 			setMouseCursor(cursor, x, y);
 		} catch (IOException e) {
-			throw new SlickException("Failed to set mouse cursor", e);
-		} catch (LWJGLException e) {
 			throw new SlickException("Failed to set mouse cursor", e);
 		}
 	}

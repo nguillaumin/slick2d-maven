@@ -1,14 +1,6 @@
 package org.newdawn.slick.tests;
 	
-import org.newdawn.slick.AngelCodeFont;
-import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 import org.newdawn.slick.util.Log;
 
 /**
@@ -79,7 +71,7 @@ public class FontTest extends BasicGame {
 		}
 		if (key == Input.KEY_SPACE) {
 			try {
-				container.setDisplayMode(640, 480, false);
+				container.setDisplayMode(640, 480, DisplayMode.Opt.WINDOWED);
 			} catch (SlickException e) {
 				Log.error(e);
 			}
@@ -97,7 +89,7 @@ public class FontTest extends BasicGame {
 	public static void main(String[] argv) {
 		try {
 			container = new AppGameContainer(new FontTest());
-			container.setDisplayMode(800,600,false);
+			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {
 			e.printStackTrace();

@@ -1,6 +1,7 @@
 package org.newdawn.slick.tests;
 
 import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.DisplayMode;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
@@ -39,7 +40,7 @@ public class StateBasedTest extends StateBasedGame {
 	public static void main(String[] argv) {
 		try {
 			AppGameContainer container = new AppGameContainer(new StateBasedTest());
-			container.setDisplayMode(800,600,false);
+			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {
 			e.printStackTrace();

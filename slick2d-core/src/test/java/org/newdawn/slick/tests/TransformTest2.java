@@ -1,12 +1,6 @@
 package org.newdawn.slick.tests;
 
-import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 
 /**
  * A test for transforming the graphics context
@@ -161,7 +155,7 @@ public class TransformTest2 extends BasicGame {
    public static void main(String[] argv) {
       try {
          AppGameContainer container = new AppGameContainer(new TransformTest2());
-         container.setDisplayMode(640,480,false);
+         container.setDisplayMode(640,480, DisplayMode.Opt.WINDOWED);
          container.start();
       } catch (SlickException e) {
          e.printStackTrace();

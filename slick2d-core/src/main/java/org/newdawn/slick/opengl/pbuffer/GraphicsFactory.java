@@ -2,26 +2,23 @@ package org.newdawn.slick.opengl.pbuffer;
 
 import java.util.HashMap;
 
-import org.lwjgl.opengl.GLContext;
-import org.lwjgl.opengl.Pbuffer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.util.Log;
+
+import static org.lwjgl.opengl.GL.getCapabilities;
 
 /**
  * A factory to produce an appropriate render to texture graphics context based on current
  * hardware
  *
  * @author kevin
+ * @author tyler
  */
 public class GraphicsFactory {
 	/** The graphics list of graphics contexts created */
 	private static HashMap graphics = new HashMap();
-	/** True if pbuffers are supported */
-	private static boolean pbuffer = true;
-	/** True if pbuffer render to texture are supported */
-	private static boolean pbufferRT = true;
 	/** True if fbo are supported */
 	private static boolean fbo = true;
 	/** True if we've initialised */
@@ -37,16 +34,18 @@ public class GraphicsFactory {
 		init = true;
 		
 		if (fbo) {
-			fbo = GLContext.getCapabilities().GL_EXT_framebuffer_object;
+			fbo = getCapabilities().GL_EXT_framebuffer_object;
 		}
-		pbuffer = (Pbuffer.getCapabilities() & Pbuffer.PBUFFER_SUPPORTED) != 0;
-		pbufferRT = (Pbuffer.getCapabilities() & Pbuffer.RENDER_TEXTURE_SUPPORTED) != 0;
+
+		// TODO what does this do?
+		//		pbuffer = (Pbuffer.getCapabilities() & PBuffer.PBUFFER_SUPPORTED) != 0;
+		//		pbufferRT = (Pbuffer.getCapabilities() & Pbuffer.RENDER_TEXTURE_SUPPORTED) != 0;
 		
-		if (!fbo && !pbuffer && !pbufferRT) {
+		if (!fbo) {
 			throw new SlickException("Your OpenGL card does not support offscreen buffers and hence can't handle the dynamic images required for this application.");
 		}
 		
-		Log.info("Offscreen Buffers FBO="+fbo+" PBUFFER="+pbuffer+" PBUFFERRT="+pbufferRT);
+		Log.info("Offscreen Buffers FBO="+fbo);
 	}
 	
 	/**
@@ -73,7 +72,7 @@ public class GraphicsFactory {
 	 * @return True if we're using PBuffer
 	 */
 	public static boolean usingPBuffer() {
-		return !fbo && pbuffer;
+		return false;
 	}
 	
 	/**
@@ -125,14 +124,6 @@ public class GraphicsFactory {
 			} catch (Exception e) {
 				fbo = false;
 				Log.warn("FBO failed in use, falling back to PBuffer");
-			}
-		}
-		
-		if (pbuffer) {
-			if (pbufferRT) {
-				return new PBufferGraphics(image);
-			} else {
-				return new PBufferUniqueGraphics(image);
 			}
 		}
 		

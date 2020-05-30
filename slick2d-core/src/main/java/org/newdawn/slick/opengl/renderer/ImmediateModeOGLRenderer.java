@@ -6,13 +6,14 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import org.lwjgl.opengl.EXTSecondaryColor;
+import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GLContext;
 
 /**
  * The default OpenGL renderer, uses immediate mode for everything
  * 
  * @author kevin
+ * @author tyler
  */
 public class ImmediateModeOGLRenderer implements SGL {
 	/** The width of the display */
@@ -184,14 +185,16 @@ public class ImmediateModeOGLRenderer implements SGL {
 	 * @see org.newdawn.slick.opengl.renderer.SGL#glGetFloat(int, java.nio.FloatBuffer)
 	 */
 	public void glGetFloat(int id, FloatBuffer ret) {
-		GL11.glGetFloat(id, ret);
+		// TODO can I get away with not using float buffer?
+		ret.put(GL11.glGetFloat(id));
 	}
 
 	/**
 	 * @see org.newdawn.slick.opengl.renderer.SGL#glGetInteger(int, java.nio.IntBuffer)
 	 */
 	public void glGetInteger(int id, IntBuffer ret) {
-		GL11.glGetInteger(id, ret);
+		// TODO can I get away with not using int buffer?
+		ret.put(GL11.glGetInteger(id));
 	}
 
 	/**
@@ -365,7 +368,7 @@ public class ImmediateModeOGLRenderer implements SGL {
 	 * @see org.newdawn.slick.opengl.renderer.SGL#glLoadMatrix(java.nio.FloatBuffer)
 	 */
 	public void glLoadMatrix(FloatBuffer buffer) {
-		GL11.glLoadMatrix(buffer);
+		GL11.glLoadMatrixf(buffer);
 	}
 
 	/*
@@ -405,7 +408,9 @@ public class ImmediateModeOGLRenderer implements SGL {
 	 * @see org.newdawn.slick.opengl.renderer.SGL#canTextureMirrorClamp()
 	 */
 	public boolean canTextureMirrorClamp() {
-		return GLContext.getCapabilities().GL_EXT_texture_mirror_clamp;
+		return GL.createCapabilities().GL_EXT_texture_mirror_clamp;
+		// TODO no clue if this is right
+		//		return GLContext.getCapabilities().GL_EXT_texture_mirror_clamp;
 	}
 
 	/*
@@ -413,7 +418,9 @@ public class ImmediateModeOGLRenderer implements SGL {
 	 * @see org.newdawn.slick.opengl.renderer.SGL#canSecondaryColor()
 	 */
 	public boolean canSecondaryColor() {
-		return GLContext.getCapabilities().GL_EXT_secondary_color;
+		return GL.createCapabilities().GL_EXT_secondary_color;
+		// TODO
+		//		return GLContext.getCapabilities().GL_EXT_secondary_color;
 	}
 
 	/*

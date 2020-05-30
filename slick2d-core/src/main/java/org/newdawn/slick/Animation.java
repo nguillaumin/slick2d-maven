@@ -2,7 +2,6 @@ package org.newdawn.slick;
 
 import java.util.ArrayList;
 
-import org.lwjgl.Sys;
 import org.newdawn.slick.util.Log;
 
 /**
@@ -10,6 +9,7 @@ import org.newdawn.slick.util.Log;
  *
  * @author kevin
  * @author DeX (speed updates)
+ * @author tyler
  */
 public class Animation implements Renderable {
 	/** The list of frames to render in this animation */
@@ -604,7 +604,7 @@ public class Animation implements Renderable {
 	 * @return The system time in milliseconds
 	 */
 	private long getTime() {
-		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
+		return System.currentTimeMillis();
 	}
 	
 	/**

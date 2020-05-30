@@ -2,13 +2,7 @@ package org.newdawn.slick.tests;
 	
 import java.util.ArrayList;
 
-import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 import org.newdawn.slick.util.Log;
 
 /**
@@ -121,8 +115,8 @@ public class InputTest extends BasicGame {
 		if (key == Input.KEY_F1) {
 			if (app != null) {
 				try {
-					app.setDisplayMode(600, 600, false);
-					app.reinit();
+					app.setDisplayMode(600, 600, DisplayMode.Opt.WINDOWED);
+					app.reInit();
 				} catch (Exception e) { Log.error(e); }
 			}
 		}
@@ -245,7 +239,7 @@ public class InputTest extends BasicGame {
 	public static void main(String[] argv) {
 		try {
 			AppGameContainer container = new AppGameContainer(new InputTest());
-			container.setDisplayMode(800,600,false);
+			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {
 			e.printStackTrace();

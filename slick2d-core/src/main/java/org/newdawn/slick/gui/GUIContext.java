@@ -1,6 +1,5 @@
 package org.newdawn.slick.gui;
 
-import org.lwjgl.input.Cursor;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -10,6 +9,7 @@ import org.newdawn.slick.opengl.ImageData;
  * The context in which GUI components are created and rendered
  *
  * @author kevin
+ * @author tyler
  */
 public interface GUIContext {
 
@@ -93,7 +93,7 @@ public interface GUIContext {
 	 * @param hotSpotY The y coordinate of the hotspot within the cursor image
 	 * @throws SlickException Indicates a failure to load the cursor image or create the hardware cursor
 	 */
-	public abstract void setMouseCursor(Cursor cursor, int hotSpotX, int hotSpotY) throws SlickException;
+	public abstract void setMouseCursor(long cursor, int hotSpotX, int hotSpotY) throws SlickException;
 	
 	/**
 	 * Set the default mouse cursor - i.e. the original cursor before any native 

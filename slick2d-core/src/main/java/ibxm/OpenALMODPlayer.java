@@ -7,14 +7,13 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
 
 /**
  * A streaming mod/xm play back system
  * 
  * @author Kevin Glass
+ * @author tyler
  */
 public class OpenALMODPlayer {
 	/** The size of the sections to stream from the mod file */
@@ -49,14 +48,16 @@ public class OpenALMODPlayer {
 	 * Initialise OpenAL LWJGL styley
 	 */
     public void init() {
-    	try {
-			AL.create();
-			soundWorks = true;
-		} catch (LWJGLException e) {
-			System.err.println("Failed to initialise LWJGL OpenAL");
-			soundWorks = false;
-			return;
-		}
+    	soundWorks = false;
+    	// TODO Fix this or there wont be sound
+		//    	try {
+		//			ALContext.create();
+		//			soundWorks = true;
+		//		} catch (LWJGLException e) {
+		//			System.err.println("Failed to initialise LWJGL OpenAL");
+		//			soundWorks = false;
+		//			return;
+		//		}
 		
 		if (soundWorks) {
 			IntBuffer sources = BufferUtils.createIntBuffer(1);

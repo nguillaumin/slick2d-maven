@@ -11,6 +11,8 @@ import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.util.Log;
 
+import java.io.File;
+
 /**
  * An example to show scrolling around a tilemap smoothly. This seems to have caused confusion
  * a couple of times so here's "a" way to do it.
@@ -249,6 +251,12 @@ public class Scroller extends BasicGame {
 	 * @param argv The argument passed on the command line (if any)
 	 */
 	public static void main(String[] argv) {
+		File JGLLib = new File("./natives");
+		System.setProperty("org.lwjgl.librarypath", JGLLib.getAbsolutePath());
+		System.setProperty(
+				"net.java.games.input.librarypath",
+				JGLLib.getAbsolutePath()
+		);
 		try {
 			// create a new container for our example game. This container
 			// just creates a normal native window for rendering OpenGL accelerated

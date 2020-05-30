@@ -5,7 +5,6 @@ import java.nio.IntBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.EXTFramebufferObject;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GLContext;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -14,10 +13,13 @@ import org.newdawn.slick.opengl.SlickCallable;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.util.Log;
 
+import static org.lwjgl.opengl.GL.getCapabilities;
+
 /**
  * A graphics implementation that renders to an FBO
  *
  * @author kevin
+ * @author tyler
  */
 public class FBOGraphics extends Graphics {
 	/** The image we're we're sort of rendering to */
@@ -39,7 +41,7 @@ public class FBOGraphics extends Graphics {
 		
 		Log.debug("Creating FBO "+image.getWidth()+"x"+image.getHeight());
 		
-		boolean FBOEnabled = GLContext.getCapabilities().GL_EXT_framebuffer_object;
+		boolean FBOEnabled = getCapabilities().GL_EXT_framebuffer_object;
 		if (!FBOEnabled) {
 			throw new SlickException("Your OpenGL card does not support FBO and hence can't handle the dynamic images required for this application.");
 		}
@@ -160,7 +162,7 @@ public class FBOGraphics extends Graphics {
 		SlickCallable.enterSafeBlock();
 		
 		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-		GL11.glPushClientAttrib(GL11.GL_ALL_CLIENT_ATTRIB_BITS);
+		GL11.glPushClientAttrib(GL11.GL_CLIENT_ALL_ATTRIB_BITS);
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glPushMatrix();
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);

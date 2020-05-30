@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -467,6 +468,12 @@ public class GradientEditor extends JPanel {
 	 * @param argv The arguments supplied at the command line
 	 */
 	public static void main(String[] argv) {
+		File JGLLib = new File("./natives");
+		System.setProperty("org.lwjgl.librarypath", JGLLib.getAbsolutePath());
+		System.setProperty(
+				"net.java.games.input.librarypath",
+				JGLLib.getAbsolutePath()
+		);
 		JFrame frame = new JFrame();
 		JPanel panel = new JPanel();
 		panel.setBorder(BorderFactory.createTitledBorder("Gradient"));

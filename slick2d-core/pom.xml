@@ -37,11 +37,33 @@
 
 
 	<dependencies>
+		<!-- LWJGL Dependencies-->
+		<!-- https://mvnrepository.com/artifact/org.lwjgl/lwjgl -->
 		<dependency>
-			<groupId>org.lwjgl.lwjgl</groupId>
+			<groupId>org.lwjgl</groupId>
 			<artifactId>lwjgl</artifactId>
-			<version>2.9.3</version>
+			<version>3.2.3</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.lwjgl/lwjgl-opengl -->
+		<dependency>
+			<groupId>org.lwjgl</groupId>
+			<artifactId>lwjgl-opengl</artifactId>
+			<version>3.2.3</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.lwjgl/lwjgl-glfw -->
+		<dependency>
+			<groupId>org.lwjgl</groupId>
+			<artifactId>lwjgl-glfw</artifactId>
+			<version>3.2.3</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.lwjgl/lwjgl-openal -->
+		<dependency>
+			<groupId>org.lwjgl</groupId>
+			<artifactId>lwjgl-openal</artifactId>
+			<version>3.2.3</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>org.jcraft</groupId>
 			<artifactId>jorbis</artifactId>

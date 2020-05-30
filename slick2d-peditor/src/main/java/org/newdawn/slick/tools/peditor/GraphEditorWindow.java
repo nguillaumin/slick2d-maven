@@ -15,6 +15,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.NumberFormat;
@@ -1092,6 +1093,12 @@ public class GraphEditorWindow extends JPanel {
 	 *            The arguments supplied at the command line
 	 */
 	public static void main(String[] argv) {
+		File JGLLib = new File("./natives");
+		System.setProperty("org.lwjgl.librarypath", JGLLib.getAbsolutePath());
+		System.setProperty(
+				"net.java.games.input.librarypath",
+				JGLLib.getAbsolutePath()
+		);
 		JFrame frame = new JFrame("Whiskas Gradient Editor");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
