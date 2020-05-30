@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.newdawn.slick.Input;
+import org.newdawn.slick.input.Input;
 import org.newdawn.slick.util.InputAdapter;
 
 /**

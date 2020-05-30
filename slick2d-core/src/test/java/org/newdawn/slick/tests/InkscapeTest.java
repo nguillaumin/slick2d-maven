@@ -1,6 +1,7 @@
 package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
+import org.newdawn.slick.input.Input;
 import org.newdawn.slick.opengl.renderer.Renderer;
 import org.newdawn.slick.svg.InkscapeLoader;
 import org.newdawn.slick.svg.SimpleDiagramRenderer;

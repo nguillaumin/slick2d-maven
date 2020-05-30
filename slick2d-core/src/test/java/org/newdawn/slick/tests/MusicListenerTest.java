@@ -1,6 +1,7 @@
 package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
+import org.newdawn.slick.input.Input;
 
 /**
  * A test for music listeners which notify you when the music has eneded

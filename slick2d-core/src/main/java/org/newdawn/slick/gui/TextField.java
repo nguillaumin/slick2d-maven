@@ -4,7 +4,7 @@ import org.lwjgl.glfw.GLFW;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
+import org.newdawn.slick.input.Input;
 import org.newdawn.slick.geom.Rectangle;
 
 import static org.newdawn.slick.GameContainer.GAME_WINDOW;

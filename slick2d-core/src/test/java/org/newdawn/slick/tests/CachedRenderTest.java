@@ -1,6 +1,7 @@
 package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
+import org.newdawn.slick.input.Input;
 
 /**
  * A simple test to show performance gains from cache operations in situtations where

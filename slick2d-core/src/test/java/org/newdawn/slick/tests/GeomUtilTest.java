@@ -11,6 +11,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.geom.Vector2f;
+import org.newdawn.slick.input.Input;
 
 /**
  * A test to try shape cutting
@@ -95,7 +96,6 @@ public class GeomUtilTest extends BasicGame implements GeomUtilListener {
 	public void init(GameContainer container) throws SlickException {
 		util.setListener(this);
 		init();
-		container.setVSync(true);
 	}
 
 	/**

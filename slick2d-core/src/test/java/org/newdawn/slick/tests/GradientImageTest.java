@@ -5,6 +5,7 @@ import org.newdawn.slick.fills.GradientFill;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.input.Input;
 
 /**
  * A test for applying gradients to images

@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.font.effects.ColorEffect;
+import org.newdawn.slick.input.Input;
 
 /**
  * A simple test of the unicode font functionality provided

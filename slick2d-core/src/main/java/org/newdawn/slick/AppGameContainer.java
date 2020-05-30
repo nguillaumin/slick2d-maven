@@ -9,7 +9,6 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWImage;
-import org.lwjgl.openal.AL;
 import org.newdawn.slick.openal.SoundStore;
 import org.newdawn.slick.opengl.ImageData;
 import org.newdawn.slick.opengl.ImageIOImageData;
@@ -322,13 +321,14 @@ public class AppGameContainer extends GameContainer {
 		initSystem();
 		enterOrtho();
 
-		try {
-			getInput().initControllers();
-		} catch (SlickException e) {
-			Log.info("Controllers not available");
-		} catch (Throwable e) {
-			Log.info("Controllers not available");
-		}
+		// FIXME controllers are disabled
+//		try {
+//			getInput().initControllers();
+//		} catch (SlickException e) {
+//			Log.info("Controllers not available");
+//		} catch (Throwable e) {
+//			Log.info("Controllers not available");
+//		}
 		
 		try {
 			game.init(this);
@@ -380,18 +380,6 @@ public class AppGameContainer extends GameContainer {
 		setIcons(new String[] {ref});
 	}
 
-	public void setMouseGrabbed(boolean grabbed) {
-		GLFW.glfwSetInputMode(GAME_WINDOW, GLFW_CURSOR_DISABLED, grabbed ? GLFW_FALSE : GLFW_TRUE);
-	}
-
-	public boolean isMouseGrabbed() {
-		return GLFW.glfwGetInputMode(GAME_WINDOW, GLFW_CURSOR_DISABLED) == GLFW_FALSE;
-	}
-	
-	public boolean hasFocus() {
-		return GLFW.glfwGetWindowAttrib(GAME_WINDOW, GLFW_FOCUSED) == GLFW_TRUE;
-	}
-
 	public int getScreenHeight() {
 		return getHeight();
 	}
@@ -402,7 +390,9 @@ public class AppGameContainer extends GameContainer {
 	
 	public void destroy() {
 		GLFW.glfwDestroyWindow(GAME_WINDOW);
-		AL.destroy();
+
+		// TODO how do I destroy audio?
+		//AL.destroy();
 	}
 
 	public void setIcons(String[] refs) throws SlickException {

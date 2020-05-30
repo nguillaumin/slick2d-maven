@@ -6,7 +6,7 @@ import java.util.Iterator;
 import org.newdawn.slick.Game;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
+import org.newdawn.slick.input.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.transition.EmptyTransition;
@@ -93,7 +93,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	}
 	
 	/**
-	 * @see org.newdawn.slick.InputListener#setInput(org.newdawn.slick.Input)
+	 * @see org.newdawn.slick.InputListener#setInput(Input)
 	 */
 	public void setInput(Input input) {
 	}

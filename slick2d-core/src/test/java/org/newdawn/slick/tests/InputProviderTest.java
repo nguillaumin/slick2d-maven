@@ -9,6 +9,7 @@ import org.newdawn.slick.command.InputProvider;
 import org.newdawn.slick.command.InputProviderListener;
 import org.newdawn.slick.command.KeyControl;
 import org.newdawn.slick.command.MouseButtonControl;
+import org.newdawn.slick.input.Input;
 
 /**
  * A test for abstract input via InputProvider

@@ -1,6 +1,6 @@
 package org.newdawn.slick.util;
 
-import org.newdawn.slick.Input;
+import org.newdawn.slick.input.Input;
 import org.newdawn.slick.InputListener;
 
 /**
@@ -131,7 +131,7 @@ public class InputAdapter implements InputListener {
 	}
 
 	/**
-	 * @see org.newdawn.slick.InputListener#setInput(org.newdawn.slick.Input)
+	 * @see org.newdawn.slick.InputListener#setInput(Input)
 	 */
 	public void setInput(Input input) {
 	}

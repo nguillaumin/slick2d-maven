@@ -1,6 +1,7 @@
 package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
+import org.newdawn.slick.input.Input;
 
 /**
  * A test to demonstrate world clipping as opposed to screen clipping

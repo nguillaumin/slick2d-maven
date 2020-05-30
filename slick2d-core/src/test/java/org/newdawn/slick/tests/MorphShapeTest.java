@@ -44,8 +44,6 @@ public class MorphShapeTest extends BasicGame {
 		morph = new MorphShape(a);
 		morph.addShape(b);
 		morph.addShape(c);
-		
-		container.setVSync(true);
 	}
 
 	/**

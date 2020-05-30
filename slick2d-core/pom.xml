@@ -63,6 +63,12 @@
 			<version>3.2.3</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.xenoamess/jxinput -->
+		<dependency>
+			<groupId>com.xenoamess</groupId>
+			<artifactId>jxinput</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.jcraft</groupId>

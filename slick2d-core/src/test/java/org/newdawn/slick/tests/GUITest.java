@@ -5,6 +5,7 @@ import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.gui.TextField;
+import org.newdawn.slick.input.Input;
 import org.newdawn.slick.util.Log;
 
 /**

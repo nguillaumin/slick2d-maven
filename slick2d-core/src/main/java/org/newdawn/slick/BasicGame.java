@@ -1,6 +1,8 @@
 package org.newdawn.slick;
 
 
+import org.newdawn.slick.input.Input;
+
 /**
  * A basic implementation of a game to take out the boring bits
  *
@@ -34,7 +36,7 @@ public abstract class BasicGame implements Game, InputListener {
 	}
 
 	/**
-	 * @see org.newdawn.slick.InputListener#setInput(org.newdawn.slick.Input)
+	 * @see org.newdawn.slick.InputListener#setInput(Input)
 	 */
 	public void setInput(Input input) {	
 	}

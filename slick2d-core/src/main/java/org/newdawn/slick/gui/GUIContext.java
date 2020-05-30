@@ -1,7 +1,7 @@
 package org.newdawn.slick.gui;
 
 import org.newdawn.slick.Font;
-import org.newdawn.slick.Input;
+import org.newdawn.slick.input.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.opengl.ImageData;
 

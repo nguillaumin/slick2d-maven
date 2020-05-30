@@ -1,5 +1,7 @@
 package org.newdawn.slick;
 
+import org.newdawn.slick.input.Input;
+
 /**
  * Description of any class capable of recieving and controlling it's own
  * reception of input

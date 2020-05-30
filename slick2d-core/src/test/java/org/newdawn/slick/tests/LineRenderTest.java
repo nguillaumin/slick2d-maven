@@ -3,6 +3,7 @@ package org.newdawn.slick.tests;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Path;
 import org.newdawn.slick.geom.Polygon;
+import org.newdawn.slick.input.Input;
 import org.newdawn.slick.opengl.renderer.Renderer;
 
 /**

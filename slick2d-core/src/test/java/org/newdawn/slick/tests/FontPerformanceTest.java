@@ -3,6 +3,7 @@ package org.newdawn.slick.tests;
 import java.util.ArrayList;
 
 import org.newdawn.slick.*;
+import org.newdawn.slick.input.Input;
 
 /**
  * A test of the font rendering capabilities

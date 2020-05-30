@@ -4,6 +4,7 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Ellipse;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.RoundedRectangle;
+import org.newdawn.slick.input.Input;
 
 /**
  * A simple graphics test for the context allowing vector based graphics

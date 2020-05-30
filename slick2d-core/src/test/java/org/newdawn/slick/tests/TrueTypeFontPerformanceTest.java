@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.util.ArrayList;
 
 import org.newdawn.slick.*;
+import org.newdawn.slick.input.Input;
 
 /**
  * A test of the font rendering capabilities

@@ -4,14 +4,14 @@ import java.awt.Canvas;
 
 import javax.swing.SwingUtilities;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.Display;
+import org.newdawn.slick.input.Input;
 import org.newdawn.slick.util.Log;
 
 /**
  * A game container that displays the game on an AWT Canvas.
  * 
  * @author kevin
+ * @tyler
  */
 public class CanvasGameContainer extends Canvas {
 	/** The actual container implementation */
@@ -60,12 +60,6 @@ public class CanvasGameContainer extends Canvas {
 				try {
 					Input.disableControllers();
 					
-					try {
-						Display.setParent(CanvasGameContainer.this);
-					} catch (LWJGLException e) {
-						throw new SlickException("Failed to setParent of canvas", e);
-					}
-					
 					container.setup();
 					scheduleUpdate();
 				} catch (SlickException e) {
@@ -86,11 +80,7 @@ public class CanvasGameContainer extends Canvas {
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					container.gameLoop();
-				} catch (SlickException e) {
-					e.printStackTrace();
-				}
+				container.gameLoop();
 				container.checkDimensions();
 				scheduleUpdate();
 			}

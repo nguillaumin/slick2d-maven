@@ -3,6 +3,7 @@ package org.newdawn.slick.tests;
 import java.io.IOException;
 
 import org.newdawn.slick.*;
+import org.newdawn.slick.input.Input;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.openal.AudioLoader;
 import org.newdawn.slick.openal.SoundStore;

@@ -37,8 +37,6 @@ public class MorphSVGTest extends BasicGame {
 		morph.addStep(InkscapeLoader.load("testdata/svg/walk2.svg"));
 		morph.addStep(InkscapeLoader.load("testdata/svg/walk3.svg"));
 		morph.addStep(InkscapeLoader.load("testdata/svg/walk4.svg"));
-		
-		container.setVSync(true);
 	}
 
 	/**
