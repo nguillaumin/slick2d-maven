@@ -99,9 +99,9 @@ public class VAOGLRenderer extends ImmediateModeOGLRenderer {
 		colors.flip(); 
 		textures.flip(); 
 		
-		GL11.glVertexPointer(3,0,vertices);     
-		GL11.glColorPointer(4,0,colors);     
-		GL11.glTexCoordPointer(2,0,textures);     
+		GL11.glVertexPointer(3,0, 0,vertices);
+		GL11.glColorPointer(4,0, 0, colors);
+		GL11.glTexCoordPointer(2,0, 0, textures);
 		
 		GL11.glDrawArrays(currentType, 0, vertIndex);
 		currentType = NONE;

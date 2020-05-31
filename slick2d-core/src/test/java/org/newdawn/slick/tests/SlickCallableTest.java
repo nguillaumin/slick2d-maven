@@ -11,6 +11,7 @@ import org.newdawn.slick.opengl.SlickCallable;
  * A test for slick callables giving the chance to perform normal GL in mid Slick render
  *
  * @author kevin
+ * @author tyler
  */
 public class SlickCallableTest extends BasicGame {
 	/** The image to be draw using normal Slick */
@@ -77,7 +78,7 @@ public class SlickCallableTest extends BasicGame {
 		FloatBuffer red = BufferUtils.createFloatBuffer(4);
 		red.put(new float[] { 0.8f, 0.1f, 0.0f, 1.0f}).flip();
 	
-		GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, pos);
+		GL11.glLightfv(GL11.GL_LIGHT0, GL11.GL_POSITION, pos);
 		GL11.glEnable(GL11.GL_LIGHT0);
 
 		GL11.glEnable(GL11.GL_CULL_FACE);
@@ -93,7 +94,7 @@ public class SlickCallableTest extends BasicGame {
 		GL11.glTranslatef(0.0f, 0.0f, -40.0f);	
 		GL11.glRotatef(rot,0,1,1);		
 		
-		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_AMBIENT_AND_DIFFUSE, red);
+		GL11.glMaterialfv(GL11.GL_FRONT, GL11.GL_AMBIENT_AND_DIFFUSE, red);
 		gear(0.5f, 2.0f, 2.0f, 10, 0.7f);
 	}
 	

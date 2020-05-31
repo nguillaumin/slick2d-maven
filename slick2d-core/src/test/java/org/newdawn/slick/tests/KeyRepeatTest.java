@@ -26,7 +26,7 @@ public class KeyRepeatTest extends BasicGame {
 	 */
 	public void init(GameContainer container) throws SlickException {
 		input = container.getInput();
-		input.enableKeyRepeat(300,100);
+//		input.enableKeyRepeat(300,100);
 	}
 
 	/**
@@ -35,7 +35,7 @@ public class KeyRepeatTest extends BasicGame {
 	public void render(GameContainer container, Graphics g) {
 		g.drawString("Key Press Count: "+count, 100,100);
 		g.drawString("Press Space to Toggle Key Repeat", 100,150);
-		g.drawString("Key Repeat Enabled: "+input.isKeyRepeatEnabled(), 100,200);
+//		g.drawString("Key Repeat Enabled: "+input.isKeyRepeatEnabled(), 100,200);
 	}
 
 	/**
@@ -65,11 +65,11 @@ public class KeyRepeatTest extends BasicGame {
 	public void keyPressed(int key, char c) {
 		count++;
 		if (key == Input.KEY_SPACE) {
-			if (input.isKeyRepeatEnabled()) {
-				input.disableKeyRepeat();
-			} else {
-				input.enableKeyRepeat(300,100);
-			}
+//			if (input.isKeyRepeatEnabled()) {
+//				input.disableKeyRepeat();
+//			} else {
+//				input.enableKeyRepeat(300,100);
+//			}
 		}
 	}
 }

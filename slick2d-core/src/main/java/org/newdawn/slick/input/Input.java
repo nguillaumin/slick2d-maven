@@ -1075,123 +1075,124 @@ public class Input {
 			ControlledInputReciever listener = allStarts.next();
 			listener.inputStarted();
 		}
-		
-		while (Keyboard.next()) {
-			if (Keyboard.getEventKeyState()) {
-				int eventKey = resolveEventKey(Keyboard.getEventKey(), Keyboard.getEventCharacter());
-				
-				keys[eventKey] = Keyboard.getEventCharacter();
-				pressed[eventKey] = true;
-				nextRepeat[eventKey] = System.currentTimeMillis() + keyRepeatInitial;
-				
-				consumed = false;
-				for (int i=0;i<keyListeners.size();i++) {
-					KeyListener listener = (KeyListener) keyListeners.get(i);
-					
-					if (listener.isAcceptingInput()) {
-						listener.keyPressed(eventKey, Keyboard.getEventCharacter());
-						if (consumed) {
-							break;
-						}
-					}
-				}
-			} else {
-				int eventKey = resolveEventKey(Keyboard.getEventKey(), Keyboard.getEventCharacter());
-				nextRepeat[eventKey] = 0;
-				
-				consumed = false;
-				for (int i=0;i<keyListeners.size();i++) {
-					KeyListener listener = (KeyListener) keyListeners.get(i);
-					if (listener.isAcceptingInput()) {
-						listener.keyReleased(eventKey, keys[eventKey]);
-						if (consumed) {
-							break;
-						}
-					}
-				}
-			}
-		}
-		
-		while (Mouse.next()) {
-			if (Mouse.getEventButton() >= 0) {
-				if (Mouse.getEventButtonState()) {
-					consumed = false;
-					mousePressed[Mouse.getEventButton()] = true;
 
-					pressedX = (int) (xoffset + (Mouse.getEventX() * scaleX));
-					pressedY =  (int) (yoffset + ((height-Mouse.getEventY()-1) * scaleY));
-
-					for (int i=0;i<mouseListeners.size();i++) {
-						MouseListener listener = (MouseListener) mouseListeners.get(i);
-						if (listener.isAcceptingInput()) {
-							listener.mousePressed(Mouse.getEventButton(), pressedX, pressedY);
-							if (consumed) {
-								break;
-							}
-						}
-					}
-				} else {
-					consumed = false;
-					mousePressed[Mouse.getEventButton()] = false;
-					
-					int releasedX = (int) (xoffset + (Mouse.getEventX() * scaleX));
-					int releasedY = (int) (yoffset + ((height-Mouse.getEventY()-1) * scaleY));
-					if ((pressedX != -1) && 
-					    (pressedY != -1) &&
-						(Math.abs(pressedX - releasedX) < mouseClickTolerance) && 
-						(Math.abs(pressedY - releasedY) < mouseClickTolerance)) {
-						considerDoubleClick(Mouse.getEventButton(), releasedX, releasedY);
-						pressedX = pressedY = -1;
-					}
-
-					for (int i=0;i<mouseListeners.size();i++) {
-						MouseListener listener = (MouseListener) mouseListeners.get(i);
-						if (listener.isAcceptingInput()) {
-							listener.mouseReleased(Mouse.getEventButton(), releasedX, releasedY);
-							if (consumed) {
-								break;
-							}
-						}
-					}
-				}
-			} else {
-				if (isMouseGrabbed() && displayActive) {
-					if ((Mouse.getEventDX() != 0) || (Mouse.getEventDY() != 0)) {
-						consumed = false;
-						for (int i=0;i<mouseListeners.size();i++) {
-							MouseListener listener = (MouseListener) mouseListeners.get(i);
-							if (listener.isAcceptingInput()) {
-								if (anyMouseDown()) {
-									listener.mouseDragged(0, 0, Mouse.getEventDX(), -Mouse.getEventDY());	
-								} else {
-									listener.mouseMoved(0, 0, Mouse.getEventDX(), -Mouse.getEventDY());
-								}
-								
-								if (consumed) {
-									break;
-								}
-							}
-						}
-					}
-				}
-				
-				int dwheel = Mouse.getEventDWheel();
-				wheel += dwheel;
-				if (dwheel != 0) {
-					consumed = false;
-					for (int i=0;i<mouseListeners.size();i++) {
-						MouseListener listener = (MouseListener) mouseListeners.get(i);
-						if (listener.isAcceptingInput()) {
-							listener.mouseWheelMoved(dwheel);
-							if (consumed) {
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
-		
+		// TODO disabling input to see if we event compile
+//		while (Keyboard.next()) {
+//			if (Keyboard.getEventKeyState()) {
+//				int eventKey = resolveEventKey(Keyboard.getEventKey(), Keyboard.getEventCharacter());
+//
+//				keys[eventKey] = Keyboard.getEventCharacter();
+//				pressed[eventKey] = true;
+//				nextRepeat[eventKey] = System.currentTimeMillis() + keyRepeatInitial;
+//
+//				consumed = false;
+//				for (int i=0;i<keyListeners.size();i++) {
+//					KeyListener listener = (KeyListener) keyListeners.get(i);
+//
+//					if (listener.isAcceptingInput()) {
+//						listener.keyPressed(eventKey, Keyboard.getEventCharacter());
+//						if (consumed) {
+//							break;
+//						}
+//					}
+//				}
+//			} else {
+//				int eventKey = resolveEventKey(Keyboard.getEventKey(), Keyboard.getEventCharacter());
+//				nextRepeat[eventKey] = 0;
+//
+//				consumed = false;
+//				for (int i=0;i<keyListeners.size();i++) {
+//					KeyListener listener = (KeyListener) keyListeners.get(i);
+//					if (listener.isAcceptingInput()) {
+//						listener.keyReleased(eventKey, keys[eventKey]);
+//						if (consumed) {
+//							break;
+//						}
+//					}
+//				}
+//			}
+//		}
+//
+//		while (Mouse.next()) {
+//			if (Mouse.getEventButton() >= 0) {
+//				if (Mouse.getEventButtonState()) {
+//					consumed = false;
+//					mousePressed[Mouse.getEventButton()] = true;
+//
+//					pressedX = (int) (xoffset + (Mouse.getEventX() * scaleX));
+//					pressedY =  (int) (yoffset + ((height-Mouse.getEventY()-1) * scaleY));
+//
+//					for (int i=0;i<mouseListeners.size();i++) {
+//						MouseListener listener = (MouseListener) mouseListeners.get(i);
+//						if (listener.isAcceptingInput()) {
+//							listener.mousePressed(Mouse.getEventButton(), pressedX, pressedY);
+//							if (consumed) {
+//								break;
+//							}
+//						}
+//					}
+//				} else {
+//					consumed = false;
+//					mousePressed[Mouse.getEventButton()] = false;
+//
+//					int releasedX = (int) (xoffset + (Mouse.getEventX() * scaleX));
+//					int releasedY = (int) (yoffset + ((height-Mouse.getEventY()-1) * scaleY));
+//					if ((pressedX != -1) &&
+//					    (pressedY != -1) &&
+//						(Math.abs(pressedX - releasedX) < mouseClickTolerance) &&
+//						(Math.abs(pressedY - releasedY) < mouseClickTolerance)) {
+//						considerDoubleClick(Mouse.getEventButton(), releasedX, releasedY);
+//						pressedX = pressedY = -1;
+//					}
+//
+//					for (int i=0;i<mouseListeners.size();i++) {
+//						MouseListener listener = (MouseListener) mouseListeners.get(i);
+//						if (listener.isAcceptingInput()) {
+//							listener.mouseReleased(Mouse.getEventButton(), releasedX, releasedY);
+//							if (consumed) {
+//								break;
+//							}
+//						}
+//					}
+//				}
+//			} else {
+//				if (isMouseGrabbed() && displayActive) {
+//					if ((Mouse.getEventDX() != 0) || (Mouse.getEventDY() != 0)) {
+//						consumed = false;
+//						for (int i=0;i<mouseListeners.size();i++) {
+//							MouseListener listener = (MouseListener) mouseListeners.get(i);
+//							if (listener.isAcceptingInput()) {
+//								if (anyMouseDown()) {
+//									listener.mouseDragged(0, 0, Mouse.getEventDX(), -Mouse.getEventDY());
+//								} else {
+//									listener.mouseMoved(0, 0, Mouse.getEventDX(), -Mouse.getEventDY());
+//								}
+//
+//								if (consumed) {
+//									break;
+//								}
+//							}
+//						}
+//					}
+//				}
+//
+//				int dwheel = Mouse.getEventDWheel();
+//				wheel += dwheel;
+//				if (dwheel != 0) {
+//					consumed = false;
+//					for (int i=0;i<mouseListeners.size();i++) {
+//						MouseListener listener = (MouseListener) mouseListeners.get(i);
+//						if (listener.isAcceptingInput()) {
+//							listener.mouseWheelMoved(dwheel);
+//							if (consumed) {
+//								break;
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+//
 		if (!displayActive || isMouseGrabbed()) {
 			lastMouseX = getMouseX();
 			lastMouseY = getMouseY();

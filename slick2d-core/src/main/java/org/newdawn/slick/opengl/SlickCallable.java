@@ -61,7 +61,7 @@ public abstract class SlickCallable {
 		lastUsed = TextureImpl.getLastBind();
 		TextureImpl.bindNone();
 		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-		GL11.glPushClientAttrib(GL11.GL_ALL_CLIENT_ATTRIB_BITS);
+		GL11.glPushClientAttrib(GL11.GL_CLIENT_ALL_ATTRIB_BITS);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glPushMatrix();
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
