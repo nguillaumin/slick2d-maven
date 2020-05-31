@@ -167,6 +167,7 @@ public class LightTest extends BasicGame {
 	 * @param newx The new x coordinate of the mouse
 	 * @param newy The new y coordinate of the mouse
 	 */
+	@Override
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
 		mousePressed(0, newx, newy);
 	}

@@ -26,6 +26,7 @@ import org.newdawn.slick.util.ResourceLoader;
 import javax.imageio.ImageIO;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.system.MemoryStack.stackPush;
 
@@ -362,6 +363,8 @@ public class AppGameContainer extends GameContainer {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		// This _should_ unlock fps cap
+		glfwSwapInterval(0);
 
 		Log.info("GLFW Version: " + GLFW.glfwGetVersionString());
 		Log.info("LWJGL Version: " + Version.getVersion());

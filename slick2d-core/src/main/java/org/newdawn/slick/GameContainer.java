@@ -321,11 +321,11 @@ public abstract class GameContainer implements GUIContext {
 	}
 
 	public static void setMouseGrabbed(boolean grabbed) {
-		GLFW.glfwSetInputMode(GAME_WINDOW, GLFW_CURSOR_DISABLED, grabbed ? GLFW_FALSE : GLFW_TRUE);
+		GLFW.glfwSetInputMode(GAME_WINDOW, GLFW_CURSOR,  grabbed ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
 	}
 
 	public static boolean isMouseGrabbed() {
-		return GLFW.glfwGetInputMode(GAME_WINDOW, GLFW_CURSOR_DISABLED) == GLFW_FALSE;
+		return GLFW.glfwGetInputMode(GAME_WINDOW, GLFW_CURSOR) == GLFW_CURSOR_DISABLED;
 	}
 
 	public static boolean hasFocus() {
