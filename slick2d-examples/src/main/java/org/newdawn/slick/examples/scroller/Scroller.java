@@ -1,13 +1,7 @@
 package org.newdawn.slick.examples.scroller;
 
-import org.newdawn.slick.Animation;
-import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
+import org.newdawn.slick.*;
 import org.newdawn.slick.input.Input;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.util.Log;
 
@@ -261,7 +255,7 @@ public class Scroller extends BasicGame {
 			// create a new container for our example game. This container
 			// just creates a normal native window for rendering OpenGL accelerated
 			// elements to
-			AppGameContainer container = new AppGameContainer(new Scroller(), 800, 600, false);
+			AppGameContainer container = new AppGameContainer(new Scroller(), 800, 600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (Exception e) {
 			e.printStackTrace();

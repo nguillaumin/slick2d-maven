@@ -117,7 +117,7 @@ public class CanvasGameContainer extends Canvas {
 		 * @throws SlickException Indicates a failure to initialise
 		 */
 		public Container(Game game, boolean shared) throws SlickException {
-			super(game, CanvasGameContainer.this.getWidth(), CanvasGameContainer.this.getHeight(), false);
+			super(game, CanvasGameContainer.this.getWidth(), CanvasGameContainer.this.getHeight(), DisplayMode.Opt.WINDOWED);
 
 			width = CanvasGameContainer.this.getWidth();
 			height = CanvasGameContainer.this.getHeight();

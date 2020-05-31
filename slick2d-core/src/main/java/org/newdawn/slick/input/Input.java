@@ -755,13 +755,15 @@ public class Input {
 	private static final DoubleBuffer MOUSE_Y = DoubleBuffer.allocate(1);
 
 	public int getAbsoluteMouseX() {
-		GLFW.glfwGetCursorPos(GAME_WINDOW, MOUSE_X, MOUSE_Y);
-		return (int) Math.floor(MOUSE_X.get());
+		return 0;
+//		GLFW.glfwGetCursorPos(GAME_WINDOW, MOUSE_X, MOUSE_Y);
+//		return (int) Math.floor(MOUSE_X.get());
 	}
 
 	public int getAbsoluteMouseY() {
-		GLFW.glfwGetCursorPos(GAME_WINDOW, MOUSE_X, MOUSE_Y);
-		return height - (int) Math.floor(MOUSE_X.get()) - 1;
+		return 0;
+//		GLFW.glfwGetCursorPos(GAME_WINDOW, MOUSE_X, MOUSE_Y);
+//		return height - (int) Math.floor(MOUSE_X.get()) - 1;
 	}
 
 	public int getMouseX() {
