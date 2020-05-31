@@ -42,9 +42,9 @@ public abstract class GameContainer implements GUIContext {
 	protected boolean running = true;
 	
 	/** The width of the display */
-	protected int width;
+	protected static int width = 0;
 	/** The height of the display */
-	protected int height;
+	protected static int height = 0;
 	/** The game being managed */
 	protected Game game;
 	
@@ -255,7 +255,7 @@ public abstract class GameContainer implements GUIContext {
 	 *
 	 * @return The width of the game canvas
 	 */
-	public int getWidth() {
+	public static int getWidth() {
 		return width;
 	}
 	
@@ -264,7 +264,7 @@ public abstract class GameContainer implements GUIContext {
 	 * 
 	 * @return The height of the game canvas
 	 */
-	public int getHeight() {
+	public static int getHeight() {
 		return height;
 	}
 	

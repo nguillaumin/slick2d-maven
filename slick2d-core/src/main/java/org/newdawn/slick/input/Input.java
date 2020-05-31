@@ -1,4 +1,4 @@
-package org.newdawn.slick;
+package org.newdawn.slick.input;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -7,18 +7,18 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Controller;
-import org.lwjgl.input.Controllers;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
+import org.newdawn.slick.*;
+import org.newdawn.slick.input.sources.controller.Controller;
+import org.newdawn.slick.input.sources.controller.Controllers;
+import org.newdawn.slick.input.sources.keyboard.Keyboard;
+import org.newdawn.slick.input.sources.mouse.Mouse;
 import org.newdawn.slick.util.Log;
 
 /**
  * A wrapped for all keyboard, mouse and controller input
  *
  * @author kevin
+ * @author tyler
  */
 public class Input {
 	/** The controller index to pass to check all controllers */
@@ -318,9 +318,9 @@ public class Input {
 	public static final int MOUSE_MIDDLE_BUTTON = 2;
 	
 	/** True if the controllers system has been initialised */
-	private static boolean controllersInited = false;
+	private static boolean controllersInitialized = false;
 	/** The list of controllers */
-	private static ArrayList controllers = new ArrayList();
+	private static final ArrayList<Controller> controllers = new ArrayList<>();
 
 	/** The last recorded mouse x position */
 	private int lastMouseX;
@@ -329,7 +329,7 @@ public class Input {
 	/** THe state of the mouse buttons */
 	protected boolean[] mousePressed = new boolean[10];
 	/** THe state of the controller buttons */
-	private boolean[][] controllerPressed = new boolean[100][MAX_BUTTONS];
+	private final boolean[][] controllerPressed = new boolean[100][MAX_BUTTONS];
 	
 	/** The character values representing the pressed keys */
 	protected char[] keys = new char[1024];
@@ -343,25 +343,22 @@ public class Input {
 	/** True if the event has been consumed */
 	protected boolean consumed = false;
 	/** A list of listeners to be notified of input events */
-	protected HashSet allListeners = new HashSet();
+	protected HashSet<ControlledInputReciever> allListeners = new HashSet<>();
 	/** The listeners to notify of key events */
-	protected ArrayList keyListeners = new ArrayList();
+	protected ArrayList<KeyListener> keyListeners = new ArrayList<>();
 	/** The listener to add */
-	protected ArrayList keyListenersToAdd = new ArrayList();
+	protected ArrayList<KeyListener> keyListenersToAdd = new ArrayList<>();
 	/** The listeners to notify of mouse events */
-	protected ArrayList mouseListeners = new ArrayList();
+	protected ArrayList<MouseListener> mouseListeners = new ArrayList<>();
 	/** The listener to add */
-	protected ArrayList mouseListenersToAdd = new ArrayList();
+	protected ArrayList<MouseListener> mouseListenersToAdd = new ArrayList<>();
 	/** The listener to nofiy of controller events */
-	protected ArrayList controllerListeners = new ArrayList();
+	protected ArrayList<ControllerListener> controllerListeners = new ArrayList<>();
 	/** The current value of the wheel */
 	private int wheel;
 	/** The height of the display */
 	private int height;
-	
-	/** True if the display is active */
-	private boolean displayActive = true;
-	
+
 	/** True if key repeat is enabled */
 	private boolean keyRepeat;
 	/** The initial delay for key repeat starts */
@@ -376,9 +373,9 @@ public class Input {
 	/** The scale to apply to screen coordinates */
 	private float scaleY = 1;
 	/** The offset to apply to screen coordinates */
-	private float xoffset = 0;
+	private float xOffset = 0;
 	/** The offset to apply to screen coordinates */
-	private float yoffset = 0;
+	private float yOoffset = 0;
 	
 	/** The delay before determining a single or double click */
 	private int doubleClickDelay = 250;
@@ -406,7 +403,7 @@ public class Input {
 	 * are not required.
 	 */
 	public static void disableControllers() {
-	   controllersInited = true;
+	   controllersInitialized = true;
 	}
 	
 	/**
@@ -457,8 +454,8 @@ public class Input {
 	 * @param yoffset The offset on the y-axis
 	 */
 	public void setOffset(float xoffset, float yoffset) {
-		this.xoffset = xoffset;
-		this.yoffset = yoffset;
+		this.xOffset = xoffset;
+		this.yOoffset = yoffset;
 	}
 	
 	/**
@@ -643,7 +640,7 @@ public class Input {
 	 * 
 	 * @param height The height of the window
 	 */
-	void init(int height) {
+	public void init(int height) {
 		this.height = height;
 		lastMouseX = getMouseX();
 		lastMouseY = getMouseY();
@@ -780,7 +777,7 @@ public class Input {
 	 * @return The x position of the mouse cursor
 	 */
 	public int getMouseX() {
-		return (int) ((getAbsoluteMouseX() * scaleX)+xoffset);
+		return (int) ((getAbsoluteMouseX() * scaleX)+ xOffset);
 	}
 	
 	/**
@@ -789,7 +786,7 @@ public class Input {
 	 * @return The y position of the mouse cursor
 	 */
 	public int getMouseY() {
-		return (int) ((getAbsoluteMouseY() * scaleY)+yoffset);
+		return (int) ((getAbsoluteMouseY() * scaleY)+ yOoffset);
 	}
 	
 	/**
@@ -1025,11 +1022,11 @@ public class Input {
 	 * @throws SlickException Indicates a failure to use the hardware
 	 */
 	public void initControllers() throws SlickException {
-		if (controllersInited) {
+		if (controllersInitialized) {
 			return;
 		}
 		
-		controllersInited = true;
+		controllersInitialized = true;
 		try {
 			Controllers.create();
 			int count = Controllers.getControllerCount();
@@ -1046,11 +1043,6 @@ public class Input {
 			for (int i=0;i<controllers.size();i++) {
 				Log.info(i+" : "+((Controller) controllers.get(i)).getName());
 			}
-		} catch (LWJGLException e) {
-			if (e.getCause() instanceof ClassNotFoundException) {
-				throw new SlickException("Unable to create controller - no jinput found - add jinput.jar to your classpath");
-			}
-			throw new SlickException("Unable to create controllers");
 		} catch (NoClassDefFoundError e) {
 			// forget it, no jinput availble
 		}
@@ -1138,7 +1130,7 @@ public class Input {
 			return;
 		}
 
-		if (!Display.isActive()) {
+		if (!AppGameContainer.hasFocus()) {
 			clearControlPressedRecord();
 			clearKeyPressedRecord();
 			clearMousePressedRecord();
@@ -1203,15 +1195,17 @@ public class Input {
 				}
 			}
 		}
-		
+
+		/** True if the display is active */
+		boolean displayActive = true;
 		while (Mouse.next()) {
 			if (Mouse.getEventButton() >= 0) {
 				if (Mouse.getEventButtonState()) {
 					consumed = false;
 					mousePressed[Mouse.getEventButton()] = true;
 
-					pressedX = (int) (xoffset + (Mouse.getEventX() * scaleX));
-					pressedY =  (int) (yoffset + ((height-Mouse.getEventY()-1) * scaleY));
+					pressedX = (int) (xOffset + (Mouse.getEventX() * scaleX));
+					pressedY =  (int) (yOoffset + ((height-Mouse.getEventY()-1) * scaleY));
 
 					for (int i=0;i<mouseListeners.size();i++) {
 						MouseListener listener = (MouseListener) mouseListeners.get(i);
@@ -1226,8 +1220,8 @@ public class Input {
 					consumed = false;
 					mousePressed[Mouse.getEventButton()] = false;
 					
-					int releasedX = (int) (xoffset + (Mouse.getEventX() * scaleX));
-					int releasedY = (int) (yoffset + ((height-Mouse.getEventY()-1) * scaleY));
+					int releasedX = (int) (xOffset + (Mouse.getEventX() * scaleX));
+					int releasedY = (int) (yOoffset + ((height-Mouse.getEventY()-1) * scaleY));
 					if ((pressedX != -1) && 
 					    (pressedY != -1) &&
 						(Math.abs(pressedX - releasedX) < mouseClickTolerance) && 
@@ -1308,7 +1302,7 @@ public class Input {
 			}
 		}
 		
-		if (controllersInited) {
+		if (controllersInitialized) {
 			for (int i=0;i<getControllerCount();i++) {
 				int count = ((Controller) controllers.get(i)).getButtonCount()+3;
 				count = Math.min(count, 24);
@@ -1353,9 +1347,6 @@ public class Input {
 			listener.inputEnded();
 		}
 		
-		if (Display.isCreated()) {
-			displayActive = Display.isActive();
-		}
 	}
 	
 	/**
