@@ -1,19 +1,11 @@
 package org.newdawn.slick.examples.lights;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
+import org.newdawn.slick.*;
 import org.newdawn.slick.input.Input;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.input.sources.keyboard.Keyboard;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.util.Bootstrap;
-import org.newdawn.slick.util.Log;
 
 /**
  * This example shows using vertex colours on a tile map to producing a lighting
@@ -74,6 +66,17 @@ public class LightTest extends BasicGame {
 	public void init(GameContainer container) throws SlickException {
 		tiles = new SpriteSheet("testdata/tiles.png", 32,32);
 		generateMap();
+		bindControls();
+	}
+
+	private void bindControls() {
+		// toggle the lighting on/off
+		Input.bindKeyPress(USKeyboard.KEY_L, () -> lightingOn = !lightingOn);
+		// change light color
+		Input.bindKeyPress(USKeyboard.KEY_C, () -> {
+			colouredLights = !colouredLights;
+			updateLightMap();
+		});
 	}
 
 	/**
@@ -147,13 +150,6 @@ public class LightTest extends BasicGame {
 	 * @param delta The amount of time that passed since last update (in seconds)
 	 */
 	public void update(GameContainer container, int delta) {
-		// toggle the lighting on/off
-		Keyboard.bindKeyPress(Input.KEY_0, () -> lightingOn = !lightingOn);
-		// change light color
-		Keyboard.bindKeyPress(Input.KEY_NUMPAD0, () -> {
-			colouredLights = !colouredLights;
-			updateLightMap();
-		});
 	}
 
 	/**
@@ -187,8 +183,7 @@ public class LightTest extends BasicGame {
 	 * @param container The container the game is running in
 	 * @param g The graphics context to which we can render
 	 */
-	public void render(GameContainer container, Graphics g)
-			throws SlickException {
+	public void render(GameContainer container, Graphics g) {
 		// display some instructions on how to use the example
 		g.setColor(Color.white);
 		g.drawString("Lighting Example", 440, 5);
@@ -239,13 +234,7 @@ public class LightTest extends BasicGame {
 	 * @param argv The arguments provided at the command line
 	 */
 	public static void main(String[] argv) {
-		File JGLLib = new File("./natives");
-		System.setProperty("org.lwjgl.librarypath", JGLLib.getAbsolutePath());
-		System.setProperty(
-				"net.java.games.input.librarypath",
-				JGLLib.getAbsolutePath()
-		);
-		Bootstrap.runAsApplication(new LightTest(), 600, 600, false);
+		Bootstrap.runAsApplication(new LightTest(), 600, 600, DisplayMode.Opt.WINDOWED);
 	}
 }
 

@@ -2,6 +2,7 @@ package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.opengl.renderer.Renderer;
 import org.newdawn.slick.svg.InkscapeLoader;
 import org.newdawn.slick.svg.SimpleDiagramRenderer;
@@ -49,28 +50,28 @@ public class InkscapeTest extends BasicGame {
 	 * @see org.newdawn.slick.BasicGame#update(org.newdawn.slick.GameContainer, int)
 	 */
 	public void update(GameContainer container, int delta) throws SlickException {
-		if (container.getInput().isKeyDown(Input.KEY_Q)) {
+		if (container.getInput().isKeyDown(USKeyboard.KEY_Q)) {
 			zoom += (delta * 0.01f);
 			if (zoom > 10) {
 				zoom = 10;
 			}
 		}
-		if (container.getInput().isKeyDown(Input.KEY_A)) {
+		if (container.getInput().isKeyDown(USKeyboard.KEY_A)) {
 			zoom -= (delta * 0.01f);
 			if (zoom < 0.1f) {
 				zoom = 0.1f;
 			}
 		}
-		if (container.getInput().isKeyDown(Input.KEY_RIGHT)) {
+		if (container.getInput().isKeyDown(USKeyboard.KEY_RIGHT)) {
 			x += (delta * 0.1f);
 		}
-		if (container.getInput().isKeyDown(Input.KEY_LEFT)) {
+		if (container.getInput().isKeyDown(USKeyboard.KEY_LEFT)) {
 			x -= (delta * 0.1f);
 		}
-		if (container.getInput().isKeyDown(Input.KEY_DOWN)) {
+		if (container.getInput().isKeyDown(USKeyboard.KEY_DOWN)) {
 			y += (delta * 0.1f);
 		}
-		if (container.getInput().isKeyDown(Input.KEY_UP)) {
+		if (container.getInput().isKeyDown(USKeyboard.KEY_UP)) {
 			y -= (delta * 0.1f);
 		}
 	}

@@ -2,6 +2,7 @@ package org.newdawn.slick.tests;
 	
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 /**
  * A test of the font rendering capabilities
@@ -48,7 +49,7 @@ public class PureFontTest extends BasicGame {
 	 * @see org.newdawn.slick.BasicGame#keyPressed(int, char)
 	 */
 	public void keyPressed(int key, char c) {
-		if (key == Input.KEY_ESCAPE) {
+		if (key == USKeyboard.KEY_ESCAPE) {
 			System.exit(0);
 		}
 	}

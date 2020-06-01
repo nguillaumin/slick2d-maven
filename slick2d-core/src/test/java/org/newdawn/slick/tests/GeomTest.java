@@ -8,6 +8,7 @@ import org.newdawn.slick.geom.RoundedRectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.opengl.renderer.Renderer;
 
 /**
@@ -114,7 +115,7 @@ public class GeomTest extends BasicGame {
 	 * @see org.newdawn.slick.BasicGame#keyPressed(int, char)
 	 */
 	public void keyPressed(int key, char c) {
-		if (key == Input.KEY_ESCAPE) {
+		if (key == USKeyboard.KEY_ESCAPE) {
 			System.exit(0);
 		}
 	}

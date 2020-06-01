@@ -2,6 +2,7 @@ package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.util.ResourceLoader;
 
 /**
@@ -75,32 +76,32 @@ public class SoundURLTest extends BasicGame {
 	 * @see org.newdawn.slick.BasicGame#keyPressed(int, char)
 	 */
 	public void keyPressed(int key, char c) {
-		if (key == Input.KEY_ESCAPE) {
+		if (key == USKeyboard.KEY_ESCAPE) {
 			System.exit(0);
 		}
-		if (key == Input.KEY_SPACE) {
+		if (key == USKeyboard.KEY_SPACE) {
 			sound.play();
 		}
-		if (key == Input.KEY_B) {
+		if (key == USKeyboard.KEY_B) {
 			burp.play();
 		}
-		if (key == Input.KEY_A) {
+		if (key == USKeyboard.KEY_A) {
 			sound.playAt(-1, 0, 0);
 		}
-		if (key == Input.KEY_L) {
+		if (key == USKeyboard.KEY_L) {
 			sound.playAt(1, 0, 0);
 		}
-		if (key == Input.KEY_RETURN) {
+		if (key == USKeyboard.KEY_RETURN) {
 			charlie.play(1.0f,1.0f);
 		}
-		if (key == Input.KEY_P) {
+		if (key == USKeyboard.KEY_P) {
 			if (music.playing()) {
 				music.pause();
 			} else {
 				music.resume();
 			}
 		}
-		if (key == Input.KEY_C) {
+		if (key == USKeyboard.KEY_C) {
 			music.stop();
 			if (music == musica) {
 				music = musicb;
@@ -110,7 +111,7 @@ public class SoundURLTest extends BasicGame {
 			
 			music.loop();
 		}
-		if (key == Input.KEY_E) {
+		if (key == USKeyboard.KEY_E) {
 			if (engine.playing()) {
 				engine.stop();
 			} else {

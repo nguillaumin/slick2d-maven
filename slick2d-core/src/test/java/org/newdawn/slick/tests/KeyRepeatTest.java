@@ -2,6 +2,7 @@ package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 /**
  * A test for basic image rendering
@@ -64,7 +65,7 @@ public class KeyRepeatTest extends BasicGame {
 	 */
 	public void keyPressed(int key, char c) {
 		count++;
-		if (key == Input.KEY_SPACE) {
+		if (key == USKeyboard.KEY_SPACE) {
 //			if (input.isKeyRepeatEnabled()) {
 //				input.disableKeyRepeat();
 //			} else {

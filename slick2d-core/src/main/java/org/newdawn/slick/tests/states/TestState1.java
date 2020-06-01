@@ -7,6 +7,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.input.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -66,7 +67,7 @@ public class TestState1 extends BasicGameState {
 	 */
 	public void keyReleased(int key, char c) {
 		
-		if (key == Input.KEY_2) {
+		if (key == USKeyboard.KEY_2) {
 			GameState target = game.getState(TestState2.ID);
 			
 			final long start = System.currentTimeMillis();
@@ -81,7 +82,7 @@ public class TestState1 extends BasicGameState {
 			
 			game.enterState(TestState2.ID, t, new EmptyTransition());
 		}
-		if (key == Input.KEY_3) {
+		if (key == USKeyboard.KEY_3) {
 			game.enterState(TestState3.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
 		}
 	}

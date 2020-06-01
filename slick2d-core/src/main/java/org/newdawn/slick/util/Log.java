@@ -26,7 +26,7 @@ public final class Log {
 	//
 	// 0 - ALL; 1 - DEBUG; 2 - INFO; 3 - WARN
 	//
-	private static int logLevel = 0;
+	private static int logLevel = 2; // Info Default Level
 
 	public static void setLevel(int level) {
 		logLevel = level;
@@ -34,7 +34,7 @@ public final class Log {
 
 	public void setVerbose(boolean enabled) {
 		if (enabled) {
-			setLevel(0);
+			setLevel(1);
 		} else {
 			setLevel(2);
 		}
@@ -78,6 +78,11 @@ public final class Log {
 		}
 
 		logErr("[ERROR]", args);
+		for (Object o : args) {
+			if (o instanceof Exception) {
+				((Exception) o).printStackTrace();
+			}
+		}
 	}
 
 	private void logSout(String tag, Object... args) {

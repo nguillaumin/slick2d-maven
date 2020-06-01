@@ -6,6 +6,7 @@ import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.RoundedRectangle;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.opengl.renderer.Renderer;
 
 /**
@@ -118,7 +119,7 @@ public class GradientTest extends BasicGame {
 	 * @see org.newdawn.slick.BasicGame#keyPressed(int, char)
 	 */
 	public void keyPressed(int key, char c) {
-		if (key == Input.KEY_ESCAPE) {
+		if (key == USKeyboard.KEY_ESCAPE) {
 			container.exit();
 		}
 	}

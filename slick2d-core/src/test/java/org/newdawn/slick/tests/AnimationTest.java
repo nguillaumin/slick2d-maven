@@ -2,6 +2,7 @@ package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 /**
  * A test for basic animation rendering
@@ -77,7 +78,7 @@ public class AnimationTest extends BasicGame {
 	 * @see org.newdawn.slick.BasicGame#update(org.newdawn.slick.GameContainer, int)
 	 */
 	public void update(GameContainer container, int delta) {
-		if (container.getInput().isKeyDown(Input.KEY_1)) {
+		if (container.getInput().isKeyDown(USKeyboard.KEY_1)) {
 			manual.update(delta);
 		}
 		if (start >= 0) {
@@ -104,10 +105,10 @@ public class AnimationTest extends BasicGame {
 	 * @see org.newdawn.slick.BasicGame#keyPressed(int, char)
 	 */
 	public void keyPressed(int key, char c) {
-		if (key == Input.KEY_ESCAPE) {
+		if (key == USKeyboard.KEY_ESCAPE) {
 			container.exit();
 		}
-		if (key == Input.KEY_SPACE) {
+		if (key == USKeyboard.KEY_SPACE) {
 			limited.restart();
 		}
 	}

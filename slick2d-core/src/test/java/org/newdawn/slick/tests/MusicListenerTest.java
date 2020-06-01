@@ -2,6 +2,7 @@ package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 /**
  * A test for music listeners which notify you when the music has eneded
@@ -74,12 +75,12 @@ public class MusicListenerTest extends BasicGame implements MusicListener {
 	 * @see org.newdawn.slick.BasicGame#keyPressed(int, char)
 	 */
 	public void keyPressed(int key, char c) {
-		if (key == Input.KEY_M) {
+		if (key == USKeyboard.KEY_M) {
 			musicEnded = false;
 			musicSwapped = false;
 			music.play();
 		}
-		if (key == Input.KEY_S) {
+		if (key == USKeyboard.KEY_S) {
 			musicEnded = false;
 			musicSwapped = false;
 			stream.play();

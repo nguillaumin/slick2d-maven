@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.newdawn.slick.*;
 import org.newdawn.slick.imageout.ImageOut;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.particles.ParticleIO;
 import org.newdawn.slick.particles.ParticleSystem;
 
@@ -93,13 +94,13 @@ public class ImageOutTest extends BasicGame {
 	public void update(GameContainer container, int delta) throws SlickException {
 		fire.update(delta);
 		
-		if (container.getInput().isKeyPressed(Input.KEY_P)) {
+		if (container.getInput().isKeyPressed(USKeyboard.KEY_P)) {
 			writeTo(System.getProperty("java.io.tmpdir") + File.separator + "ImageOutTest.png");
 		}
-		if (container.getInput().isKeyPressed(Input.KEY_J)) {
+		if (container.getInput().isKeyPressed(USKeyboard.KEY_J)) {
 			writeTo(System.getProperty("java.io.tmpdir") + File.separator + "ImageOutTest.jpg");
 		}
-		if (container.getInput().isKeyPressed(Input.KEY_T)) {
+		if (container.getInput().isKeyPressed(USKeyboard.KEY_T)) {
 			writeTo(System.getProperty("java.io.tmpdir") + File.separator + "ImageOutTest.tga");
 		}
 	}
@@ -123,7 +124,7 @@ public class ImageOutTest extends BasicGame {
 	 * @see org.newdawn.slick.BasicGame#keyPressed(int, char)
 	 */
 	public void keyPressed(int key, char c) {
-		if (key == Input.KEY_ESCAPE) {
+		if (key == USKeyboard.KEY_ESCAPE) {
 			container.exit();
 		}
 	}

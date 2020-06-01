@@ -2,6 +2,7 @@ package org.newdawn.slick.examples.scroller;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.util.Log;
 
@@ -21,48 +22,48 @@ public class Scroller extends BasicGame {
 	/** The size of the tiles - used to determine the amount to draw */
 	private static final int TILE_SIZE = 32;
 	/** The speed the tank moves at */
-	private static final float TANK_MOVE_SPEED = 0.003f;
+	private static final float TANK_MOVE_SPEED = 0.001f;
 	/** The speed the tank rotates at */
-	private static final float TANK_ROTATE_SPEED = 0.2f;
-	
+	private static final float TANK_ROTATE_SPEED = 0.04f;
+
 	/** The player's x position in tiles */
 	private float playerX = 15;
 	/** The player's y position in tiles */
 	private float playerY = 16;
-	
+
 	/** The width of the display in tiles */
 	private int widthInTiles;
 	/** The height of the display in tiles */
 	private int heightInTiles;
-	
+
 	/** The offset from the centre of the screen to the top edge in tiles */
 	private int topOffsetInTiles;
 	/** The offset from the centre of the screen to the left edge in tiles */
 	private int leftOffsetInTiles;
-	
+
 	/** The map that we're going to drive around */
 	private TiledMap map;
-	
+
 	/** The animation representing the player's tank */
 	private Animation player;
-	
+
 	/** The angle the player is facing */
 	private float ang;
 	/** The x component of the movement vector */
 	private float dirX;
 	/** The y component of themovement vector */
 	private float dirY;
-	
+
 	/** The collision map indicating which tiles block movement - generated based on tile properties */
 	private boolean[][] blocked;
-	
+
 	/**
 	 * Scroller example
 	 */
 	public Scroller() {
 		super("Scroller");
 	}
-	
+
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
@@ -70,9 +71,9 @@ public class Scroller extends BasicGame {
 		// load the sprites and tiles, note that underneath the texture
 		// will be shared between the sprite sheet and tilemap
 		SpriteSheet sheet = new SpriteSheet("testdata/scroller/sprites.png",32,32);
-		// load the tilemap created the TileD tool 
+		// load the tilemap created the TileD tool
 		map = new TiledMap("testdata/scroller/map.tmx");
-		
+
 		// build a collision map based on tile properties in the TileD map
 		blocked = new boolean[map.getWidth()][map.getHeight()];
 		for (int x=0;x<map.getWidth();x++) {
@@ -84,7 +85,7 @@ public class Scroller extends BasicGame {
 				}
 			}
 		}
-		
+
 		// caculate some layout values for rendering the tilemap. How many tiles
 		// do we need to render to fill the screen in each dimension and how far is
 		// it from the centre of the screen
@@ -92,7 +93,7 @@ public class Scroller extends BasicGame {
 		heightInTiles = container.getHeight() / TILE_SIZE;
 		topOffsetInTiles = heightInTiles / 2;
 		leftOffsetInTiles = widthInTiles / 2;
-		
+
 		// create the player sprite based on a set of sprites from the sheet loaded
 		// above (tank tracks moving)
 		player = new Animation();
@@ -103,36 +104,40 @@ public class Scroller extends BasicGame {
 
 		// update the vector of movement based on the initial angle
 		updateMovementVector();
-		
+		bindInput();
+
 		LOG.info("Window Dimensions in Tiles: "+widthInTiles+"x"+heightInTiles);
 	}
 
-	/**
-	 * @see org.newdawn.slick.BasicGame#update(org.newdawn.slick.GameContainer, int)
-	 */
-	public void update(GameContainer container, int delta) throws SlickException {
-		// check the controls, left/right adjust the rotation of the tank, up/down 
+	private static int lastDelta = 0;
+
+	private void bindInput() {
+		// check the controls, left/right adjust the rotation of the tank, up/down
 		// move backwards and forwards
-		if (container.getInput().isKeyDown(Input.KEY_LEFT)) {
-			ang -= delta * TANK_ROTATE_SPEED;
+		Input.bindKeyPress(USKeyboard.KEY_LEFT, () -> {
+			ang -= lastDelta * TANK_ROTATE_SPEED;
 			updateMovementVector();
-		}
-		if (container.getInput().isKeyDown(Input.KEY_RIGHT)) {
-			ang += delta * TANK_ROTATE_SPEED;
+		});
+		Input.bindKeyPress(USKeyboard.KEY_RIGHT, () -> {
+			ang += lastDelta * TANK_ROTATE_SPEED;
 			updateMovementVector();
-		}
-		if (container.getInput().isKeyDown(Input.KEY_UP)) {
-			if (tryMove(dirX * delta * TANK_MOVE_SPEED, dirY * delta * TANK_MOVE_SPEED)) {
+		});
+		Input.bindKeyPress(USKeyboard.KEY_UP, () -> {
+			if (tryMove(dirX * lastDelta * TANK_MOVE_SPEED, dirY * lastDelta * TANK_MOVE_SPEED)) {
 				// if we managed to move update the animation
-				player.update(delta);
+				player.update(lastDelta);
 			}
-		}
-		if (container.getInput().isKeyDown(Input.KEY_DOWN)) {
-			if (tryMove(-dirX * delta * TANK_MOVE_SPEED, -dirY * delta * TANK_MOVE_SPEED)) {
+		});
+		Input.bindKeyPress(USKeyboard.KEY_DOWN, () -> {
+			if (tryMove(-dirX * lastDelta * TANK_MOVE_SPEED, -dirY * lastDelta * TANK_MOVE_SPEED)) {
 				// if we managed to move update the animation
-				player.update(delta);
+				player.update(lastDelta);
 			}
-		}
+		});
+	}
+
+	public void update(GameContainer container, int delta) {
+		lastDelta = delta;
 	}
 
 	/**
@@ -209,10 +214,10 @@ public class Scroller extends BasicGame {
 		// render the section of the map that should be visible. Notice the -1 and +3 which renders
 		// a little extra map around the edge of the screen to cope with tiles scrolling on and off
 		// the screen
-		map.render(playerTileOffsetX - (TANK_SIZE / 2), playerTileOffsetY - (TANK_SIZE / 2), 
-				   playerTileX - leftOffsetInTiles - 1, 
-				   playerTileY - topOffsetInTiles - 1,
-				   widthInTiles + 3, heightInTiles + 3);
+		map.render(playerTileOffsetX - (TANK_SIZE / 2), playerTileOffsetY - (TANK_SIZE / 2),
+				playerTileX - leftOffsetInTiles - 1,
+				playerTileY - topOffsetInTiles - 1,
+				widthInTiles + 3, heightInTiles + 3);
 		
 		// draw entities relative to the player that must appear in the centre of the screen
 		g.translate(400 - (int) (playerX * 32), 300 - (int) (playerY * 32));

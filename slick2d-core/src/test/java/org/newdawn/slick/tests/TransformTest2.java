@@ -2,6 +2,7 @@ package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 /**
  * A test for transforming the graphics context
@@ -99,26 +100,26 @@ public class TransformTest2 extends BasicGame {
     * @see org.newdawn.slick.BasicGame#keyPressed(int, char)
     */
    public void keyPressed(int key, char c) {
-      if (key == Input.KEY_ESCAPE) {
+      if (key == USKeyboard.KEY_ESCAPE) {
          System.exit(0);
       }
-      if (key == Input.KEY_Q) {
+      if (key == USKeyboard.KEY_Q) {
          scaleUp = true;
       }
-      if (key == Input.KEY_A) {
+      if (key == USKeyboard.KEY_A) {
          scaleDown = true;
       }
 
-      if( key == Input.KEY_LEFT) {
+      if( key == USKeyboard.KEY_LEFT) {
          moveLeft = true;
       }
-      if( key == Input.KEY_UP ) {
+      if( key == USKeyboard.KEY_UP ) {
          moveUp = true;
       }
-      if( key == Input.KEY_RIGHT ) {
+      if( key == USKeyboard.KEY_RIGHT ) {
          moveRight = true;
       }
-      if( key == Input.KEY_DOWN ) {
+      if( key == USKeyboard.KEY_DOWN ) {
          moveDown = true;
       }
    }
@@ -127,23 +128,23 @@ public class TransformTest2 extends BasicGame {
     * @see org.newdawn.slick.BasicGame#keyReleased(int, char)
     */
    public void keyReleased(int key, char c) {
-      if (key == Input.KEY_Q) {
+      if (key == USKeyboard.KEY_Q) {
          scaleUp = false;
       }
-      if (key == Input.KEY_A) {
+      if (key == USKeyboard.KEY_A) {
          scaleDown = false;
       }
       
-      if( key == Input.KEY_LEFT) {
+      if( key == USKeyboard.KEY_LEFT) {
          moveLeft = false;
       }
-      if( key == Input.KEY_UP ) {
+      if( key == USKeyboard.KEY_UP ) {
          moveUp = false;
       }
-      if( key == Input.KEY_RIGHT ) {
+      if( key == USKeyboard.KEY_RIGHT ) {
          moveRight = false;
       }
-      if( key == Input.KEY_DOWN ) {
+      if( key == USKeyboard.KEY_DOWN ) {
          moveDown = false;
       }
    }

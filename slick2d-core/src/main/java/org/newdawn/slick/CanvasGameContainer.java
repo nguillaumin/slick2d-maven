@@ -56,18 +56,16 @@ public class CanvasGameContainer extends Canvas {
 	 * 
 	 * @throws SlickException Indicates a failure during game execution
 	 */
-	public void start() throws SlickException {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Input.disableControllers();
-					
-					container.setup();
-					scheduleUpdate();
-				} catch (SlickException e) {
-					e.printStackTrace();
-					System.exit(0);
-				}
+	public void start() {
+		SwingUtilities.invokeLater(() -> {
+			try {
+				Input.disableControllers();
+
+				container.setup();
+				scheduleUpdate();
+			} catch (SlickException e) {
+				e.printStackTrace();
+				System.exit(0);
 			}
 		});
 	}

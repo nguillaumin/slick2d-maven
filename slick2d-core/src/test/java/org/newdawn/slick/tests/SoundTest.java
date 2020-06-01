@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.openal.AudioLoader;
 import org.newdawn.slick.openal.SoundStore;
@@ -98,32 +99,32 @@ public class SoundTest extends BasicGame {
 	 * @see org.newdawn.slick.BasicGame#keyPressed(int, char)
 	 */
 	public void keyPressed(int key, char c) {
-		if (key == Input.KEY_ESCAPE) {
+		if (key == USKeyboard.KEY_ESCAPE) {
 			System.exit(0);
 		}
-		if (key == Input.KEY_SPACE) {
+		if (key == USKeyboard.KEY_SPACE) {
 			sound.play();
 		}
-		if (key == Input.KEY_B) {
+		if (key == USKeyboard.KEY_B) {
 			burp.play();
 		}
-		if (key == Input.KEY_A) {
+		if (key == USKeyboard.KEY_A) {
 			sound.playAt(-1, 0, 0);
 		}
-		if (key == Input.KEY_L) {
+		if (key == USKeyboard.KEY_L) {
 			sound.playAt(1, 0, 0);
 		}
-		if (key == Input.KEY_RETURN) {
+		if (key == USKeyboard.KEY_RETURN) {
 			charlie.play(1.0f,1.0f);
 		}
-		if (key == Input.KEY_P) {
+		if (key == USKeyboard.KEY_P) {
 			if (music.playing()) {
 				music.pause();
 			} else {
 				music.resume();
 			}
 		}
-		if (key == Input.KEY_C) {
+		if (key == USKeyboard.KEY_C) {
 			music.stop();
 			if (music == musica) {
 				music = musicb;
@@ -134,7 +135,7 @@ public class SoundTest extends BasicGame {
 			music.loop();
 		}
 		for (int i=0;i<3;i++) {
-			if (key == Input.KEY_1+i) {
+			if (key == USKeyboard.KEY_1+i) {
 				if (engines[i] != 0) {
 					System.out.println("Stop "+i);
 					SoundStore.get().stopSoundEffect(engines[i]);
@@ -156,28 +157,28 @@ public class SoundTest extends BasicGame {
 			setVolume();
 		}
 		
-		if (key == Input.KEY_Y) {
+		if (key == USKeyboard.KEY_Y) {
 			int vol = (int) (music.getVolume() * 10);
 			vol --;
 			if (vol < 0) vol = 0;
 			// set individual volume of music
 			music.setVolume(vol/10.0f);
 		}
-		if (key == Input.KEY_X) {
+		if (key == USKeyboard.KEY_X) {
 			int vol = (int) (music.getVolume() * 10);
 			vol ++;
 			if (vol > 10) vol = 10;
 			// set individual volume of music
 			music.setVolume(vol/10.0f);
 		}
-		if (key == Input.KEY_N) {
+		if (key == USKeyboard.KEY_N) {
 			int vol = (int) (myContainer.getSoundVolume() * 10);
 			vol --;
 			if (vol < 0) vol = 0;
 			// set global volume of sound fx
 			myContainer.setSoundVolume(vol/10.0f);
 		}
-		if (key == Input.KEY_M) {
+		if (key == USKeyboard.KEY_M) {
 			int vol = (int) (myContainer.getSoundVolume() * 10);
 			vol ++;
 			if (vol > 10) vol = 10;

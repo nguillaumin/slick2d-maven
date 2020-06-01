@@ -6,6 +6,7 @@ import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.input.Input;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 import static org.newdawn.slick.GameContainer.GAME_WINDOW;
 
@@ -374,16 +375,16 @@ public class TextField extends AbstractComponent {
 		if (hasFocus()) {
 			if (key != -1)
 			{
-				if ((key == Input.KEY_V) && 
-				   ((input.isKeyDown(Input.KEY_LCONTROL)) || (input.isKeyDown(Input.KEY_RCONTROL)))) {
+				if ((key == USKeyboard.KEY_V) &&
+				   ((input.isKeyDown(USKeyboard.KEY_LCONTROL)) || (input.isKeyDown(USKeyboard.KEY_RCONTROL)))) {
 					String text = GLFW.glfwGetClipboardString(GAME_WINDOW);
 					if (text != null) {
 						doPaste(text);
 					}
 					return;
 				}
-				if ((key == Input.KEY_Z) && 
-				   ((input.isKeyDown(Input.KEY_LCONTROL)) || (input.isKeyDown(Input.KEY_RCONTROL)))) {
+				if ((key == USKeyboard.KEY_Z) &&
+				   ((input.isKeyDown(USKeyboard.KEY_LCONTROL)) || (input.isKeyDown(USKeyboard.KEY_RCONTROL)))) {
 					if (oldText != null) {
 						doUndo(oldCursorPos, oldText);
 					}
@@ -391,10 +392,10 @@ public class TextField extends AbstractComponent {
 				}
 				
 				// alt and control keys don't come through here
-				if (input.isKeyDown(Input.KEY_LCONTROL) || input.isKeyDown(Input.KEY_RCONTROL)) {
+				if (input.isKeyDown(USKeyboard.KEY_LCONTROL) || input.isKeyDown(USKeyboard.KEY_RCONTROL)) {
 					return;
 				}
-				if (input.isKeyDown(Input.KEY_LALT) || input.isKeyDown(Input.KEY_RALT)) {
+				if (input.isKeyDown(USKeyboard.KEY_LALT) || input.isKeyDown(USKeyboard.KEY_RALT)) {
 					return;
 				}
 			}
@@ -407,7 +408,7 @@ public class TextField extends AbstractComponent {
 			}
 			lastChar = c;
 			
-			if (key == Input.KEY_LEFT) {
+			if (key == USKeyboard.KEY_LEFT) {
 				if (cursorPos > 0) {
 					cursorPos--;
 				}
@@ -415,7 +416,7 @@ public class TextField extends AbstractComponent {
 				if (consume) {
 					container.getInput().consumeEvent();
 				}
-			} else if (key == Input.KEY_RIGHT) {
+			} else if (key == USKeyboard.KEY_RIGHT) {
 				if (cursorPos < value.length()) {
 					cursorPos++;
 				}
@@ -423,7 +424,7 @@ public class TextField extends AbstractComponent {
 				if (consume) {
 					container.getInput().consumeEvent();
 				}
-			} else if (key == Input.KEY_BACK) {
+			} else if (key == USKeyboard.KEY_BACK) {
 				if ((cursorPos > 0) && (value.length() > 0)) {
 					if (cursorPos < value.length()) {
 						value = value.substring(0, cursorPos - 1)
@@ -437,7 +438,7 @@ public class TextField extends AbstractComponent {
 				if (consume) {
 					container.getInput().consumeEvent();
 				}
-			} else if (key == Input.KEY_DELETE) {
+			} else if (key == USKeyboard.KEY_DELETE) {
 				if (value.length() > cursorPos) {
 					value = value.substring(0,cursorPos) + value.substring(cursorPos+1);
 				}
@@ -457,7 +458,7 @@ public class TextField extends AbstractComponent {
 				if (consume) {
 					container.getInput().consumeEvent();
 				}
-			} else if (key == Input.KEY_RETURN) {
+			} else if (key == USKeyboard.KEY_RETURN) {
 				notifyListeners();
 				// Nobody more will be notified
 				if (consume) {

@@ -10,6 +10,7 @@ import org.newdawn.slick.command.InputProviderListener;
 import org.newdawn.slick.command.KeyControl;
 import org.newdawn.slick.command.MouseButtonControl;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 /**
  * A test for abstract input via InputProvider
@@ -42,13 +43,13 @@ public class InputProviderTest extends BasicGame implements InputProviderListene
 		provider = new InputProvider(container.getInput());
 		provider.addListener(this);
 		
-		provider.bindCommand(new KeyControl(Input.KEY_LEFT), run);
-		provider.bindCommand(new KeyControl(Input.KEY_A), run);
+		provider.bindCommand(new KeyControl(USKeyboard.KEY_LEFT), run);
+		provider.bindCommand(new KeyControl(USKeyboard.KEY_A), run);
 		provider.bindCommand(new ControllerDirectionControl(0, ControllerDirectionControl.LEFT), run);
-		provider.bindCommand(new KeyControl(Input.KEY_UP), jump);
-		provider.bindCommand(new KeyControl(Input.KEY_W), jump);
+		provider.bindCommand(new KeyControl(USKeyboard.KEY_UP), jump);
+		provider.bindCommand(new KeyControl(USKeyboard.KEY_W), jump);
 		provider.bindCommand(new ControllerDirectionControl(0, ControllerDirectionControl.UP), jump);
-		provider.bindCommand(new KeyControl(Input.KEY_SPACE), attack);
+		provider.bindCommand(new KeyControl(USKeyboard.KEY_SPACE), attack);
 		provider.bindCommand(new MouseButtonControl(0), attack);
 		provider.bindCommand(new ControllerButtonControl(0, 1), attack);
 	}

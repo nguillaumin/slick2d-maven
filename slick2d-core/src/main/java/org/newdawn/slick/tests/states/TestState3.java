@@ -7,6 +7,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.input.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -71,22 +72,22 @@ public class TestState3 extends BasicGameState {
 	 * @see org.newdawn.slick.state.BasicGameState#keyReleased(int, char)
 	 */
 	public void keyReleased(int key, char c) {
-		if (key == Input.KEY_DOWN) {
+		if (key == USKeyboard.KEY_DOWN) {
 			selected++;
 			if (selected >= options.length) {
 				selected = 0;
 			}
 		}
-		if (key == Input.KEY_UP) {
+		if (key == USKeyboard.KEY_UP) {
 			selected--;
 			if (selected < 0) {
 				selected = options.length - 1;
 			}
 		}
-		if (key == Input.KEY_1) {
+		if (key == USKeyboard.KEY_1) {
 			game.enterState(TestState1.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
 		}
-		if (key == Input.KEY_2) {
+		if (key == USKeyboard.KEY_2) {
 			game.enterState(TestState2.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
 		}
 	}

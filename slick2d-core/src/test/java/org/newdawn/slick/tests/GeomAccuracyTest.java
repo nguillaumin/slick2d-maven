@@ -5,6 +5,7 @@ import org.newdawn.slick.geom.Ellipse;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.RoundedRectangle;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 /**
  * A simple graphics test for the context allowing vector based graphics
@@ -230,23 +231,23 @@ public class GeomAccuracyTest extends BasicGame {
 	 * @see org.newdawn.slick.BasicGame#keyPressed(int, char)
 	 */
 	public void keyPressed(int key, char c) {
-		if (key == Input.KEY_ESCAPE) {
+		if (key == USKeyboard.KEY_ESCAPE) {
 			System.exit(0);
 		}
 		
-		if(key == Input.KEY_N) {
+		if(key == USKeyboard.KEY_N) {
 			curTest++;
 			curTest %= NUMTESTS;
 		}
 		
-		if(key == Input.KEY_C) {
+		if(key == USKeyboard.KEY_C) {
 			colorIndex++;
 			
 			colorIndex %= 4;
 			setColors();
 		}
 		
-		if(key == Input.KEY_T) {
+		if(key == USKeyboard.KEY_T) {
 			hideOverlay = !hideOverlay;
 		}
 

@@ -2,6 +2,7 @@ package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 /**
  * A test to demonstrate world clipping as opposed to screen clipping
@@ -75,15 +76,15 @@ public class ClipTest extends BasicGame {
 	 * @see org.newdawn.slick.BasicGame#keyPressed(int, char)
 	 */
 	public void keyPressed(int key, char c) {
-		if (key == Input.KEY_1) {
+		if (key == USKeyboard.KEY_1) {
 			world = false;
 			clip = false;
 		}
-		if (key == Input.KEY_2) {
+		if (key == USKeyboard.KEY_2) {
 			world = false;
 			clip = true;
 		}
-		if (key == Input.KEY_3) {
+		if (key == USKeyboard.KEY_3) {
 			world = true;
 			clip = false;
 		}

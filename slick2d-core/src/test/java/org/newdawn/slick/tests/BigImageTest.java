@@ -2,6 +2,7 @@ package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 /**
  * A test for basic image rendering
@@ -91,16 +92,16 @@ public class BigImageTest extends BasicGame {
 	public void update(GameContainer container, int delta) throws SlickException {
 		ang += delta * 0.1f;
 		
-		if (container.getInput().isKeyDown(Input.KEY_LEFT)) {
+		if (container.getInput().isKeyDown(USKeyboard.KEY_LEFT)) {
 			x -= delta * 0.1f;
 		}
-		if (container.getInput().isKeyDown(Input.KEY_RIGHT)) {
+		if (container.getInput().isKeyDown(USKeyboard.KEY_RIGHT)) {
 			x += delta * 0.1f;
 		}
-		if (container.getInput().isKeyDown(Input.KEY_UP)) {
+		if (container.getInput().isKeyDown(USKeyboard.KEY_UP)) {
 			y -= delta * 0.1f;
 		}
-		if (container.getInput().isKeyDown(Input.KEY_DOWN)) {
+		if (container.getInput().isKeyDown(USKeyboard.KEY_DOWN)) {
 			y += delta * 0.1f;
 		}
 	}

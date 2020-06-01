@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.particles.ConfigurableEmitter;
 import org.newdawn.slick.particles.ParticleIO;
 import org.newdawn.slick.particles.ParticleSystem;
@@ -81,10 +82,10 @@ public class DuplicateEmitterTest extends BasicGame {
 	 * @see org.newdawn.slick.BasicGame#keyPressed(int, char)
 	 */
 	public void keyPressed(int key, char c) {
-		if (key == Input.KEY_ESCAPE) {
+		if (key == USKeyboard.KEY_ESCAPE) {
 			container.exit();
 		}
-		if (key == Input.KEY_K) {
+		if (key == USKeyboard.KEY_K) {
 			explosionEmitter.wrapUp();
 		}
 	}

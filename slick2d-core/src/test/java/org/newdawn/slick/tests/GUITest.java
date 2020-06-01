@@ -6,6 +6,7 @@ import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.util.Log;
 
 /**
@@ -105,13 +106,13 @@ public class GUITest extends BasicGame implements ComponentListener {
 	 * @see org.newdawn.slick.BasicGame#keyPressed(int, char)
 	 */
 	public void keyPressed(int key, char c) {
-		if (key == Input.KEY_ESCAPE) {
+		if (key == USKeyboard.KEY_ESCAPE) {
 			System.exit(0);
 		}
-		if (key == Input.KEY_F2) {
+		if (key == USKeyboard.KEY_F2) {
 			app.setDefaultMouseCursor();
 		}
-		if (key == Input.KEY_F1) {
+		if (key == USKeyboard.KEY_F1) {
 			if (app != null) {
 				try {
 					app.setDisplayMode(640,480, DisplayMode.Opt.WINDOWED);

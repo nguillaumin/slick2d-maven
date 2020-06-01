@@ -2,6 +2,7 @@ package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.BlobbyTransition;
@@ -132,7 +133,7 @@ public class TransitionTest extends StateBasedGame {
 		 * @see org.newdawn.slick.state.GameState#update(org.newdawn.slick.GameContainer, org.newdawn.slick.state.StateBasedGame, int)
 		 */
 		public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-			if (container.getInput().isKeyPressed(Input.KEY_SPACE)) {
+			if (container.getInput().isKeyPressed(USKeyboard.KEY_SPACE)) {
 				Transition[] pair = getNextTransitionPair();
 				game.enterState(next, pair[0], pair[1]);
 			}

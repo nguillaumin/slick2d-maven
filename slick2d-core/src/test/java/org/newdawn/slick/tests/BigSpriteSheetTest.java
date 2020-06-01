@@ -2,6 +2,7 @@ package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 /**
  * A test for big images used as sprites sheets
@@ -75,7 +76,7 @@ public class BigSpriteSheetTest extends BasicGame {
 	 * @see org.newdawn.slick.BasicGame#update(org.newdawn.slick.GameContainer, int)
 	 */
 	public void update(GameContainer container, int delta) throws SlickException {
-		if (container.getInput().isKeyPressed(Input.KEY_SPACE)) {
+		if (container.getInput().isKeyPressed(USKeyboard.KEY_SPACE)) {
 			oldMethod = !oldMethod;
 		}
 	}

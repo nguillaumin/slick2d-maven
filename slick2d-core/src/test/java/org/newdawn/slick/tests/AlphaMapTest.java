@@ -1,6 +1,7 @@
 package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
+import org.newdawn.slick.util.Bootstrap;
 
 /**
  * A test to demonstrate world clipping as opposed to screen clipping
@@ -67,12 +68,6 @@ public class AlphaMapTest extends BasicGame {
 	 * @param argv The arguments to pass into the test
 	 */
 	public static void main(String[] argv) {
-		try {
-			AppGameContainer container = new AppGameContainer(new AlphaMapTest());
-			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
-			container.start();
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
+		Bootstrap.runAsApplication(new AlphaMapTest(), 800, 600, DisplayMode.Opt.WINDOWED);
 	}
 }

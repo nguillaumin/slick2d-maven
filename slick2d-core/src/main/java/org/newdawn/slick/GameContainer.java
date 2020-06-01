@@ -206,7 +206,7 @@ public abstract class GameContainer implements GUIContext {
 			
 			return build;
 		} catch (Exception e) {
-			LOG.error("Unable to determine Slick build number");
+			LOG.error("Unable to determine Slick build number ", e);
 			return -1;
 		}
 	}
@@ -293,7 +293,7 @@ public abstract class GameContainer implements GUIContext {
 
 	// TODO still dont know if i can really use system time here
 	public long getTime() {
-		return System.currentTimeMillis();
+		return System.nanoTime() / 1000000;
 	}
 
 	public void sleep(int milliseconds) {
@@ -350,7 +350,7 @@ public abstract class GameContainer implements GUIContext {
 		long time = getTime();
 		int delta = (int) (time - lastFrame);
 		lastFrame = time;
-		
+
 		return delta;
 	}
 	
@@ -392,7 +392,7 @@ public abstract class GameContainer implements GUIContext {
 			}
 		}
 		
-		input.poll(width, height);
+		input.poll();
 	
 		Music.poll(delta);
 		if (!paused) {
@@ -471,9 +471,9 @@ public abstract class GameContainer implements GUIContext {
 		GL.initDisplay(width, height);
 		
 		if (input == null) {
-			input = new Input(height);
+			input = new Input();
 		}
-		input.init(height);
+		input.init();
 		// no need to remove listeners?
 		//input.removeAllListeners();
 		if (game instanceof InputListener) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.opengl.SlickCallable;
 import org.newdawn.slick.util.Log;
 
@@ -189,7 +190,7 @@ public class TestBox extends BasicGame {
 	public void keyPressed(int key, char c) {
 		currentGame.keyPressed(key, c);
 		
-		if (key == Input.KEY_ENTER) {
+		if (key == USKeyboard.KEY_ENTER) {
 			nextGame();
 		}
 	}

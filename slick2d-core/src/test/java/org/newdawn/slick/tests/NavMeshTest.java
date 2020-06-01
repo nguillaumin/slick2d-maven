@@ -2,12 +2,9 @@ package org.newdawn.slick.tests;
 
 import java.io.IOException;
 
-import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
+import org.newdawn.slick.*;
 import org.newdawn.slick.input.Input;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.util.Bootstrap;
 import org.newdawn.slick.util.ResourceLoader;
 import org.newdawn.slick.util.pathfinding.Mover;
@@ -78,10 +75,10 @@ public class NavMeshTest extends BasicGame implements PathFindingContext {
 	 */
 	public void update(GameContainer container, int delta)
 			throws SlickException {
-		if (container.getInput().isKeyPressed(Input.KEY_1)) {
+		if (container.getInput().isKeyPressed(USKeyboard.KEY_1)) {
 			showLinks = !showLinks;
 		}
-		if (container.getInput().isKeyPressed(Input.KEY_2)) {
+		if (container.getInput().isKeyPressed(USKeyboard.KEY_2)) {
 			showSpaces = !showSpaces;
 		}
 	}
@@ -253,6 +250,6 @@ public class NavMeshTest extends BasicGame implements PathFindingContext {
 	 * @param argv The arguments passed to the application
 	 */
 	public static void main(String[] argv) {
-		Bootstrap.runAsApplication(new NavMeshTest(), 600, 600, false);
+		Bootstrap.runAsApplication(new NavMeshTest(), 600, 600, DisplayMode.Opt.WINDOWED);
 	}
 }

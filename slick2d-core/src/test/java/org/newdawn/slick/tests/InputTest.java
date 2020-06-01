@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.util.Log;
 
 /**
@@ -90,9 +91,9 @@ public class InputTest extends BasicGame {
 	 * @see org.newdawn.slick.BasicGame#update(org.newdawn.slick.GameContainer, int)
 	 */
 	public void update(GameContainer container, int delta) {
-        lshift = container.getInput().isKeyDown(Input.KEY_LSHIFT);
-        rshift = container.getInput().isKeyDown(Input.KEY_RSHIFT);
-        space = container.getInput().isKeyDown(Input.KEY_SPACE); 
+        lshift = container.getInput().isKeyDown(USKeyboard.KEY_LSHIFT);
+        rshift = container.getInput().isKeyDown(USKeyboard.KEY_RSHIFT);
+        space = container.getInput().isKeyDown(USKeyboard.KEY_SPACE);
         
 		if (controllerLeft[0]) {
 			x -= delta * 0.1f;
@@ -112,10 +113,10 @@ public class InputTest extends BasicGame {
 	 * @see org.newdawn.slick.BasicGame#keyPressed(int, char)
 	 */
 	public void keyPressed(int key, char c) {
-		if (key == Input.KEY_ESCAPE) {
+		if (key == USKeyboard.KEY_ESCAPE) {
 			System.exit(0);
 		}
-		if (key == Input.KEY_F1) {
+		if (key == USKeyboard.KEY_F1) {
 			if (app != null) {
 				try {
 					app.setDisplayMode(600, 600, DisplayMode.Opt.WINDOWED);

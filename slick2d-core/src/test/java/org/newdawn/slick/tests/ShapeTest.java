@@ -10,6 +10,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.RoundedRectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.input.Input;
+import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.opengl.renderer.Renderer;
 
 /**
@@ -116,139 +117,139 @@ public class ShapeTest extends BasicGame {
     public void update(GameContainer container, int delta) {
         
         createPoly(200,200);
-        if(keys[Input.KEY_ESCAPE]) {
+        if(keys[USKeyboard.KEY_ESCAPE]) {
             System.exit(0);
         }
-        if(keys[Input.KEY_W]) {
-            if(lastChar[Input.KEY_W] == 'w') {
+        if(keys[USKeyboard.KEY_W]) {
+            if(lastChar[USKeyboard.KEY_W] == 'w') {
                 rect.setY(rect.getY() - 1);
             }
             else {
                 rect.setHeight(rect.getHeight() - 1);
             }
         }
-        if(keys[Input.KEY_S]) {
-            if(lastChar[Input.KEY_S] == 's') {
+        if(keys[USKeyboard.KEY_S]) {
+            if(lastChar[USKeyboard.KEY_S] == 's') {
                 rect.setY(rect.getY() + 1);
             }
             else {
                 rect.setHeight(rect.getHeight() + 1);
             }
         }
-        if(keys[Input.KEY_A]) {
-            if(lastChar[Input.KEY_A] == 'a') {
+        if(keys[USKeyboard.KEY_A]) {
+            if(lastChar[USKeyboard.KEY_A] == 'a') {
                 rect.setX(rect.getX() - 1);
             }
             else {
                 rect.setWidth(rect.getWidth() - 1);
             }
         }
-        if(keys[Input.KEY_D]) {
-            if(lastChar[Input.KEY_D] == 'd') {
+        if(keys[USKeyboard.KEY_D]) {
+            if(lastChar[USKeyboard.KEY_D] == 'd') {
                 rect.setX(rect.getX() + 1);
             }
             else {
                 rect.setWidth(rect.getWidth() + 1);
             }
         }
-        if(keys[Input.KEY_T]) {
-            if(lastChar[Input.KEY_T] == 't') {
+        if(keys[USKeyboard.KEY_T]) {
+            if(lastChar[USKeyboard.KEY_T] == 't') {
                 roundRect.setY(roundRect.getY() - 1);
             }
             else {
                 roundRect.setHeight(roundRect.getHeight() - 1);
             }
         }
-        if(keys[Input.KEY_G]) {
-            if(lastChar[Input.KEY_G] == 'g') {
+        if(keys[USKeyboard.KEY_G]) {
+            if(lastChar[USKeyboard.KEY_G] == 'g') {
                 roundRect.setY(roundRect.getY() + 1);
             }
             else {
                 roundRect.setHeight(roundRect.getHeight() + 1);
             }
         }
-        if(keys[Input.KEY_F]) {
-            if(lastChar[Input.KEY_F] == 'f') {
+        if(keys[USKeyboard.KEY_F]) {
+            if(lastChar[USKeyboard.KEY_F] == 'f') {
                 roundRect.setX(roundRect.getX() - 1);
             }
             else {
                 roundRect.setWidth(roundRect.getWidth() - 1);
             }
         }
-        if(keys[Input.KEY_H]) {
-            if(lastChar[Input.KEY_H] == 'h') {
+        if(keys[USKeyboard.KEY_H]) {
+            if(lastChar[USKeyboard.KEY_H] == 'h') {
                 roundRect.setX(roundRect.getX() + 1);
             }
             else {
                 roundRect.setWidth(roundRect.getWidth() + 1);
             }
         }
-        if(keys[Input.KEY_R]) {
+        if(keys[USKeyboard.KEY_R]) {
             roundRect.setCornerRadius(roundRect.getCornerRadius() - 1);
         }
-        if(keys[Input.KEY_Y]) {
+        if(keys[USKeyboard.KEY_Y]) {
             roundRect.setCornerRadius(roundRect.getCornerRadius() + 1);
         }
-        if(keys[Input.KEY_I]) {
-            if(lastChar[Input.KEY_I] == 'i') {
+        if(keys[USKeyboard.KEY_I]) {
+            if(lastChar[USKeyboard.KEY_I] == 'i') {
                 ellipse.setCenterY(ellipse.getCenterY() - 1);
             }
             else {
                 ellipse.setRadius2(ellipse.getRadius2() - 1);
             }
         }
-        if(keys[Input.KEY_K]) {
-            if(lastChar[Input.KEY_K] == 'k') {
+        if(keys[USKeyboard.KEY_K]) {
+            if(lastChar[USKeyboard.KEY_K] == 'k') {
                 ellipse.setCenterY(ellipse.getCenterY() + 1);
             }
             else {
                 ellipse.setRadius2(ellipse.getRadius2() + 1);
             }
         }
-        if(keys[Input.KEY_J]) {
-            if(lastChar[Input.KEY_J] == 'j') {
+        if(keys[USKeyboard.KEY_J]) {
+            if(lastChar[USKeyboard.KEY_J] == 'j') {
                 ellipse.setCenterX(ellipse.getCenterX() - 1);
             }
             else {
                 ellipse.setRadius1(ellipse.getRadius1() - 1);
             }
         }
-        if(keys[Input.KEY_L]) {
-            if(lastChar[Input.KEY_L] == 'l') {
+        if(keys[USKeyboard.KEY_L]) {
+            if(lastChar[USKeyboard.KEY_L] == 'l') {
                 ellipse.setCenterX(ellipse.getCenterX() + 1);
             }
             else {
                 ellipse.setRadius1(ellipse.getRadius1() + 1);
             }
         }
-        if(keys[Input.KEY_UP]) {
+        if(keys[USKeyboard.KEY_UP]) {
             circle.setCenterY(circle.getCenterY() - 1);
         }
-        if(keys[Input.KEY_DOWN]) {
+        if(keys[USKeyboard.KEY_DOWN]) {
             circle.setCenterY(circle.getCenterY() + 1);
         }
-        if(keys[Input.KEY_LEFT]) {
+        if(keys[USKeyboard.KEY_LEFT]) {
             circle.setCenterX(circle.getCenterX() - 1);
         }
-        if(keys[Input.KEY_RIGHT]) {
+        if(keys[USKeyboard.KEY_RIGHT]) {
             circle.setCenterX(circle.getCenterX() + 1);
         }
-        if(keys[Input.KEY_PRIOR]) {
+        if(keys[USKeyboard.KEY_PRIOR]) {
             circle.setRadius(circle.getRadius() - 1);
         }
-        if(keys[Input.KEY_RIGHT]) {
+        if(keys[USKeyboard.KEY_RIGHT]) {
             circle.setRadius(circle.getRadius() + 1);
         }
-        if(keys[Input.KEY_NUMPAD8]) {
+        if(keys[USKeyboard.KEY_NUMPAD8]) {
             polygon.setY(polygon.getY() - 1);
         }
-        if(keys[Input.KEY_NUMPAD5]) {
+        if(keys[USKeyboard.KEY_NUMPAD5]) {
             polygon.setY(polygon.getY() + 1);
         }
-        if(keys[Input.KEY_NUMPAD4]) {
+        if(keys[USKeyboard.KEY_NUMPAD4]) {
             polygon.setX(polygon.getX() - 1);
         }
-        if(keys[Input.KEY_NUMPAD6]) {
+        if(keys[USKeyboard.KEY_NUMPAD6]) {
             polygon.setX(polygon.getX() + 1);
         }
     }

@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
@@ -14,7 +12,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.InputListener;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.particles.ConfigurableEmitter;
 import org.newdawn.slick.particles.ParticleEmitter;
 import org.newdawn.slick.particles.ParticleSystem;
@@ -26,6 +23,8 @@ import org.newdawn.slick.util.Log;
  * @author kevin
  */
 public class ParticleGame extends BasicGame {
+	private static final Log LOG = new Log(ParticleGame.class);
+
 	/** Emitters waiting to be added once the system is created */
 	private ArrayList waiting = new ArrayList();
 
@@ -67,10 +66,8 @@ public class ParticleGame extends BasicGame {
 	 * 
 	 * @param editor
 	 *            The editor which this canvas is part of
-	 * @throws LWJGLException
-	 *             Indicates a failure to create the OpenGL context
 	 */
-	public ParticleGame(ParticleEditor editor) throws LWJGLException {
+	public ParticleGame(ParticleEditor editor) {
 		super("Particle Game");
 	}
 
@@ -220,7 +217,7 @@ public class ParticleGame extends BasicGame {
 		return system;
 	}
 
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		container.getInput().addListener(listener);
 		container.setShowFPS(false);
 		
@@ -234,8 +231,7 @@ public class ParticleGame extends BasicGame {
 		waiting.clear();
 	}
 
-	public void update(GameContainer container, int delta)
-			throws SlickException {
+	public void update(GameContainer container, int delta) {
 		if (!paused) {
 			ypos += delta * 0.002 * systemMove;
 			if (ypos > 300) {
@@ -252,12 +248,9 @@ public class ParticleGame extends BasicGame {
 				system.update(1);
 			}
 		}
-
-		Display.sync(100);
 	}
 
-	public void render(GameContainer container, Graphics g)
-			throws SlickException {
+	public void render(GameContainer container, Graphics g) {
 		try {
 			if (backgroundImage != null) {
 				if (background == null) {
@@ -267,8 +260,8 @@ public class ParticleGame extends BasicGame {
 				}
 			}
 		} catch (Exception e) {
-			Log.error("Failed to load backgroundImage: " + backgroundImage);
-			Log.error(e);
+			LOG.error("Failed to load backgroundImage: " + backgroundImage);
+			LOG.error(e);
 			backgroundImage = null;
 			background = null;
 		}
