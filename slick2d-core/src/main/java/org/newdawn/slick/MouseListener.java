@@ -12,7 +12,7 @@ public interface MouseListener extends ControlledInputReciever {
 	 * 
 	 * @param change The amount of the wheel has moved
 	 */
-	public abstract void mouseWheelMoved(int change);
+	void mouseWheelMoved(int change);
 
 	/**
 	 * Notification that a mouse button was clicked. Due to double click
@@ -26,7 +26,7 @@ public interface MouseListener extends ControlledInputReciever {
 	 * @param y The y position of the mouse when the button was pressed
 	 * @param clickCount The number of times the button was clicked
 	 */
-	public abstract void mouseClicked(int button, int x, int y, int clickCount);
+	void mouseClicked(int button, int x, int y, int clickCount);
 
 	/**
 	 * Notification that a mouse button was pressed
@@ -35,7 +35,7 @@ public interface MouseListener extends ControlledInputReciever {
 	 * @param x The x position of the mouse when the button was pressed
 	 * @param y The y position of the mouse when the button was pressed
 	 */
-	public abstract void mousePressed(int button, int x, int y);
+	void mousePressed(int button, int x, int y);
 
 	/**
 	 * Notification that a mouse button was released
@@ -44,7 +44,7 @@ public interface MouseListener extends ControlledInputReciever {
 	 * @param x The x position of the mouse when the button was released
 	 * @param y The y position of the mouse when the button was released
 	 */
-	public abstract void mouseReleased(int button, int x, int y);
+	void mouseReleased(int button, int x, int y);
 
 	/**
 	 * Notification that mouse cursor was moved
@@ -54,7 +54,7 @@ public interface MouseListener extends ControlledInputReciever {
 	 * @param newx The new x position of the mouse
 	 * @param newy The new y position of the mouse
 	 */
-	public abstract void mouseMoved(int oldx, int oldy, int newx, int newy);
+	void mouseMoved(int oldx, int oldy, int newx, int newy);
 	
 	/**
 	 * Notification that mouse cursor was dragged
@@ -64,6 +64,6 @@ public interface MouseListener extends ControlledInputReciever {
 	 * @param newx The new x position of the mouse
 	 * @param newy The new y position of the mouse
 	 */
-	public abstract void mouseDragged(int oldx, int oldy, int newx, int newy);
+	void mouseDragged(int oldx, int oldy, int newx, int newy);
 
 }

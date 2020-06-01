@@ -243,6 +243,11 @@
 			<artifactId>steamworks4j</artifactId>
 			<version>${steamworks4j.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>29.0-jre</version>
+		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.xenoamess/jxinput -->
 		<dependency>

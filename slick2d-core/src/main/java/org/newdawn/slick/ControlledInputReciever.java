@@ -22,23 +22,23 @@ public interface ControlledInputReciever {
 	 * 
 	 * @param input The input instance sending events
 	 */
-	public abstract void setInput(Input input);
+	void setInput(Input input);
 
 	/**
 	 * Check if this input listener is accepting input
 	 * 
 	 * @return True if the input listener should recieve events
 	 */
-	public abstract boolean isAcceptingInput();
+	boolean isAcceptingInput();
 
 	/**
 	 * Notification that all input events have been sent for this frame
 	 */
-	public abstract void inputEnded();
+	void inputEnded();
 	
 	/**
 	 * Notification that input is about to be processed
 	 */
-	public abstract void inputStarted();
+	void inputStarted();
 
 }

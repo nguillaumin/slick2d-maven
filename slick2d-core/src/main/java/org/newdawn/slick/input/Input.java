@@ -2,19 +2,14 @@ package org.newdawn.slick.input;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.glfw.*;
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.sources.controller.Controller;
 import org.newdawn.slick.input.sources.controller.Controllers;
 import org.newdawn.slick.input.sources.keyboard.Keyboard;
-import org.newdawn.slick.input.sources.mouse.Mouse;
 import org.newdawn.slick.util.Log;
 
 import static org.newdawn.slick.GameContainer.GAME_WINDOW;
@@ -444,20 +439,11 @@ public class Input {
 		mouseListeners.clear();
 	}
 
-	/**
-	 * Remove all the controller listeners from this input
-	 */
 	public void removeAllControllerListeners() {
 		allListeners.removeAll(controllerListeners);
 		controllerListeners.clear();
 	}
 	
-	/**
-	 * Add a listener to be notified of input events. This listener
-	 * will get events before others that are currently registered
-	 * 
-	 * @param listener The listener to be notified
-	 */
 	public void addPrimaryListener(InputListener listener) {
 		removeListener(listener);
 		
@@ -468,22 +454,12 @@ public class Input {
 		allListeners.add(listener);
 	}
 	
-	/**
-	 * Remove a listener that will no longer be notified
-	 * 
-	 * @param listener The listen to be removed
-	 */
 	public void removeListener(InputListener listener) {
 		removeKeyListener(listener);
 		removeMouseListener(listener);
 		removeControllerListener(listener);
 	}
 
-	/**
-	 * Remove a key listener that will no longer be notified
-	 * 
-	 * @param listener The listen to be removed
-	 */
 	public void removeKeyListener(KeyListener listener) {
 		keyListeners.remove(listener);
 		keyListenersToAdd.remove(listener);
@@ -493,11 +469,6 @@ public class Input {
 		}
 	}
 
-	/**
-	 * Remove a controller listener that will no longer be notified
-	 * 
-	 * @param listener The listen to be removed
-	 */
 	public void removeControllerListener(ControllerListener listener) {
 		controllerListeners.remove(listener);
 		
@@ -532,13 +503,56 @@ public class Input {
 		lastMouseX = getMouseX();
 		lastMouseY = getMouseY();
 
-		// bind input map
-		GLFW.glfwSetKeyCallback(GAME_WINDOW, new GLFWKeyCallback() {
-			@Override
-			public void invoke(long window, int key, int scancode, int action, int mods) {
-				LOG.debug("pressed key: " + key + " - action: " + action);
-				if (action == GLFW.GLFW_PRESS)
-					keyPressBindings.get(key).doAction();
+		// TODO set keyListener multimap instead of this, that way I can monitor clicked and press events and have multiple bindings per key
+		// bind key input map
+		GLFW.glfwSetKeyCallback(GAME_WINDOW, (window, key, scancode, action, mods) -> {
+			if (paused) return;
+			LOG.debug("pressed key: " + key + " - action: " + action);
+			if (action == GLFW.GLFW_PRESS)
+				Optional.ofNullable(keyPressBindings.get(key)).ifPresent(Keyboard.Action::doAction);
+		});
+
+		// bind mouse movement
+		GLFW.glfwSetCursorPosCallback(GAME_WINDOW, (window, xpos, ypos) -> {
+			if (paused) return;
+			mouseListeners.forEach(mouseListener -> {
+				if (mouseListener.isAcceptingInput()) {
+					if (anyMouseDown()) {
+						mouseListener.mouseDragged(lastMouseX ,  lastMouseY, (int) xpos, (int) ypos);
+					} else {
+						mouseListener.mouseMoved(lastMouseX ,  lastMouseY, (int) xpos, (int) ypos);
+					}
+				}
+			});
+			// todo is cast here fine?
+			lastMouseX = (int) xpos;
+			lastMouseY = (int) ypos;
+		});
+
+		// bind mouse input map
+		GLFW.glfwSetMouseButtonCallback(GAME_WINDOW, (window, button, action, mods) -> {
+			Map<Integer, Integer> pressedMap = new HashMap<>();
+			if (paused) return;
+			if (action == GLFW.GLFW_PRESS) {
+				mouseListeners.forEach(mouseListener ->  {
+					if (mouseListener.isAcceptingInput()) {
+						mouseListener.mousePressed(button, lastMouseX, lastMouseY);
+						pressedMap.put(button, 1);
+					}
+				});
+			} else if (action == GLFW.GLFW_RELEASE) {
+				mouseListeners.forEach(mouseListener ->  {
+					if (mouseListener.isAcceptingInput()) {
+						mouseListener.mouseReleased(button, lastMouseX, lastMouseY);
+					}
+				});
+			} else if (action == GLFW.GLFW_REPEAT) {
+				mouseListeners.forEach(mouseListener -> {
+					if (mouseListener.isAcceptingInput()) {
+						pressedMap.put(button, pressedMap.get(button) + 1);
+						mouseListener.mouseClicked(button, lastMouseX, lastMouseY, pressedMap.get(button));
+					}
+				});
 			}
 		});
 	}
@@ -650,72 +664,36 @@ public class Input {
 		return Keyboard.isKeyDown(code);
 	}
 
-	/**
-	 * Get the absolute x position of the mouse cursor within the container
-	 * 
-	 * @return The absolute x position of the mouse cursor
-	 */
 	public int getAbsoluteMouseX() {
-		return Mouse.getX();
+		return lastMouseX;
 	}
 
-	/**
-	 * Get the absolute y position of the mouse cursor within the container
-	 * 
-	 * @return The absolute y position of the mouse cursor
-	 */
 	public int getAbsoluteMouseY() {
-		return height - Mouse.getY() - 1;
+		return lastMouseY;
 	}
-	   
-	/**
-	 * Get the x position of the mouse cursor
-	 * 
-	 * @return The x position of the mouse cursor
-	 */
+
 	public int getMouseX() {
 		return (int) ((getAbsoluteMouseX() * scaleX)+ xOffset);
 	}
 	
-	/**
-	 * Get the y position of the mouse cursor
-	 * 
-	 * @return The y position of the mouse cursor
-	 */
 	public int getMouseY() {
 		return (int) ((getAbsoluteMouseY() * scaleY)+ yOoffset);
 	}
 	
-	/**
-	 * Check if a given mouse button is down
-	 * 
-	 * @param button The index of the button to check (starting at 0)
-	 * @return True if the mouse button is down
-	 */
 	public boolean isMouseButtonDown(int button) {
-		return Mouse.isButtonDown(button);
+		return GLFW.glfwGetMouseButton(GAME_WINDOW, button) == GLFW.GLFW_PRESS;
 	}
 	
-	/**
-	 * Check if any mouse button is down
-	 * 
-	 * @return True if any mouse button is down
-	 */
 	private boolean anyMouseDown() {
 		for (int i=0;i<3;i++) {
-			if (Mouse.isButtonDown(i)) {
+			if (GLFW.glfwGetMouseButton(GAME_WINDOW, i) == GLFW.GLFW_PRESS) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 	
-	/**
-	 * Get a count of the number of controlles available
-	 * 
-	 * @return The number of controllers available
-	 */
 	public int getControllerCount() {
 		try {
 			initControllers();
@@ -725,39 +703,7 @@ public class Input {
 		
 		return controllers.size();
 	}
-	
-	/**
-	 * Get the number of axis that are avaiable on a given controller
-	 * 
-	 * @param controller The index of the controller to check
-	 * @return The number of axis available on the controller
-	 */
-	public int getAxisCount(int controller) {
-		return ((Controller) controllers.get(controller)).getAxisCount();
-	}
-	
-	/**
-	 * Get the value of the axis with the given index
-	 *  
-	 * @param controller The index of the controller to check
-	 * @param axis The index of the axis to read
-	 * @return The axis value at time of reading
-	 */ 
-	public float getAxisValue(int controller, int axis) {
-		return ((Controller) controllers.get(controller)).getAxisValue(axis);
-	}
 
-	/**
-	 * Get the name of the axis with the given index
-	 *  
-	 * @param controller The index of the controller to check
-	 * @param axis The index of the axis to read
-	 * @return The name of the specified axis
-	 */ 
-	public String getAxisName(int controller, int axis) {
-		return ((Controller) controllers.get(controller)).getAxisName(axis);
-	}
-	
 	/**
 	 * Check if the controller has the left direction pressed
 	 * 
@@ -779,8 +725,8 @@ public class Input {
 			return false;
 		}
 		
-		return ((Controller) controllers.get(controller)).getXAxisValue() < -0.5f
-				|| ((Controller) controllers.get(controller)).getPovX() < -0.5f;
+		return (controllers.get(controller)).getXAxisValue() < -0.5f
+				|| (controllers.get(controller)).getPovX() < -0.5f;
 	}
 
 	/**
@@ -1017,22 +963,22 @@ public class Input {
 	 * @param height The height of the game view
 	 */
 	public void poll(int width, int height) {
-		if (paused) {
-			clearControlPressedRecord();
-			clearKeyPressedRecord();
-			clearMousePressedRecord();
-			
-			while (Keyboard.next()) {}
-			while (Mouse.next()) {}
-			return;
-		}
-
-		if (!AppGameContainer.hasFocus()) {
-			clearControlPressedRecord();
-			clearKeyPressedRecord();
-			clearMousePressedRecord();
-		}
-		
+//		if (paused) {
+//			clearControlPressedRecord();
+//			clearKeyPressedRecord();
+//			clearMousePressedRecord();
+//
+//			while (Keyboard.next()) {}
+//			while (Mouse.next()) {}
+//			return;
+//		}
+//
+//		if (!AppGameContainer.hasFocus()) {
+//			clearControlPressedRecord();
+//			clearKeyPressedRecord();
+//			clearMousePressedRecord();
+//		}
+//
 		// add any listeners requested since last time
 		for (KeyListener keyListener : keyListenersToAdd) {
 			addKeyListenerImpl(keyListener);
@@ -1080,7 +1026,7 @@ public class Input {
 				
 				consumed = false;
 				for (int i=0;i<keyListeners.size();i++) {
-					KeyListener listener = (KeyListener) keyListeners.get(i);
+					KeyListener listener = keyListeners.get(i);
 					if (listener.isAcceptingInput()) {
 						listener.keyReleased(eventKey, keys[eventKey]);
 						if (consumed) {
@@ -1091,115 +1037,109 @@ public class Input {
 			}
 		}
 
-		/** True if the display is active */
-		boolean displayActive = true;
-		while (Mouse.next()) {
-			if (Mouse.getEventButton() >= 0) {
-				if (Mouse.getEventButtonState()) {
-					consumed = false;
-					mousePressed[Mouse.getEventButton()] = true;
+		// TODO don't think this does anything since not supplying the buffer -- would like to translate to callback events
+//		while (Mouse.next()) {
+//			if (Mouse.getEventButton() >= 0) {
+//				if (Mouse.getEventButtonState()) {
+//					consumed = false;
+//					mousePressed[Mouse.getEventButton()] = true;
+//
+//					pressedX = (int) (xOffset + (Mouse.getEventX() * scaleX));
+//					pressedY =  (int) (yOoffset + ((height-Mouse.getEventY()-1) * scaleY));
+//
+//					for (int i=0;i<mouseListeners.size();i++) {
+//						MouseListener listener = (MouseListener) mouseListeners.get(i);
+//						if (listener.isAcceptingInput()) {
+//							listener.mousePressed(Mouse.getEventButton(), pressedX, pressedY);
+//							if (consumed) {
+//								break;
+//							}
+//						}
+//					}
+//				} else {
+//					consumed = false;
+//					mousePressed[Mouse.getEventButton()] = false;
+//
+//					int releasedX = (int) (xOffset + (Mouse.getEventX() * scaleX));
+//					int releasedY = (int) (yOoffset + ((height-Mouse.getEventY()-1) * scaleY));
+//					if ((pressedX != -1) &&
+//					    (pressedY != -1) &&
+//						(Math.abs(pressedX - releasedX) < mouseClickTolerance) &&
+//						(Math.abs(pressedY - releasedY) < mouseClickTolerance)) {
+//						considerDoubleClick(Mouse.getEventButton(), releasedX, releasedY);
+//						pressedX = pressedY = -1;
+//					}
+//
+//					for (int i=0;i<mouseListeners.size();i++) {
+//						MouseListener listener = (MouseListener) mouseListeners.get(i);
+//						if (listener.isAcceptingInput()) {
+//							listener.mouseReleased(Mouse.getEventButton(), releasedX, releasedY);
+//							if (consumed) {
+//								break;
+//							}
+//						}
+//					}
+//				}
+//			} else {
+//				if (Mouse.isGrabbed()) {
+//					if ((Mouse.getEventDX() != 0) || (Mouse.getEventDY() != 0)) {
+//						consumed = false;
+//						for (int i=0;i<mouseListeners.size();i++) {
+//							MouseListener listener = mouseListeners.get(i);
+//							if (listener.isAcceptingInput()) {
+//								if (anyMouseDown()) {
+//									listener.mouseDragged(0, 0, Mouse.getEventDX(), -Mouse.getEventDY());
+//								} else {
+//									listener.mouseMoved(0, 0, Mouse.getEventDX(), -Mouse.getEventDY());
+//								}
+//
+//								if (consumed) {
+//									break;
+//								}
+//							}
+//						}
+//					}
+//				}
+//
+//				int dwheel = Mouse.getEventDWheel();
+//				wheel += dwheel;
+//				if (dwheel != 0) {
+//					consumed = false;
+//					for (int i=0;i<mouseListeners.size();i++) {
+//						MouseListener listener = (MouseListener) mouseListeners.get(i);
+//						if (listener.isAcceptingInput()) {
+//							listener.mouseWheelMoved(dwheel);
+//							if (consumed) {
+//								break;
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
 
-					pressedX = (int) (xOffset + (Mouse.getEventX() * scaleX));
-					pressedY =  (int) (yOoffset + ((height-Mouse.getEventY()-1) * scaleY));
-
-					for (int i=0;i<mouseListeners.size();i++) {
-						MouseListener listener = (MouseListener) mouseListeners.get(i);
-						if (listener.isAcceptingInput()) {
-							listener.mousePressed(Mouse.getEventButton(), pressedX, pressedY);
-							if (consumed) {
-								break;
-							}
-						}
-					}
-				} else {
-					consumed = false;
-					mousePressed[Mouse.getEventButton()] = false;
-					
-					int releasedX = (int) (xOffset + (Mouse.getEventX() * scaleX));
-					int releasedY = (int) (yOoffset + ((height-Mouse.getEventY()-1) * scaleY));
-					if ((pressedX != -1) && 
-					    (pressedY != -1) &&
-						(Math.abs(pressedX - releasedX) < mouseClickTolerance) && 
-						(Math.abs(pressedY - releasedY) < mouseClickTolerance)) {
-						considerDoubleClick(Mouse.getEventButton(), releasedX, releasedY);
-						pressedX = pressedY = -1;
-					}
-
-					for (int i=0;i<mouseListeners.size();i++) {
-						MouseListener listener = (MouseListener) mouseListeners.get(i);
-						if (listener.isAcceptingInput()) {
-							listener.mouseReleased(Mouse.getEventButton(), releasedX, releasedY);
-							if (consumed) {
-								break;
-							}
-						}
-					}
-				}
-			} else {
-				if (Mouse.isGrabbed() && displayActive) {
-					if ((Mouse.getEventDX() != 0) || (Mouse.getEventDY() != 0)) {
-						consumed = false;
-						for (int i=0;i<mouseListeners.size();i++) {
-							MouseListener listener = (MouseListener) mouseListeners.get(i);
-							if (listener.isAcceptingInput()) {
-								if (anyMouseDown()) {
-									listener.mouseDragged(0, 0, Mouse.getEventDX(), -Mouse.getEventDY());	
-								} else {
-									listener.mouseMoved(0, 0, Mouse.getEventDX(), -Mouse.getEventDY());
-								}
-								
-								if (consumed) {
-									break;
-								}
-							}
-						}
-					}
-				}
-				
-				int dwheel = Mouse.getEventDWheel();
-				wheel += dwheel;
-				if (dwheel != 0) {
-					consumed = false;
-					for (int i=0;i<mouseListeners.size();i++) {
-						MouseListener listener = (MouseListener) mouseListeners.get(i);
-						if (listener.isAcceptingInput()) {
-							listener.mouseWheelMoved(dwheel);
-							if (consumed) {
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
-		
-		if (!displayActive || Mouse.isGrabbed()) {
-			lastMouseX = getMouseX();
-			lastMouseY = getMouseY();
-		} else {
-			if ((lastMouseX != getMouseX()) || (lastMouseY != getMouseY())) {
-				consumed = false;
-				for (int i=0;i<mouseListeners.size();i++) {
-					MouseListener listener = (MouseListener) mouseListeners.get(i);
-					if (listener.isAcceptingInput()) {
-						if (anyMouseDown()) {
-							listener.mouseDragged(lastMouseX ,  lastMouseY, getMouseX(), getMouseY());
-						} else {
-							listener.mouseMoved(lastMouseX ,  lastMouseY, getMouseX(), getMouseY());	
-						}
-						if (consumed) {
-							break;
-						}
-					}
-				}
-				lastMouseX = getMouseX();
-				lastMouseY = getMouseY();
-			}
-		}
+//		if ((lastMouseX != getMouseX()) || (lastMouseY != getMouseY())) {
+//			consumed = false;
+//			for (int i=0;i<mouseListeners.size();i++) {
+//				MouseListener listener = mouseListeners.get(i);
+//				if (listener.isAcceptingInput()) {
+//					if (anyMouseDown()) {
+//						listener.mouseDragged(lastMouseX ,  lastMouseY, getMouseX(), getMouseY());
+//					} else {
+//						listener.mouseMoved(lastMouseX ,  lastMouseY, getMouseX(), getMouseY());
+//					}
+//					if (consumed) {
+//						break;
+//					}
+//				}
+//			}
+//			lastMouseX = getMouseX();
+//			lastMouseY = getMouseY();
+//		}
 		
 		if (controllersInitialized) {
 			for (int i=0;i<getControllerCount();i++) {
-				int count = ((Controller) controllers.get(i)).getButtonCount()+3;
+				int count = (controllers.get(i)).getButtonCount()+3;
 				count = Math.min(count, 24);
 				for (int c=0;c<=count;c++) {
 					if (controls[i][c] && !isControlDwn(c, i)) {
