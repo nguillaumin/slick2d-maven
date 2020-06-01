@@ -20,6 +20,8 @@ import org.newdawn.slick.util.Log;
  * @author kevin
  */
 public class TransitionTest extends StateBasedGame {
+	private static final Log LOG = new Log(TransitionTest.class);
+
 	/** The transitions under test */
 	private Class[][] transitions = new Class[][] {
 			{null, VerticalSplitTransition.class},
@@ -64,7 +66,7 @@ public class TransitionTest extends StateBasedGame {
 				pair[1] = (Transition) transitions[index][1].newInstance();
 			}
 		} catch (Throwable e) {
-			Log.error(e);
+			LOG.error(e);
 		}
 		
 		index++;

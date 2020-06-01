@@ -35,18 +35,7 @@ import static org.lwjgl.system.MemoryStack.stackPush;
  * @author kevin
  */
 public class AppGameContainer extends GameContainer {
-	// TODO what does this do? just check that we are able to create the window?
-	//	static {
-	//		AccessController.doPrivileged(new PrivilegedAction() {
-	//            public Object run() {
-	//        		try {
-	//        			Display.getDisplayMode();
-	//        		} catch (Exception e) {
-	//        			Log.error(e);
-	//        		}
-	//				return null;
-	//            }});
-	//	}
+	private static final Log LOG = new Log(AppGameContainer.class);
 
 	private static final long DEFAULT_SHARE = 0L;
 
@@ -263,7 +252,7 @@ public class AppGameContainer extends GameContainer {
 			long cursor = GLFW.glfwCreateCursor(cursorImg, hotSpotX, hotSpotY);
 			GLFW.glfwSetCursor(GAME_WINDOW, cursor);
 		} catch (Throwable e) {
-			Log.error("Failed to load and apply cursor.", e);
+			LOG.error("Failed to load and apply cursor.", e);
 			throw new SlickException("Failed to set mouse cursor", e);
 		}
 	}
@@ -279,7 +268,7 @@ public class AppGameContainer extends GameContainer {
 			long cursor = GLFW.glfwCreateCursor(cursorImg, hotSpotX, hotSpotY);
 			GLFW.glfwSetCursor(GAME_WINDOW, cursor);
 		} catch (Throwable e) {
-			Log.error("Failed to load and apply cursor.", e);
+			LOG.error("Failed to load and apply cursor.", e);
 			throw new SlickException("Failed to set mouse cursor", e);
 		}
 	}
@@ -288,7 +277,7 @@ public class AppGameContainer extends GameContainer {
 		try {
 			GLFW.glfwSetCursor(GAME_WINDOW, cursor);
 		} catch (Throwable e) {
-			Log.error("Failed to load and apply cursor.", e);
+			LOG.error("Failed to load and apply cursor.", e);
 			throw new SlickException("Failed to set mouse cursor", e);
 		}
 	}
@@ -320,7 +309,7 @@ public class AppGameContainer extends GameContainer {
 			long cursor = GLFW.glfwCreateCursor(cursorImg, hotSpotX, hotSpotY);
 			GLFW.glfwSetCursor(GAME_WINDOW, cursor);
 		} catch (Throwable e) {
-			Log.error("Failed to load and apply cursor.", e);
+			LOG.error("Failed to load and apply cursor.", e);
 			throw new SlickException("Failed to set mouse cursor", e);
 		}
 	}
@@ -334,7 +323,7 @@ public class AppGameContainer extends GameContainer {
 		try {
 			game.init(this);
 		} catch (SlickException e) {
-			Log.error(e);
+			LOG.error(e);
 			running = false;
 		}
 	}
@@ -364,9 +353,9 @@ public class AppGameContainer extends GameContainer {
 		// This _should_ unlock fps cap
 		glfwSwapInterval(0);
 
-		Log.info("GLFW Version: " + GLFW.glfwGetVersionString());
-		Log.info("LWJGL Version: " + Version.getVersion());
-		Log.info("DisplayMode: " + DisplayMode.getDisplayType()
+		LOG.info("GLFW Version: " + GLFW.glfwGetVersionString());
+		LOG.info("LWJGL Version: " + Version.getVersion());
+		LOG.info("DisplayMode: " + DisplayMode.getDisplayType()
 				+ "; width: " + DisplayMode.getWidth()
 				+ "; height: " + DisplayMode.getHeight());
 
@@ -386,15 +375,15 @@ public class AppGameContainer extends GameContainer {
 //		try {
 //			getInput().initControllers();
 //		} catch (SlickException e) {
-//			Log.info("Controllers not available");
+//			LOG.info("Controllers not available");
 //		} catch (Throwable e) {
-//			Log.info("Controllers not available");
+//			LOG.info("Controllers not available");
 //		}
 		
 		try {
 			game.init(this);
 		} catch (SlickException e) {
-			Log.error(e);
+			LOG.error(e);
 			running = false;
 		}
 	}
@@ -411,7 +400,7 @@ public class AppGameContainer extends GameContainer {
 			try {
 				updateAndRender(delta);
 			} catch (SlickException e) {
-				Log.error(e);
+				LOG.error(e);
 				running = false;
 				return;
 			}
@@ -472,7 +461,7 @@ public class AppGameContainer extends GameContainer {
 			try {
 				bufs[i] = data.loadImage(ResourceLoader.getResourceAsStream(refs[i]), flip, false, null);
 			} catch (Exception e) {
-				Log.error(e);
+				LOG.error(e);
 				throw new SlickException("Failed to set the icon");
 			}
 		}

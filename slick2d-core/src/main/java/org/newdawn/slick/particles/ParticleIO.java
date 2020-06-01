@@ -36,6 +36,7 @@ import org.w3c.dom.NodeList;
  * @author kevin
  */
 public class ParticleIO {
+	private static final Log LOG = new Log(ParticleIO.class);
 
 	/**
 	 * Load a set of configured emitters into a single system
@@ -221,10 +222,10 @@ public class ParticleIO {
 			system.setRemoveCompletedEmitters(false);
 			return system;
 		} catch (IOException e) {
-			Log.error(e);
+			LOG.error(e);
 			throw e;
 		} catch (Exception e) {
-			Log.error(e);
+			LOG.error(e);
 			throw new IOException("Unable to load particle system config");
 		}
 	}
@@ -292,7 +293,7 @@ public class ParticleIO {
 
 			xformer.transform(source, result);
 		} catch (Exception e) {
-			Log.error(e);
+			LOG.error(e);
 			throw new IOException("Unable to save configured particle system");
 		}
 	}
@@ -411,10 +412,10 @@ public class ParticleIO {
 
 			return emitter;
 		} catch (IOException e) {
-			Log.error(e);
+			LOG.error(e);
 			throw e;
 		} catch (Exception e) {
-			Log.error(e);
+			LOG.error(e);
 			throw new IOException("Unable to load emitter");
 		}
 	}
@@ -462,7 +463,7 @@ public class ParticleIO {
 
 			xformer.transform(source, result);
 		} catch (Exception e) {
-			Log.error(e);
+			LOG.error(e);
 			throw new IOException("Failed to save emitter");
 		}
 	}
@@ -732,7 +733,7 @@ public class ParticleIO {
 				element.appendChild(pointElement);
 			}
 		} else {
-			Log.warn("unkown value type ignored: " + value.getClass());
+			LOG.warn("unkown value type ignored: " + value.getClass());
 		}
 
 		return element;
@@ -780,7 +781,7 @@ public class ParticleIO {
 			} else if (value instanceof RandomValue) {
 				((RandomValue) value).setValue(Float.parseFloat(v));
 			} else {
-				Log.warn("problems reading element, skipping: " + element);
+				LOG.warn("problems reading element, skipping: " + element);
 			}
 		} else {
 			// type given: this is the new style
@@ -810,7 +811,7 @@ public class ParticleIO {
 				((LinearInterpolator) value).setMax(Integer.parseInt(max));
 				((LinearInterpolator) value).setActive("true".equals(active));
 			} else {
-				Log.warn("unkown type detected: " + type);
+				LOG.warn("unkown type detected: " + type);
 			}
 		}
 	}

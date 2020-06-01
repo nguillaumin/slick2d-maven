@@ -27,6 +27,7 @@ import static org.lwjgl.openal.ALC10.*;
  * @author Rockstar setVolume cleanup 
  */
 public class SoundStore {
+	private static final Log LOG = new Log(SoundStore.class);
 
 	/** The single instance of this class */
 	private static SoundStore store = new SoundStore();
@@ -288,7 +289,7 @@ public class SoundStore {
 		if (inited) {
 			return;
 		}
-		Log.info("Initialising sounds..");
+		LOG.info("Initialising sounds..");
 		inited = true;
 		
 		AccessController.doPrivileged(new PrivilegedAction() {
@@ -303,10 +304,10 @@ public class SoundStore {
 					soundWorks = true;
 					sounds = true;
 					music = true;
-					Log.info("- Sound works");
+					LOG.info("- Sound works");
 				} catch (Exception e) {
-					Log.error("Sound initialisation failure.");
-					Log.error(e);
+					LOG.error("Sound initialisation failure.");
+					LOG.error(e);
 					soundWorks = false;
 					sounds = false;
 					music = false;
@@ -331,13 +332,13 @@ public class SoundStore {
 					}
 				}
 			}
-			Log.info("- "+sourceCount+" OpenAL source available");
+			LOG.info("- "+sourceCount+" OpenAL source available");
 		
 			if (AL10.alGetError() != AL10.AL_NO_ERROR) {
 				sounds = false;
 				music = false;
 				soundWorks = false;
-				Log.error("- AL init failed");
+				LOG.error("- AL init failed");
 			} else {
 				FloatBuffer listenerOri = BufferUtils.createFloatBuffer(6).put(
 						new float[] { 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f });
@@ -352,7 +353,7 @@ public class SoundStore {
 				AL10.alListenerfv(AL10.AL_VELOCITY, listenerVel);
 				AL10.alListenerfv(AL10.AL_ORIENTATION, listenerOri);
    			 
-				Log.info("- Sounds source generated");
+				LOG.info("- Sounds source generated");
 			}
 		}
 	}
@@ -646,7 +647,7 @@ public class SoundStore {
 				loaded.put(ref,new Integer(buf.get(0)));
 				buffer = buf.get(0);
 			} catch (Exception e) {
-				Log.error(e);
+				LOG.error(e);
 				IOException x = new IOException("Failed to load: "+ref);
 				x.initCause(e);
 				
@@ -719,7 +720,7 @@ public class SoundStore {
 				loaded.put(ref,new Integer(buf.get(0)));
 				buffer = buf.get(0);
 			} catch (Exception e) {
-				Log.error(e);
+				LOG.error(e);
 				IOException x = new IOException("Failed to load: "+ref);
 				x.initCause(e);
 				
@@ -843,7 +844,7 @@ public class SoundStore {
 				                     
 				buffer = buf.get(0);
 			} catch (Exception e) {
-				Log.error(e);
+				LOG.error(e);
 				// TODO what did sys alert do before? should it kill some context?
 //				Sys.alert("Error","Failed to load: "+ref+" - "+e.getMessage());
 				throw new IOException("Unable to load: "+ref);

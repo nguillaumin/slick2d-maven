@@ -21,6 +21,8 @@ import org.newdawn.slick.util.Log;
  * @author kevin
  */
 public class ConfigurableEmitter implements ParticleEmitter {
+	private static final Log LOG = new Log(ConfigurableEmitter.class);
+
 	/** The path from which the images should be loaded */
 	private static String relativePath = "";
 
@@ -293,7 +295,7 @@ public class ConfigurableEmitter implements ParticleEmitter {
 				image = new Image(relativePath + imageName);
 			} catch (SlickException e) {
 				image = null;
-				Log.error(e);
+				LOG.error(e);
 			}
 		}
 
@@ -512,7 +514,7 @@ public class ConfigurableEmitter implements ParticleEmitter {
 			ByteArrayInputStream bin = new ByteArrayInputStream(bout.toByteArray());
 			theCopy = ParticleIO.loadEmitter(bin);
 		} catch (IOException e) {
-			Log.error("Slick: ConfigurableEmitter.duplicate(): caught exception " + e.toString());
+			LOG.error("Slick: ConfigurableEmitter.duplicate(): caught exception " + e.toString());
 			return null;
 		}
 		return theCopy;

@@ -13,6 +13,8 @@ import org.newdawn.slick.util.Log;
  * @author kevin
  */
 public class LoadingList {
+	private static final Log LOG = new Log(LoadingList.class);
+
 	/** The single instance of this list */
 	private static LoadingList single = new LoadingList();
 	
@@ -74,7 +76,7 @@ public class LoadingList {
 	 * @param resource The resource to remove
 	 */
 	public void remove(DeferredResource resource) {
-		Log.info("Early loading of deferred resource due to req: "+resource.getDescription());
+		LOG.info("Early loading of deferred resource due to req: "+resource.getDescription());
 		total--;
 		deferred.remove(resource);
 	}

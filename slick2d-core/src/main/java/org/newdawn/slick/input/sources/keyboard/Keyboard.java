@@ -2,13 +2,17 @@ package org.newdawn.slick.input.sources.keyboard;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWKeyCallback;
+import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.GlfwPackageAccess;
+import org.newdawn.slick.util.Log;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.newdawn.slick.GameContainer.GAME_WINDOW;
 import static org.newdawn.slick.input.sources.keyboard.KeyBindings.KEYBOARD_SIZE;
@@ -82,13 +86,17 @@ public abstract class Keyboard {
      * followed by state. The state is followed by
      * a 4 byte code point representing the translated character.
      */
-    private static ByteBuffer readBuffer;
+    private static final ByteBuffer readBuffer = ByteBuffer.allocate(EVENT_SIZE*BUFFER_SIZE);
+
+    static {
+        readBuffer.limit(0);
+    }
 
     /** current event */
-    private static KeyEvent current_event = new KeyEvent();
+    private static final KeyEvent current_event = new KeyEvent();
 
     /** scratch event */
-    private static KeyEvent tmp_event = new KeyEvent();
+    private static final KeyEvent tmp_event = new KeyEvent();
 
     /**
      * Keyboard cannot be constructed.
@@ -145,6 +153,16 @@ public abstract class Keyboard {
             GLFW.glfwPollEvents();
 //            read();
         }
+    }
+
+    public static void bindKeyPress(int boundKey, KeyPress event) {
+        Input.keyPressBindings.put(boundKey, event);
+    }
+
+    public interface KeyHold extends Action {}
+    public interface KeyPress extends Action {}
+    public interface Action {
+        public void doAction();
     }
 
     /**

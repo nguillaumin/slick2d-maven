@@ -17,6 +17,8 @@ import org.newdawn.slick.util.ResourceLoader;
  * @author kevin
  */
 public class PackedSpriteSheet {
+	private static final Log LOG = new Log(PackedSpriteSheet.class);
+
 	/** The image loaded for the sheet */
 	private Image image;
 	/** The base path where the image is expected to be found based on the original definition file */
@@ -142,7 +144,7 @@ public class PackedSpriteSheet {
 				}
 			}
 		} catch (Exception e) {
-			Log.error(e);
+			LOG.error(e);
 			throw new SlickException("Failed to process definitions file - invalid format?", e);
 		}
 	}

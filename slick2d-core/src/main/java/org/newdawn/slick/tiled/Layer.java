@@ -17,6 +17,8 @@ import org.w3c.dom.NodeList;
  * @author kevin
  */
 public class Layer {
+	private static final Log LOG = new Log(Layer.class);
+
 	/** The code used to decode Base64 encoding */
 	private static byte[] baseCodes = new byte[256];
 
@@ -126,7 +128,7 @@ public class Layer {
 					}
 				}
 			} catch (IOException e) {
-				Log.error(e);
+				LOG.error(e);
 				throw new SlickException("Unable to decode base 64 block");
 			}
 		} else {

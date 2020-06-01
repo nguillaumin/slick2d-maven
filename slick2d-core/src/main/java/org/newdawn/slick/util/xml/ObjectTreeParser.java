@@ -46,6 +46,8 @@ import org.newdawn.slick.util.ResourceLoader;
  *
  */
 public class ObjectTreeParser {
+	private static final Log LOG = new Log(ObjectTreeParser.class);
+
 	/** The mapping of XML element names to class names */
 	private HashMap nameToClass = new HashMap();
 	/** The default package where classes will be searched for */
@@ -261,7 +263,7 @@ public class ObjectTreeParser {
 						Object typedValue = typeValue(value, field.getType());
 						setField(field, instance, typedValue);
 					} else {
-						Log.info("Unable to find property on: "+clazz+" for attribute: "+attrs[i]);
+						LOG.info("Unable to find property on: "+clazz+" for attribute: "+attrs[i]);
 					}
 				} else {
 					String value = current.getAttribute(attrs[i]);
@@ -280,7 +282,7 @@ public class ObjectTreeParser {
 					
 					Method method = findMethod(clazz, methodName, child.getClass());
 					if (method == null) {
-						Log.info("Unable to find method to add: "+child+" to "+clazz);
+						LOG.info("Unable to find method to add: "+child+" to "+clazz);
 					} else {
 						invoke(method, instance, new Object[] {child});
 					}

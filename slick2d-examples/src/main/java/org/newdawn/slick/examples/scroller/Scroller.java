@@ -14,6 +14,8 @@ import java.io.File;
  * @author kevin
  */
 public class Scroller extends BasicGame {
+	private static final Log LOG = new Log(Scroller.class);
+
 	/** The size of the tank sprite - used for finding the centre */
 	private static final int TANK_SIZE = 32;
 	/** The size of the tiles - used to determine the amount to draw */
@@ -102,7 +104,7 @@ public class Scroller extends BasicGame {
 		// update the vector of movement based on the initial angle
 		updateMovementVector();
 		
-		Log.info("Window Dimensions in Tiles: "+widthInTiles+"x"+heightInTiles);
+		LOG.info("Window Dimensions in Tiles: "+widthInTiles+"x"+heightInTiles);
 	}
 
 	/**

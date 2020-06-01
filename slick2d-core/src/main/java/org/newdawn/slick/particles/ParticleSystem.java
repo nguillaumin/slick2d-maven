@@ -25,6 +25,8 @@ import org.newdawn.slick.util.Log;
  * @author kevin
  */
 public class ParticleSystem {
+	private static final Log LOG = new Log(ParticleSystem.class);
+
 	/** The renderer to use for all GL operations */
 	protected SGL GL = Renderer.get();
 	
@@ -471,7 +473,7 @@ public class ParticleSystem {
         				sprite = new Image(defaultImageName);
         			}
         		} catch (SlickException e) {
-        			Log.error(e);
+        			LOG.error(e);
         			defaultImageName = null;
         		}
                 return null; // nothing to return
@@ -556,7 +558,7 @@ public class ParticleSystem {
 			return p;
 		}
 		
-		Log.warn("Ran out of particles (increase the limit)!");
+		LOG.warn("Ran out of particles (increase the limit)!");
 		return dummy;
 	}
 	
@@ -637,7 +639,7 @@ public class ParticleSystem {
 			ByteArrayInputStream bin = new ByteArrayInputStream(bout.toByteArray());
 			theCopy = ParticleIO.loadConfiguredSystem(bin);
 		} catch (IOException e) {
-			Log.error("Failed to duplicate particle system");
+			LOG.error("Failed to duplicate particle system");
 			throw new SlickException("Unable to duplicated particle system", e);
 		}
 		

@@ -14,6 +14,8 @@ import org.newdawn.slick.util.Log;
  * @tyler
  */
 public class CanvasGameContainer extends Canvas {
+	private static final Log LOG = new Log(CanvasGameContainer.class);
+
 	/** The actual container implementation */
 	protected Container container;
 	/** The game being held in this container */
@@ -166,7 +168,7 @@ public class CanvasGameContainer extends Canvas {
 					setDisplayMode(CanvasGameContainer.this.getWidth(), 
 								   CanvasGameContainer.this.getHeight(), DisplayMode.Opt.WINDOWED);
 				} catch (SlickException e) {
-					Log.error(e);
+					LOG.error(e);
 				}
 			}
 		}

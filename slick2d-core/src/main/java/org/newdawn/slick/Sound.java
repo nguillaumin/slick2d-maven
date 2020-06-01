@@ -14,6 +14,8 @@ import org.newdawn.slick.util.Log;
  * @author kevin
  */
 public class Sound {
+	private static final Log LOG = new Log(Sound.class);
+
 	/** The internal sound effect represent this sound */
 	private Audio sound;
 
@@ -40,7 +42,7 @@ public class Sound {
 				throw new SlickException("Only .xm, .mod, .aif, .wav and .ogg are currently supported.");
 			}
 		} catch (Exception e) {
-			Log.error(e);
+			LOG.error(e);
 			throw new SlickException("Failed to load sound: "+ref);
 		}
 	}
@@ -68,7 +70,7 @@ public class Sound {
 				throw new SlickException("Only .xm, .mod, .aif, .wav and .ogg are currently supported.");
 			}
 		} catch (Exception e) {
-			Log.error(e);
+			LOG.error(e);
 			throw new SlickException("Failed to load sound: "+ref);
 		}
 	}
@@ -95,7 +97,7 @@ public class Sound {
 				throw new SlickException("Only .xm, .mod, .aif, .wav and .ogg are currently supported.");
 			}
 		} catch (Exception e) {
-			Log.error(e);
+			LOG.error(e);
 			throw new SlickException("Failed to load sound: "+ref);
 		}
 	}

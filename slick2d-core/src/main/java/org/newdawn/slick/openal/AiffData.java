@@ -57,6 +57,8 @@ import org.newdawn.slick.util.Log;
  * @version $Revision: 2286 $
  */
 public class AiffData {
+	private static final Log LOG = new Log(AiffData.class);
+
 	/** actual AIFF data */
 	public final ByteBuffer data;
 
@@ -98,7 +100,7 @@ public class AiffData {
 				AudioSystem.getAudioInputStream(
 					new BufferedInputStream(path.openStream())));
 		} catch (Exception e) {
-			Log.error("Unable to create from: " + path);
+			LOG.error("Unable to create from: " + path);
 			e.printStackTrace();
 			return null;
 		}		
@@ -125,7 +127,7 @@ public class AiffData {
 			return create(
 				AudioSystem.getAudioInputStream(is));
 		} catch (Exception e) {
-			Log.error("Unable to create from inputstream");
+			LOG.error("Unable to create from inputstream");
 			e.printStackTrace();
 			return null;
 		}		

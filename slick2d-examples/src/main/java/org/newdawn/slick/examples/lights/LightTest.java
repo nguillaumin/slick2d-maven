@@ -11,7 +11,9 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.input.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.input.sources.keyboard.Keyboard;
 import org.newdawn.slick.util.Bootstrap;
+import org.newdawn.slick.util.Log;
 
 /**
  * This example shows using vertex colours on a tile map to producing a lighting
@@ -144,19 +146,14 @@ public class LightTest extends BasicGame {
 	 * @param container The container the game is running in
 	 * @param delta The amount of time that passed since last update (in seconds)
 	 */
-	public void update(GameContainer container, int delta)
-			throws SlickException {
+	public void update(GameContainer container, int delta) {
 		// toggle the lighting on/off
-		if (container.getInput().isKeyPressed(Input.KEY_L)){
-			lightingOn = !lightingOn;
-		}
-		// toggle the use of coloured lighting on/off
-		if (container.getInput().isKeyPressed(Input.KEY_C)){
+		Keyboard.bindKeyPress(Input.KEY_L, () -> lightingOn = !lightingOn);
+		// change light color
+		Keyboard.bindKeyPress(Input.KEY_C, () -> {
 			colouredLights = !colouredLights;
-			// we need to recaculate the lighting values because
-			// colours may now be involved
 			updateLightMap();
-		}
+		});
 	}
 
 	/**

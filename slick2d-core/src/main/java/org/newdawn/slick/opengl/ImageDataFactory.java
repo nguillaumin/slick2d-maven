@@ -11,6 +11,8 @@ import org.newdawn.slick.util.Log;
  * @author kevin
  */
 public class ImageDataFactory {
+	private static final Log LOG = new Log(ImageDataFactory.class);
+
 	/** True if we're going to use the native PNG loader - cached so it doesn't have
 	 *  the security check repeatedly
 	 */
@@ -37,7 +39,7 @@ public class ImageDataFactory {
 							usePngLoader = false;
 						}
 						
-						Log.info("Use Java PNG Loader = " + usePngLoader);
+						LOG.info("Use Java PNG Loader = " + usePngLoader);
 						return null;
 		            }
 				});

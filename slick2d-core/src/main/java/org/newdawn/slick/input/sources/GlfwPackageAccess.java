@@ -11,7 +11,7 @@ public abstract class GlfwPackageAccess {
     static {
         try {
             global_lock = AccessController.doPrivileged((PrivilegedExceptionAction<Object>) () -> {
-                Field lock_field = Class.forName("org.lwjgl.opengl.GlobalLock").getDeclaredField("lock");
+                Field lock_field = Class.forName("org.newdawn.slick.input.sources.GlobalLock").getDeclaredField("lock");
                 lock_field.setAccessible(true);
                 return lock_field.get(null);
             });

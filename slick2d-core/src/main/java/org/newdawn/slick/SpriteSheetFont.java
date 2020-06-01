@@ -13,6 +13,8 @@ import org.newdawn.slick.util.Log;
  * @author Onno Scheffers
  */
 public class SpriteSheetFont implements Font {
+	private static final Log LOG = new Log(SpriteSheetFont.class);
+
 	/** The SpriteSheet containing the bitmap font */
 	private SpriteSheet font;
 	/** First character in the SpriteSheet */
@@ -84,7 +86,7 @@ public class SpriteSheetFont implements Font {
 			}
 		} catch (UnsupportedEncodingException e) {
 			// Should never happen, ASCII is supported pretty much anywhere
-			Log.error(e);
+			LOG.error(e);
 		}
 	}
 

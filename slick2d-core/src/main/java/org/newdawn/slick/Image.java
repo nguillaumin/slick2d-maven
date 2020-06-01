@@ -18,6 +18,8 @@ import org.newdawn.slick.util.Log;
  * @author kevin
  */
 public class Image implements Renderable {
+	private static final Log LOG = new Log(Image.class);
+
 	/** The top left corner identifier */
 	public static final int TOP_LEFT = 0;
 	/** The top right corner identifier */
@@ -191,7 +193,7 @@ public class Image implements Renderable {
 			}
 			texture = InternalTextureLoader.get().getTexture(ref, flipped, filter, trans);
 		} catch (IOException e) {
-			Log.error(e);
+			LOG.error(e);
 			throw new SlickException("Failed to load image from: "+ref, e);
 		}
 	}
@@ -236,7 +238,7 @@ public class Image implements Renderable {
 		try {
 			texture = InternalTextureLoader.get().createTexture(width, height, this.filter);
 		} catch (IOException e) {
-			Log.error(e);
+			LOG.error(e);
 			throw new SlickException("Failed to create empty image "+width+"x"+height);
 		}
 		
@@ -310,7 +312,7 @@ public class Image implements Renderable {
 			texture = InternalTextureLoader.get().getTexture(data, this.filter);
 			ref = texture.toString();
 		} catch (IOException e) {
-			Log.error(e);
+			LOG.error(e);
 		}
 	}
 
@@ -468,7 +470,7 @@ public class Image implements Renderable {
 			}
 			texture = InternalTextureLoader.get().getTexture(in, ref, flipped, filter, trans);
 		} catch (IOException e) {
-			Log.error(e);
+			LOG.error(e);
 			throw new SlickException("Failed to load image from: "+ref, e);
 		}
 	}

@@ -17,6 +17,8 @@ import static org.lwjgl.opengl.GL.getCapabilities;
  * @author tyler
  */
 public class GraphicsFactory {
+	private static final Log LOG = new Log(GraphicsFactory.class);
+
 	/** The graphics list of graphics contexts created */
 	private static HashMap graphics = new HashMap();
 	/** True if fbo are supported */
@@ -45,7 +47,7 @@ public class GraphicsFactory {
 			throw new SlickException("Your OpenGL card does not support offscreen buffers and hence can't handle the dynamic images required for this application.");
 		}
 		
-		Log.info("Offscreen Buffers FBO="+fbo);
+		LOG.info("Offscreen Buffers FBO="+fbo);
 	}
 	
 	/**
@@ -123,7 +125,7 @@ public class GraphicsFactory {
 				return new FBOGraphics(image);
 			} catch (Exception e) {
 				fbo = false;
-				Log.warn("FBO failed in use, falling back to PBuffer");
+				LOG.warn("FBO failed in use, falling back to PBuffer");
 			}
 		}
 		

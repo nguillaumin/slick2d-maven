@@ -20,7 +20,7 @@ import static org.newdawn.slick.GameContainer.GAME_WINDOW;
  * A raw Mouse interface. This can be used to poll the current state of the
  * mouse buttons, and determine the mouse movement delta since the last poll.
  *
- * n buttons supported, n being a native limit. A scrolly wheel is also
+ * n buttons supported, n being a native limit. A scroll wheel is also
  * supported, if one such is available. Movement is reported as delta from
  * last position or as an absolute position. If the window has been created
  * the absolute position will be clamped to 0 - width | height.
@@ -37,7 +37,7 @@ public class Mouse {
     public static final int	EVENT_SIZE									= 1 + 1 + 4 + 4 + 4 + 8;
 
     /** Has the mouse been created? */
-    private static boolean		created;
+    private static boolean		created = true;
 
     /** The mouse buttons status from the last poll */
     private static ByteBuffer buttons;
@@ -79,13 +79,20 @@ public class Mouse {
     private static String[]		buttonName;
 
     /** hashmap of button names, for fast lookup */
-    private static final Map<String, Integer> buttonMap									= new HashMap<String, Integer>(16);
+    private static final Map<String, Integer> buttonMap									= new HashMap<>(16);
 
     /** Lazy initialization */
     private static boolean		initialized;
 
+    /** Buffer size in events */
+    private static final int	BUFFER_SIZE									= 50;
+
     /** The mouse button events from the last read */
-    private static ByteBuffer	readBuffer;
+    private static ByteBuffer	readBuffer = ByteBuffer.allocate(EVENT_SIZE * BUFFER_SIZE);
+
+    static {
+        readBuffer.limit(0);
+    }
 
     /** The current mouse event button being examined */
     private static int				eventButton;
@@ -108,8 +115,6 @@ public class Mouse {
     private static int			last_event_raw_x;
     private static int			last_event_raw_y;
 
-    /** Buffer size in events */
-    private static final int	BUFFER_SIZE									= 50;
 
     private static boolean		isGrabbed;
 
@@ -138,11 +143,10 @@ public class Mouse {
         }
     }
 
-    public static Cursor setNativeCursor(Cursor cursor) {
+    public static void setNativeCursor(Cursor cursor) {
         synchronized (GlfwPackageAccess.global_lock) {
             if ((Cursor.getCapabilities() & Cursor.CURSOR_ONE_BIT_TRANSPARENCY) == 0)
                 throw new IllegalStateException("Mouse doesn't support native cursors");
-            Cursor oldCursor = currentCursor;
             currentCursor = cursor;
             if (isCreated()) {
                 if (currentCursor != null) {
@@ -152,7 +156,6 @@ public class Mouse {
                     implementation.setNativeCursor(null);
                 }
             }
-            return oldCursor;
         }
     }
 
@@ -328,8 +331,8 @@ public class Mouse {
             }
 
             if(clipMouseCoordinatesToWindow) {
-                x = Math.min(GameContainer.getWidth() - 1, Math.max(0, x));
-                y = Math.min(GameContainer.getHeight() - 1, Math.max(0, y));
+                x = Math.min(GameContainer.getStaticWidth() - 1, Math.max(0, x));
+                y = Math.min(GameContainer.getStaticHeight() - 1, Math.max(0, y));
             }
 
             dwheel += poll_dwheel;
@@ -420,8 +423,8 @@ public class Mouse {
                     last_event_raw_y = new_event_y;
                 }
                 if(clipMouseCoordinatesToWindow) {
-                    event_x = Math.min(GameContainer.getWidth() - 1, Math.max(0, event_x));
-                    event_y = Math.min(GameContainer.getHeight() - 1, Math.max(0, event_y));
+                    event_x = Math.min(GameContainer.getStaticWidth() - 1, Math.max(0, event_x));
+                    event_y = Math.min(GameContainer.getStaticHeight() - 1, Math.max(0, event_y));
                 }
                 event_dwheel = readBuffer.getInt();
                 event_nanos = readBuffer.getLong();

@@ -10,6 +10,8 @@ import org.newdawn.slick.util.Log;
  * @author Onno Scheffers
  */
 public class SpriteSheetFontTest extends BasicGame {
+   private static final Log LOG = new Log(SpriteSheetFontTest.class);
+
    /**
     * The font we're going to use to render
     */
@@ -57,7 +59,7 @@ public class SpriteSheetFontTest extends BasicGame {
          try {
             container.setDisplayMode(640, 480, DisplayMode.Opt.WINDOWED);
          } catch (SlickException e) {
-            Log.error(e);
+            LOG.error(e);
          }
       }
    }

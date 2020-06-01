@@ -10,6 +10,8 @@ import org.newdawn.slick.util.Log;
  * @author kevin
  */
 public class FontTest extends BasicGame {
+	private static final Log LOG = new Log(FontTest.class);
+
 	/** The font we're going to use to render */
 	private AngelCodeFont font;
 	/** The font we're going to use to render */
@@ -74,7 +76,7 @@ public class FontTest extends BasicGame {
 			try {
 				container.setDisplayMode(640, 480, DisplayMode.Opt.WINDOWED);
 			} catch (SlickException e) {
-				Log.error(e);
+				LOG.error(e);
 			}
 		}
 	}

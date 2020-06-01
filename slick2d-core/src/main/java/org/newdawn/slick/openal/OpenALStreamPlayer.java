@@ -21,6 +21,8 @@ import org.newdawn.slick.util.ResourceLoader;
  * @author tyler
  */
 public class OpenALStreamPlayer {
+	private static final Log LOG = new Log(OpenALStreamPlayer.class);
+
 	/** The number of buffers to maintain */
 	public static final int BUFFER_COUNT = 3;
 	/** The size of the sections to stream from the stream */
@@ -239,7 +241,7 @@ public class OpenALStreamPlayer {
 			
 			return true;
 		} catch (IOException e) {
-			Log.error(e);
+			LOG.error(e);
 			return false;
 		}
 	}
@@ -283,7 +285,7 @@ public class OpenALStreamPlayer {
 
 			return true;
 		} catch (IOException e) {
-			Log.error(e);
+			LOG.error(e);
 			return false;
 		}
 	}

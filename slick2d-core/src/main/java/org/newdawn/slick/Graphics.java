@@ -25,6 +25,8 @@ import org.newdawn.slick.util.Log;
  * @author kevin
  */
 public class Graphics {
+	private static final Log LOG = new Log(Graphics.class);
+
 	/** The renderer to use for all GL operations */
 	protected static SGL GL = Renderer.get();
 	/** The renderer to use line strips */
@@ -142,7 +144,7 @@ public class Graphics {
 								"org/newdawn/slick/data/defaultfont.fnt",
 								"org/newdawn/slick/data/defaultfont.png");
 					} catch (SlickException e) {
-						Log.error(e);
+						LOG.error(e);
 					}
 					return null; // nothing to return
 				}

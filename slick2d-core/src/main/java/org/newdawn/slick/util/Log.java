@@ -1,161 +1,132 @@
 package org.newdawn.slick.util;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+import java.io.PrintStream;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
- * A simple central logging system
- * 
- * @author kevin
+ * @author tyler
  */
 public final class Log {
-	/** True if we're doing verbose logging INFO and DEBUG */
-	private static boolean verbose = true;
-	/** true if activated by the system property "org.newdawn.slick.forceVerboseLog" */
-	private static boolean forcedVerbose = false;
-	
-	/**
-	 * The debug property which can be set via JNLP or startup parameter to switch
-	 * logging mode to verbose for games that were released without verbose logging
-	 * value must be "true"
-	 */
-	private static final String forceVerboseProperty = "org.newdawn.slick.forceVerboseLog";
-	
-	/**
-	 * the verbose property must be set to "true" to switch on verbose logging
-	 */
-	private static final String forceVerbosePropertyOnValue = "true";
-	
-	/** The log system plugin in use */
-	private static LogSystem logSystem = new DefaultLogSystem();
-	
-	/**
-	 * The log is a simple static utility, no construction
-	 */
-	private Log() {
-		
+	public static final int TRACE = 0;
+	public static final int DEBUG = 1;
+	public static final int INFO = 2;
+	public static final int WARN = 3;
+	public static final int ERROR = 4;
+
+	private final String clazzName;
+
+	public Log(Class clazz) {
+		this.clazzName = clazz.getName();
 	}
-	
-	/**
-	 * Set the log system that will have all of the log info 
-	 * sent to it.
-	 * 
-	 * @param system The system to use for logging.
-	 */
-	public static void setLogSystem(LogSystem system) {
-		logSystem = system;
+
+	//
+	// 0 - ALL; 1 - DEBUG; 2 - INFO; 3 - WARN
+	//
+	private static int logLevel = 0;
+
+	public static void setLevel(int level) {
+		logLevel = level;
 	}
-	
-	/**
-	 * Indicate that we want verbose logging.
-	 * The call is ignored if verbose logging is forced by the system property
-	 * "org.newdawn.slick.forceVerboseLog"
-	 * 
-	 * @param v True if we want verbose logging (INFO and DEBUG)
-	 */
-	public static void setVerbose(boolean v) {
-		if (forcedVerbose)
+
+	public void setVerbose(boolean enabled) {
+		if (enabled) {
+			setLevel(0);
+		} else {
+			setLevel(2);
+		}
+	}
+
+	public void trace(Object... args) {
+		if (logLevel > TRACE) {
 			return;
-		verbose = v;
-	}
-
-	/**
-	 * Check if the system property org.newdawn.slick.verboseLog is set to true.
-	 * If this is the case we activate the verbose logging mode
-	 */
-	public static void checkVerboseLogSetting() {
-		try {
-			AccessController.doPrivileged(new PrivilegedAction() {
-	            public Object run() {
-					String val = System.getProperty(Log.forceVerboseProperty);
-					if ((val != null) && (val.equalsIgnoreCase(Log.forceVerbosePropertyOnValue))) {
-						Log.setForcedVerboseOn();
-					}
-					
-					return null;
-	            }
-			});
-		} catch (Throwable e) {
-			// ignore, security failure - probably an applet
 		}
-	}
-	
-	/**
-	 * Indicate that we want verbose logging, even if switched off in game code.
-	 * Only be called when system property "org.newdawn.slick.forceVerboseLog" is set to true.
-	 * You must not call this method directly.
-	 */
-	public static void setForcedVerboseOn() {
-		forcedVerbose = true;
-		verbose = true;
-	}
-	
-	/**
-	 * Log an error
-	 * 
-	 * @param message The message describing the error
-	 * @param e The exception causing the error
-	 */
-	public static void error(String message, Throwable e) {
-		logSystem.error(message, e);
+
+		logSout("[TRACE]", args);
 	}
 
-	/**
-	 * Log an error
-	 * 
-	 * @param e The exception causing the error
-	 */
-	public static void error(Throwable e) {
-		logSystem.error(e);
-	}
-
-	/**
-	 * Log an error
-	 * 
-	 * @param message The message describing the error
-	 */
-	public static void error(String message) {
-		logSystem.error(message);
-	}
-
-	/**
-	 * Log a warning
-	 * 
-	 * @param message The message describing the warning
-	 */
-	public static void warn(String message) {
-		logSystem.warn(message);
-	}
-	
-	/**
-	 * Log a warning
-	 * 
-	 * @param message The message describing the warning
-	 * @param e The issue causing the warning
-	 */
-	public static void warn(String message, Throwable e) {
-		logSystem.warn(message, e);
-	}
-
-	/**
-	 * Log an information message
-	 * 
-	 * @param message The message describing the infomation
-	 */
-	public static void info(String message) {
-		if (verbose || forcedVerbose) {
-			logSystem.info(message);
+	public void debug(Object... args) {
+		if (logLevel > DEBUG) {
+			return;
 		}
+
+		logSout("[DEBUG]", args);
 	}
 
-	/**
-	 * Log a debug message
-	 * 
-	 * @param message The message describing the debug
-	 */
-	public static void debug(String message) {
-		if (verbose || forcedVerbose) {
-			logSystem.debug(message);
+	public void info(Object... args) {
+		if (logLevel > INFO) {
+			return;
 		}
+
+		logSout("[INFO]", args);
+	}
+
+	public void warn(Object... args) {
+		if (logLevel > WARN) {
+			return;
+		}
+
+		logSout("[WARN]", args);
+	}
+
+	public void error(Object... args) {
+		if (logLevel > ERROR) {
+			return;
+		}
+
+		logErr("[ERROR]", args);
+	}
+
+	private void logSout(String tag, Object... args) {
+		log(tag, System.out, args);
+	}
+
+	private void logErr(String tag, Object... arg) {
+		log(tag, System.err, arg);
+	}
+
+	private static int countMatches(String str) {
+		return (str.split( Pattern.quote("{}"), -1).length) - 1;
+	}
+
+	private void log(String label, PrintStream printStream, Object... args) {
+		StringBuilder format = new StringBuilder(args[0].toString());
+
+		int count = countMatches(format.toString());
+		int arguments = args.length - 1;
+
+		if (count < arguments) {
+			format.append(", {}".repeat(Math.max(0, arguments - count)));
+		} else if (arguments < count) {
+			System.err.println(getTag(label) + "Please supply positional arguments for all {}.");
+			new Exception("Bad Arguments").printStackTrace();
+			return;
+		}
+
+		format = new StringBuilder(format.toString().replace("{}", "%s"));
+
+		List<Object> tmp  = Arrays.asList(args).subList(1, args.length);
+		List<Exception> exceptions = new ArrayList<>();
+		String[] pos = tmp.stream().map(obj -> {
+			if (obj instanceof Exception) {
+				exceptions.add((Exception) obj);
+				return ((Exception) obj).getMessage();
+			}
+			return obj.toString();
+		}).toArray(String[]::new);
+
+		printStream.printf(getTag(label) + format + "\n", pos);
+		exceptions.forEach(Exception::printStackTrace);
+	}
+
+	private String getTag(String label) {
+		return label + " | "
+				+ Instant.now()
+				+ " | "
+				+ clazzName
+				+ " | ";
 	}
 }

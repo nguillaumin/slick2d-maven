@@ -68,8 +68,8 @@ public class OggDecoder {
 //			try {
 //				bytes = input.read(buffer, index, 4096);
 //			} catch (Exception e) {
-//				Log.error("Failure reading in vorbis");
-//				Log.error(e);
+//				LOG.error("Failure reading in vorbis");
+//				LOG.error(e);
 //				System.exit(0);
 //			}
 //			oy.wrote(bytes);
@@ -81,7 +81,7 @@ public class OggDecoder {
 //					break;
 //
 //				// error case.  Must not be Vorbis data
-//				Log.error("Input does not appear to be an Ogg bitstream.");
+//				LOG.error("Input does not appear to be an Ogg bitstream.");
 //				System.exit(0);
 //			}
 //
@@ -101,19 +101,19 @@ public class OggDecoder {
 //			vc.init();
 //			if (os.pagein(og) < 0) {
 //				// error; stream version mismatch perhaps
-//				Log.error("Error reading first page of Ogg bitstream data.");
+//				LOG.error("Error reading first page of Ogg bitstream data.");
 //				System.exit(0);
 //			}
 //
 //			if (os.packetout(op) != 1) {
 //				// no page? must not be vorbis
-//				Log.error("Error reading initial header packet.");
+//				LOG.error("Error reading initial header packet.");
 //				System.exit(0);
 //			}
 //
 //			if (vi.synthesis_headerin(vc, op) < 0) {
 //				// error case; not a vorbis header
-//				Log.error("This Ogg bitstream does not contain Vorbis audio data.");
+//				LOG.error("This Ogg bitstream does not contain Vorbis audio data.");
 //				System.exit(0);
 //			}
 //
@@ -148,7 +148,7 @@ public class OggDecoder {
 //							if (result == -1) {
 //								// Uh oh; data at some point was corrupted or missing!
 //								// We can't tolerate that in a header.  Die.
-//								Log.error("Corrupt secondary header.  Exiting.");
+//								LOG.error("Corrupt secondary header.  Exiting.");
 //								System.exit(0);
 //							}
 //							vi.synthesis_headerin(vc, op);
@@ -162,12 +162,12 @@ public class OggDecoder {
 //				try {
 //					bytes = input.read(buffer, index, 4096);
 //				} catch (Exception e) {
-//					Log.error("Failed to read Vorbis: ");
-//					Log.error(e);
+//					LOG.error("Failed to read Vorbis: ");
+//					LOG.error(e);
 //					System.exit(0);
 //				}
 //				if (bytes == 0 && i < 2) {
-//					Log.error("End of file before finding all Vorbis headers!");
+//					LOG.error("End of file before finding all Vorbis headers!");
 //					System.exit(0);
 //				}
 //				oy.wrote(bytes);
@@ -194,7 +194,7 @@ public class OggDecoder {
 //					if (result == 0)
 //						break; // need more data
 //					if (result == -1) { // missing or corrupt data at this page position
-//						Log.error("Corrupt or missing data in bitstream; continuing...");
+//						LOG.error("Corrupt or missing data in bitstream; continuing...");
 //					} else {
 //						os.pagein(og); // can safely ignore errors at
 //						// this point
@@ -276,8 +276,8 @@ public class OggDecoder {
 //						try {
 //							bytes = input.read(buffer, index, 4096);
 //						} catch (Exception e) {
-//							Log.error("Failure during vorbis decoding");
-//							Log.error(e);
+//							LOG.error("Failure during vorbis decoding");
+//							LOG.error(e);
 //							return null;
 //						}
 //					} else {

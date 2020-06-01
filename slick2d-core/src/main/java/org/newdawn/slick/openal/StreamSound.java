@@ -16,6 +16,8 @@ import org.newdawn.slick.util.Log;
  * @author Rockstar playAsMusic cleanup 
  */
 public class StreamSound extends AudioImpl {
+	private static final Log LOG = new Log(StreamSound.class);
+
 	/** The player we're going to ask to stream data */
 	private OpenALStreamPlayer player;
 	
@@ -46,7 +48,7 @@ public class StreamSound extends AudioImpl {
 			player.play(loop);
 			SoundStore.get().setStream(player);
 		} catch (IOException e) {
-			Log.error("Failed to read OGG source: "+player.getSource());
+			LOG.error("Failed to read OGG source: "+player.getSource());
 		}
 		
 		return SoundStore.get().getSource(0);

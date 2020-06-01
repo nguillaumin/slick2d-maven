@@ -12,6 +12,8 @@ import org.newdawn.slick.util.Log;
  * @author kevin
  */
 public class InputTest extends BasicGame {
+	private static final Log LOG = new Log(InputTest.class);
+
 	/** The message to be displayed */
 	private String message = "Press any key, mouse button, or drag the mouse";
 	/** The lines to be drawn on the screen */
@@ -118,7 +120,7 @@ public class InputTest extends BasicGame {
 				try {
 					app.setDisplayMode(600, 600, DisplayMode.Opt.WINDOWED);
 					app.reInit();
-				} catch (Exception e) { Log.error(e); }
+				} catch (Exception e) { LOG.error(e); }
 			}
 		}
 	}

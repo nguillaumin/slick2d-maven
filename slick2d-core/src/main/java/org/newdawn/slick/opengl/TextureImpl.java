@@ -23,7 +23,9 @@ import org.newdawn.slick.util.Log;
  * @author Brian Matzon
  */
 public class TextureImpl implements Texture {
-	/** The renderer to use for all GL operations */
+    private static final Log LOG = new Log(TextureImpl.class);
+
+    /** The renderer to use for all GL operations */
 	protected static SGL GL = Renderer.get();
 	
 	/** The last texture that was bound to */
@@ -370,7 +372,7 @@ public class TextureImpl implements Texture {
 		 * @return The new texture ID assigned to this texture
 		 */
 		public int reload() {
-			Log.error("Reloading texture: "+ref);
+			LOG.error("Reloading texture: "+ref);
 			return InternalTextureLoader.get().reload(TextureImpl.this, srcPixelFormat, componentCount, minFilter, magFilter, textureBuffer);
 		}
 	}

@@ -46,14 +46,14 @@ public interface GUIContext {
 	 * 
 	 * @return The width of the game canvas
 	 */
-	public static int getWidth();
+	public int getWidth();
 	
 	/**
 	 * Get the height of the game canvas
 	 * 
 	 * @return The height of the game canvas
 	 */
-	public static int getHeight();
+	public int getHeight();
 	
 	/**
 	 * Get the default system font

@@ -6,13 +6,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWKeyCallback;
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.sources.controller.Controller;
 import org.newdawn.slick.input.sources.controller.Controllers;
 import org.newdawn.slick.input.sources.keyboard.Keyboard;
 import org.newdawn.slick.input.sources.mouse.Mouse;
 import org.newdawn.slick.util.Log;
+
+import static org.newdawn.slick.GameContainer.GAME_WINDOW;
 
 /**
  * A wrapped for all keyboard, mouse and controller input
@@ -21,6 +26,9 @@ import org.newdawn.slick.util.Log;
  * @author tyler
  */
 public class Input {
+
+	private static final Log LOG = new Log(Input.class);
+
 	/** The controller index to pass to check all controllers */
 	public static final int ANY_CONTROLLER = -1;
 	
@@ -28,15 +36,15 @@ public class Input {
 	private static final int MAX_BUTTONS = 100;
 	
 	/** */
-	public static final int KEY_ESCAPE          = 0x01;
+	public static final int KEY_ESCAPE          = GLFW.GLFW_KEY_ESCAPE;
 	/** */
-	public static final int KEY_1               = 0x02;
+	public static final int KEY_1               = GLFW.GLFW_KEY_1;
 	/** */
-	public static final int KEY_2               = 0x03;
+	public static final int KEY_2               = GLFW.GLFW_KEY_2;
 	/** */
-	public static final int KEY_3               = 0x04;
+	public static final int KEY_3               = GLFW.GLFW_KEY_3;
 	/** */
-	public static final int KEY_4               = 0x05;
+	public static final int KEY_4               = GLFW.GLFW_KEY_4;
 	/** */
 	public static final int KEY_5               = 0x06;
 	/** */
@@ -104,7 +112,7 @@ public class Input {
 	/** */
 	public static final int KEY_K               = 0x25;
 	/** */
-	public static final int KEY_L               = 0x26;
+	public static final int KEY_L               = GLFW.GLFW_KEY_L;
 	/** */
 	public static final int KEY_SEMICOLON       = 0x27;
 	/** */
@@ -120,7 +128,7 @@ public class Input {
 	/** */
 	public static final int KEY_X               = 0x2D;
 	/** */
-	public static final int KEY_C               = 0x2E;
+	public static final int KEY_C               = GLFW.GLFW_KEY_C;
 	/** */
 	public static final int KEY_V               = 0x2F;
 	/** */
@@ -634,7 +642,9 @@ public class Input {
 			allListeners.remove(listener);
 		}
 	}
-	
+
+	public static final ConcurrentHashMap<Integer, Keyboard.Action> keyPressBindings = new ConcurrentHashMap<>();
+
 	/**
 	 * Initialise the input system
 	 * 
@@ -644,6 +654,16 @@ public class Input {
 		this.height = height;
 		lastMouseX = getMouseX();
 		lastMouseY = getMouseY();
+
+		// bind input map
+		GLFW.glfwSetKeyCallback(GAME_WINDOW, new GLFWKeyCallback() {
+			@Override
+			public void invoke(long window, int key, int scancode, int action, int mods) {
+				LOG.debug("pressed key: " + key + " - action: " + action);
+				if (action == GLFW.GLFW_PRESS)
+					keyPressBindings.get(key).doAction();
+			}
+		});
 	}
 	
 	/**
@@ -1039,9 +1059,9 @@ public class Input {
 				}
 			}
 			
-			Log.info("Found "+controllers.size()+" controllers");
+			LOG.info("Found "+controllers.size()+" controllers");
 			for (int i=0;i<controllers.size();i++) {
-				Log.info(i+" : "+((Controller) controllers.get(i)).getName());
+				LOG.info(i+" : "+(controllers.get(i)).getName());
 			}
 		} catch (NoClassDefFoundError e) {
 			// forget it, no jinput availble
@@ -1137,12 +1157,12 @@ public class Input {
 		}
 		
 		// add any listeners requested since last time
-		for (int i=0;i<keyListenersToAdd.size();i++) {
-			addKeyListenerImpl((KeyListener) keyListenersToAdd.get(i));
+		for (KeyListener keyListener : keyListenersToAdd) {
+			addKeyListenerImpl(keyListener);
 		}
 		keyListenersToAdd.clear();
-		for (int i=0;i<mouseListenersToAdd.size();i++) {
-			addMouseListenerImpl((MouseListener) mouseListenersToAdd.get(i));
+		for (MouseListener mouseListener : mouseListenersToAdd) {
+			addMouseListenerImpl(mouseListener);
 		}
 		mouseListenersToAdd.clear();
 		
@@ -1154,9 +1174,7 @@ public class Input {
 		
 		this.height = height;
 
-		Iterator allStarts = allListeners.iterator();
-		while (allStarts.hasNext()) {
-			ControlledInputReciever listener = (ControlledInputReciever) allStarts.next();
+		for (ControlledInputReciever listener : allListeners) {
 			listener.inputStarted();
 		}
 		
@@ -1170,7 +1188,7 @@ public class Input {
 				
 				consumed = false;
 				for (int i=0;i<keyListeners.size();i++) {
-					KeyListener listener = (KeyListener) keyListeners.get(i);
+					KeyListener listener = keyListeners.get(i);
 					
 					if (listener.isAcceptingInput()) {
 						listener.keyPressed(eventKey, Keyboard.getEventCharacter());

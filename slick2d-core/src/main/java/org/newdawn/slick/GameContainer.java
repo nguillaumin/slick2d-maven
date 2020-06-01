@@ -23,6 +23,8 @@ import static org.lwjgl.glfw.GLFW.*;
  * @author tyler
  */
 public abstract class GameContainer implements GUIContext {
+	private static final Log LOG = new Log(GameContainer.class);
+
 	public static long GAME_WINDOW = -1L;
 
 	/** The renderer to use for all GL operations */
@@ -97,7 +99,6 @@ public abstract class GameContainer implements GUIContext {
 		lastFrame = getTime();
 
 		getBuildVersion();
-		Log.checkVerboseLogSetting();
 	}
 
 	public static void enableStencil() {
@@ -108,7 +109,7 @@ public abstract class GameContainer implements GUIContext {
 		if (font != null) {
 			this.defaultFont = font;
 		} else {
-			Log.warn("Please provide a non null font");
+			LOG.warn("Please provide a non null font");
 		}
 	}
 	
@@ -201,11 +202,11 @@ public abstract class GameContainer implements GUIContext {
 			props.load(ResourceLoader.getResourceAsStream("version"));
 			
 			int build = Integer.parseInt(props.getProperty("build"));
-			Log.info("Slick Build #"+build);
+			LOG.info("Slick Build #"+build);
 			
 			return build;
 		} catch (Exception e) {
-			Log.error("Unable to determine Slick build number");
+			LOG.error("Unable to determine Slick build number");
 			return -1;
 		}
 	}
@@ -255,7 +256,11 @@ public abstract class GameContainer implements GUIContext {
 	 *
 	 * @return The width of the game canvas
 	 */
-	public static int getWidth() {
+	public int getWidth() {
+		return width;
+	}
+
+	public static int getStaticWidth() {
 		return width;
 	}
 	
@@ -264,7 +269,11 @@ public abstract class GameContainer implements GUIContext {
 	 * 
 	 * @return The height of the game canvas
 	 */
-	public static int getHeight() {
+	public int getHeight() {
+		return height;
+	}
+
+	public static int getStaticHeight() {
 		return height;
 	}
 	
@@ -410,7 +419,7 @@ public abstract class GameContainer implements GUIContext {
 					}
 					
 				} catch (Throwable e) {
-					Log.error(e);
+					LOG.error(e);
 					throw new SlickException("Game.update() failure - check the game code.");
 				}
 			}
@@ -432,7 +441,7 @@ public abstract class GameContainer implements GUIContext {
 			try {
 				game.render(this, graphics);
 			} catch (Throwable e) {
-				Log.error(e);
+				LOG.error(e);
 				throw new SlickException("Game.render() failure - check the game code.");
 			}
 			graphics.resetTransform();
@@ -458,7 +467,7 @@ public abstract class GameContainer implements GUIContext {
 	}
 	
 	protected void initGL() {
-		Log.info("Starting display "+width+"x"+height);
+		LOG.info("Starting display "+width+"x"+height);
 		GL.initDisplay(width, height);
 		
 		if (input == null) {
@@ -516,7 +525,7 @@ public abstract class GameContainer implements GUIContext {
 	}
 	
 	public void setVerbose(boolean verbose) {
-		Log.setVerbose(verbose);
+		LOG.setVerbose(verbose);
 	}
 	
 	public void exit() {

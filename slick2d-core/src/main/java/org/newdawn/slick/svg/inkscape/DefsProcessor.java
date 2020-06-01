@@ -18,6 +18,7 @@ import org.w3c.dom.NodeList;
  * @author kevin
  */
 public class DefsProcessor implements ElementProcessor {
+	private static final Log LOG = new Log(DefsProcessor.class);
 
 	/**
 	 * @see org.newdawn.slick.svg.inkscape.ElementProcessor#handles(org.w3c.dom.Element)
@@ -40,7 +41,7 @@ public class DefsProcessor implements ElementProcessor {
 			Element pattern = (Element) patterns.item(i);
 			NodeList list = pattern.getElementsByTagName("image");
 			if (list.getLength() == 0) {
-				Log.warn("Pattern 1981 does not specify an image. Only image patterns are supported.");
+				LOG.warn("Pattern 1981 does not specify an image. Only image patterns are supported.");
 				continue;
 			}
 			Element image = (Element) list.item(0);

@@ -25,6 +25,8 @@ import com.jcraft.jorbis.Info;
  * @author kevin
  */
 public class OggInputStream extends InputStream implements AudioInputStream {
+	private static final Log LOG = new Log(OggInputStream.class);
+
 	/** The conversion buffer size */
 	private int convsize = 4096 * 4;
 	/** The buffer used to read OGG file */
@@ -153,8 +155,8 @@ public class OggInputStream extends InputStream implements AudioInputStream {
 		try {
 			bytes = input.read(buffer, index, 4096);
 		} catch (Exception e) {
-			Log.error("Failure reading in vorbis");
-			Log.error(e);
+			LOG.error("Failure reading in vorbis");
+			LOG.error(e);
 			endOfStream = true;
 			return false;
 		}
@@ -167,7 +169,7 @@ public class OggInputStream extends InputStream implements AudioInputStream {
 				return false;
 
 			// error case.  Must not be Vorbis data
-			Log.error("Input does not appear to be an Ogg bitstream.");
+			LOG.error("Input does not appear to be an Ogg bitstream.");
 			endOfStream = true;
 			return false;
 		}
@@ -188,21 +190,21 @@ public class OggInputStream extends InputStream implements AudioInputStream {
 		comment.init();
 		if (streamState.pagein(page) < 0) {
 			// error; stream version mismatch perhaps
-			Log.error("Error reading first page of Ogg bitstream data.");
+			LOG.error("Error reading first page of Ogg bitstream data.");
 			endOfStream = true;
 			return false;
 		}
 
 		if (streamState.packetout(packet) != 1) {
 			// no page? must not be vorbis
-			Log.error("Error reading initial header packet.");
+			LOG.error("Error reading initial header packet.");
 			endOfStream = true;
 			return false;
 		}
 
 		if (oggInfo.synthesis_headerin(comment, packet) < 0) {
 			// error case; not a vorbis header
-			Log.error("This Ogg bitstream does not contain Vorbis audio data.");
+			LOG.error("This Ogg bitstream does not contain Vorbis audio data.");
 			endOfStream = true;
 			return false;
 		}
@@ -238,7 +240,7 @@ public class OggInputStream extends InputStream implements AudioInputStream {
 						if (result == -1) {
 							// Uh oh; data at some point was corrupted or missing!
 							// We can't tolerate that in a header.  Die.
-							Log.error("Corrupt secondary header.  Exiting.");
+							LOG.error("Corrupt secondary header.  Exiting.");
 							endOfStream = true;
 							return false;
 						}
@@ -254,13 +256,13 @@ public class OggInputStream extends InputStream implements AudioInputStream {
 			try {
 				bytes = input.read(buffer, index, 4096);
 			} catch (Exception e) {
-				Log.error("Failed to read Vorbis: ");
-				Log.error(e);
+				LOG.error("Failed to read Vorbis: ");
+				LOG.error(e);
 				endOfStream = true;
 				return false;
 			}
 			if (bytes == 0 && i < 2) {
-				Log.error("End of file before finding all Vorbis headers!");
+				LOG.error("End of file before finding all Vorbis headers!");
 				endOfStream = true;
 				return false;
 			}
@@ -314,7 +316,7 @@ public class OggInputStream extends InputStream implements AudioInputStream {
 					}
 					
 					if (result == -1) { // missing or corrupt data at this page position
-						Log.error("Corrupt or missing data in bitstream; continuing...");
+						LOG.error("Corrupt or missing data in bitstream; continuing...");
 					} else {
 						streamState.pagein(page); // can safely ignore errors at
 						// this point
@@ -375,7 +377,7 @@ public class OggInputStream extends InputStream implements AudioInputStream {
 
 									int bytesToWrite = 2 * oggInfo.channels * bout;
 									if (bytesToWrite >= pcmBuffer.remaining()) {
-										Log.warn("Read block from OGG that was too big to be buffered: " + bytesToWrite);
+										LOG.warn("Read block from OGG that was too big to be buffered: " + bytesToWrite);
 									} else {
 										pcmBuffer.put(convbuffer, 0, bytesToWrite);
 									}
@@ -405,8 +407,8 @@ public class OggInputStream extends InputStream implements AudioInputStream {
 						try {
 							bytes = input.read(buffer, index, 4096);
 						} catch (Exception e) {
-							Log.error("Failure during vorbis decoding");
-							Log.error(e);
+							LOG.error("Failure during vorbis decoding");
+							LOG.error(e);
 							endOfStream = true;
 							return;
 						}
@@ -483,7 +485,7 @@ public class OggInputStream extends InputStream implements AudioInputStream {
 					}
 				}
 			} catch (IOException e) {
-				Log.error(e);
+				LOG.error(e);
 				return i;
 			}
 		}

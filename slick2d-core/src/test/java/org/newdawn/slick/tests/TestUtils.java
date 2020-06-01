@@ -24,6 +24,8 @@ import static org.lwjgl.opengl.GL11.GL_TRUE;
  * @author kevin
  */
 public class TestUtils {
+	private static final Log LOG = new Log(TestUtils.class);
+
 	/** The texture that's been loaded */
 	private Texture texture;
 	/** The ogg sound effect */
@@ -102,7 +104,7 @@ public class TestUtils {
 	 */
 	public void init() {
 		// turn off all but errors
-		Log.setVerbose(false);
+		LOG.setVerbose(false);
 
 		java.awt.Font awtFont = new java.awt.Font("Times New Roman", java.awt.Font.BOLD, 16);
 		font = new TrueTypeFont(awtFont, false);

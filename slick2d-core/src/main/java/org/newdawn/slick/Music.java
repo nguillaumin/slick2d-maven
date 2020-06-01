@@ -17,6 +17,8 @@ import org.newdawn.slick.util.Log;
  * @author Nathan Sweet <misc@n4te.com>
  */
 public class Music {
+	private static final Log LOG = new Log(Music.class);
+
 	/** The music currently being played or null if none */
 	private static Music currentMusic;
 	
@@ -107,7 +109,7 @@ public class Music {
 				throw new SlickException("Only .xm, .mod, .ogg, and .aif/f are currently supported.");
 			}
 		} catch (Exception e) {
-			Log.error(e);
+			LOG.error(e);
 			throw new SlickException("Failed to load music: "+ref);
 		}
 	}
@@ -140,7 +142,7 @@ public class Music {
 				throw new SlickException("Only .xm, .mod, .ogg, and .aif/f are currently supported.");
 			}
 		} catch (Exception e) {
-			Log.error(e);
+			LOG.error(e);
 			throw new SlickException("Failed to load sound: "+url);
 		}
 	}
@@ -172,7 +174,7 @@ public class Music {
 				throw new SlickException("Only .xm, .mod, .ogg, and .aif/f are currently supported.");
 			}
 		} catch (Exception e) {
-			Log.error(e);
+			LOG.error(e);
 			throw new SlickException("Failed to load sound: "+ref);
 		}
 	}

@@ -18,6 +18,7 @@ import org.newdawn.slick.util.Log;
  * @author kappaOne
  */
 public class FileMuffin implements Muffin {
+	private static final Log LOG = new Log(FileMuffin.class);
 
 	/**
 	 * @see org.newdawn.slick.muffin.Muffin#saveFile(java.util.HashMap,
@@ -64,7 +65,7 @@ public class FileMuffin implements Muffin {
 			} catch (EOFException e) {
 				// End of the file reached, do nothing
 			} catch (ClassNotFoundException e) {
-				Log.error(e);
+				LOG.error(e);
 				throw new IOException("Failed to pull state from store - class not found");
 			}
 		}

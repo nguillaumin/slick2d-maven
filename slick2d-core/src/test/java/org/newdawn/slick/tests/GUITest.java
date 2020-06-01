@@ -14,6 +14,8 @@ import org.newdawn.slick.util.Log;
  * @author kevin
  */
 public class GUITest extends BasicGame implements ComponentListener {
+	private static final Log LOG = new Log(GUITest.class);
+
 	/** The image being rendered */
 	private Image image;
 	/** The areas defined */
@@ -114,7 +116,7 @@ public class GUITest extends BasicGame implements ComponentListener {
 				try {
 					app.setDisplayMode(640,480, DisplayMode.Opt.WINDOWED);
 				} catch (SlickException e) {
-					Log.error(e);
+					LOG.error(e);
 				}
 			}
 		}

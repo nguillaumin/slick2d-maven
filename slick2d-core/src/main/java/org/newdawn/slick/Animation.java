@@ -12,6 +12,8 @@ import org.newdawn.slick.util.Log;
  * @author tyler
  */
 public class Animation implements Renderable {
+	private static final Log LOG = new Log(Animation.class);
+
 	/** The list of frames to render in this animation */
 	private ArrayList frames = new ArrayList();
 	/** The frame currently being displayed */
@@ -184,7 +186,7 @@ public class Animation implements Renderable {
 	 */
 	public void addFrame(int duration, int x, int y){
 	   if (duration == 0) {
-	      Log.error("Invalid duration: "+duration);
+	      LOG.error("Invalid duration: "+duration);
 	      throw new RuntimeException("Invalid duration: "+duration);
 	   }
 	 
@@ -297,7 +299,7 @@ public class Animation implements Renderable {
 	 */
 	public void addFrame(Image frame, int duration) {
 		if (duration == 0) {
-			Log.error("Invalid duration: "+duration);
+			LOG.error("Invalid duration: "+duration);
 			throw new RuntimeException("Invalid duration: "+duration);
 		}
 

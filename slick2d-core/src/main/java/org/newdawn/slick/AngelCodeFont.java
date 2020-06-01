@@ -33,6 +33,8 @@ import org.newdawn.slick.util.ResourceLoader;
  * @author Nathan Sweet <misc@n4te.com>
  */
 public class AngelCodeFont implements Font {
+	private static final Log LOG = new Log(AngelCodeFont.class);
+
 	/** The renderer to use for all GL operations */
 	private static SGL GL = Renderer.get();
 
@@ -268,7 +270,7 @@ public class AngelCodeFont implements Font {
 				chars[first].kerning = valueArray;
 			}
 		} catch (IOException e) {
-			Log.error(e);
+			LOG.error(e);
 			throw new SlickException("Failed to parse font file: " + fntFile);
 		}
 	}

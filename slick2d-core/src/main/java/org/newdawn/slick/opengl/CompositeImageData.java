@@ -15,6 +15,8 @@ import org.newdawn.slick.util.Log;
  * @author kevin
  */
 public class CompositeImageData implements LoadableImageData  {
+	private static final Log LOG = new Log(CompositeImageData.class);
+
 	/** The list of images sources in order of preference to try loading the data with */
 	private ArrayList sources = new ArrayList();
 	/** The data source that worked and was used - or null if no luck */
@@ -63,7 +65,7 @@ public class CompositeImageData implements LoadableImageData  {
 				picked = data;
 				break;
 			} catch (Exception e) {
-				Log.warn(sources.get(i).getClass()+" failed to read the data", e);
+				LOG.warn(sources.get(i).getClass()+" failed to read the data", e);
 				exception.addException(e);
 			}
 		}

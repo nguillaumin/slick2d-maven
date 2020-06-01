@@ -14,6 +14,8 @@ import org.newdawn.slick.util.Log;
  * @author kevin
  */
 public class TestBox extends BasicGame {
+	private static final Log LOG = new Log(TestBox.class);
+
 	/** The games that have been added */
 	private ArrayList games = new ArrayList();
 	/** The current game */
@@ -65,7 +67,7 @@ public class TestBox extends BasicGame {
 			currentGame.init(container);
 			currentGame.render(container, container.getGraphics());
 		} catch (Exception e) {
-			Log.error(e);
+			LOG.error(e);
 		}
 		
 		container.setTitle(currentGame.getTitle());

@@ -23,6 +23,8 @@ import org.w3c.dom.NodeList;
  * @author kevin
  */
 public class TileSet {
+	private static final Log LOG = new Log(TileSet.class);
+
 	/** The map this tileset was loaded as part of */
 	private final TiledMap map;
 	/** The index of the tile set */
@@ -82,7 +84,7 @@ public class TileSet {
 				element = docElement; // (Element)
 										// docElement.getElementsByTagName("tileset").item(0);
 			} catch (Exception e) {
-				Log.error(e);
+				LOG.error(e);
 				throw new SlickException(
 						"Unable to load or parse sourced tileset: "
 								+ this.map.tilesLocation + "/" + source);

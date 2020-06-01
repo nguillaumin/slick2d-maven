@@ -31,6 +31,8 @@ import org.xml.sax.SAXException;
  * @author Loads of others!
  */
 public class TiledMap {
+	private static final Log LOG = new Log(TiledMap.class);
+
 	/** Indicates if we're running on a headless system */
 	private static boolean headless;
 
@@ -691,7 +693,7 @@ public class TiledMap {
 				objectGroups.add(objectGroup);
 			}
 		} catch (Exception e) {
-			Log.error(e);
+			LOG.error(e);
 			throw new SlickException("Failed to parse tilemap", e);
 		}
 	}

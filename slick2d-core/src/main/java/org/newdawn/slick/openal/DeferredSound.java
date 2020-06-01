@@ -14,6 +14,8 @@ import org.newdawn.slick.util.Log;
  * @author kevin
  */
 public class DeferredSound extends AudioImpl implements DeferredResource {
+	private static final Log LOG = new Log(DeferredSound.class);
+
 	/** Indicate a OGG to be loaded */
 	public static final int OGG = 1;
 	/** Indicate a WAV to be loaded */
@@ -81,7 +83,7 @@ public class DeferredSound extends AudioImpl implements DeferredResource {
 				target = SoundStore.get().getAIF(in);
 				break;
 			default:
-				Log.error("Unrecognised sound type: "+type);
+				LOG.error("Unrecognised sound type: "+type);
 				break;
 			}
 		} else {
@@ -99,7 +101,7 @@ public class DeferredSound extends AudioImpl implements DeferredResource {
 				target = SoundStore.get().getAIF(ref);
 				break;
 			default:
-				Log.error("Unrecognised sound type: "+type);
+				LOG.error("Unrecognised sound type: "+type);
 				break;
 			}
 		}

@@ -22,6 +22,9 @@ import static org.lwjgl.opengl.GL.getCapabilities;
  * @author tyler
  */
 public class FBOGraphics extends Graphics {
+
+	private static final Log LOG = new Log(FBOGraphics.class);
+
 	/** The image we're we're sort of rendering to */
 	private Image image;
 	/** The ID of the FBO in use */
@@ -39,7 +42,7 @@ public class FBOGraphics extends Graphics {
 		super(image.getTexture().getTextureWidth(), image.getTexture().getTextureHeight());
 		this.image = image;
 		
-		Log.debug("Creating FBO "+image.getWidth()+"x"+image.getHeight());
+		LOG.debug("Creating FBO "+image.getWidth()+"x"+image.getHeight());
 		
 		boolean FBOEnabled = getCapabilities().GL_EXT_framebuffer_object;
 		if (!FBOEnabled) {
