@@ -148,9 +148,9 @@ public class LightTest extends BasicGame {
 	 */
 	public void update(GameContainer container, int delta) {
 		// toggle the lighting on/off
-		Keyboard.bindKeyPress(Input.KEY_L, () -> lightingOn = !lightingOn);
+		Keyboard.bindKeyPress(Input.KEY_0, () -> lightingOn = !lightingOn);
 		// change light color
-		Keyboard.bindKeyPress(Input.KEY_C, () -> {
+		Keyboard.bindKeyPress(Input.KEY_NUMPAD0, () -> {
 			colouredLights = !colouredLights;
 			updateLightMap();
 		});

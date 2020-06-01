@@ -236,7 +236,7 @@ public class ShapeTest extends BasicGame {
         if(keys[Input.KEY_PRIOR]) {
             circle.setRadius(circle.getRadius() - 1);
         }
-        if(keys[Input.KEY_NEXT]) {
+        if(keys[Input.KEY_RIGHT]) {
             circle.setRadius(circle.getRadius() + 1);
         }
         if(keys[Input.KEY_NUMPAD8]) {
