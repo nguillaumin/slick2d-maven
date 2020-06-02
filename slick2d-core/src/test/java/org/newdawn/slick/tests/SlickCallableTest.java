@@ -35,12 +35,16 @@ public class SlickCallableTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
-		image = new Image("testdata/rocket.png");
-		back = new Image("testdata/sky.jpg");
-		font = new AngelCodeFont("testdata/hiero.fnt","testdata/hiero.png");
-		SpriteSheet sheet = new SpriteSheet("testdata/homeranim.png", 36, 65);
-		homer = new Animation(sheet, 0,0,7,0,true,150,true);
+	public void init(GameContainer container) {
+		try {
+			image = new Image("testdata/rocket.png");
+			back = new Image("testdata/sky.jpg");
+			font = new AngelCodeFont("testdata/hiero.fnt", "testdata/hiero.png");
+			SpriteSheet sheet = new SpriteSheet("testdata/homeranim.png", 36, 65);
+			homer = new Animation(sheet, 0, 0, 7, 0, true, 150, true);
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

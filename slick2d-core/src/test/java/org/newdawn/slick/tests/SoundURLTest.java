@@ -1,7 +1,6 @@
 package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.util.ResourceLoader;
 
@@ -39,14 +38,18 @@ public class SoundURLTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
-		sound = new Sound(ResourceLoader.getResource("testdata/restart.ogg"));
-		charlie = new Sound(ResourceLoader.getResource("testdata/cbrown01.wav"));
-		engine = new Sound(ResourceLoader.getResource("testdata/engine.wav"));
-		//music = musica = new Music("testdata/SMB-X.XM");
-		music = musica = new Music(ResourceLoader.getResource("testdata/restart.ogg"), false);
-		musicb = new Music(ResourceLoader.getResource("testdata/kirby.ogg"), false);
-		burp = new Sound(ResourceLoader.getResource("testdata/burp.aif"));
+	public void init(GameContainer container) {
+		try {
+			sound = new Sound(ResourceLoader.getResource("testdata/restart.ogg"));
+			charlie = new Sound(ResourceLoader.getResource("testdata/cbrown01.wav"));
+			engine = new Sound(ResourceLoader.getResource("testdata/engine.wav"));
+			//music = musica = new Music("testdata/SMB-X.XM");
+			music = musica = new Music(ResourceLoader.getResource("testdata/restart.ogg"), false);
+			musicb = new Music(ResourceLoader.getResource("testdata/kirby.ogg"), false);
+			burp = new Sound(ResourceLoader.getResource("testdata/burp.aif"));
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

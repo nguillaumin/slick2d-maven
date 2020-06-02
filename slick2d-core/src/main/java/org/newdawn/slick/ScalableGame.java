@@ -62,7 +62,7 @@ public class ScalableGame implements Game {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		this.container = container;
 		
 		recalculateScale();
@@ -71,31 +71,29 @@ public class ScalableGame implements Game {
 	
 	/**
 	 * Recalculate the scale of the game
-	 * 
-	 * @throws SlickException Indicates a failure to reinit the game
 	 */
-	public void recalculateScale() throws SlickException {
+	public void recalculateScale() {
 		targetWidth = container.getWidth();
 		targetHeight = container.getHeight();
 		
 		if (maintainAspect) {
-			boolean normalIsWide = (normalWidth / normalHeight > 1.6 ? true : false);
-			boolean containerIsWide = ((float) targetWidth / (float) targetHeight > 1.6 ? true : false);
+			boolean normalIsWide = (normalWidth / normalHeight > 1.6);
+			boolean containerIsWide = ((float) targetWidth / (float) targetHeight > 1.6);
 			float wScale = targetWidth / normalWidth;
 			float hScale = targetHeight / normalHeight;
 
 			if (normalIsWide & containerIsWide) {
-				float scale = (wScale < hScale ? wScale : hScale);
+				float scale = (Math.min(wScale, hScale));
 				targetWidth = (int) (normalWidth * scale);
 				targetHeight = (int) (normalHeight * scale);
 			} else if (normalIsWide & !containerIsWide) {
 				targetWidth = (int) (normalWidth * wScale);
 				targetHeight = (int) (normalHeight * wScale);
-			} else if (!normalIsWide & containerIsWide) {
+			} else if (containerIsWide) {
 				targetWidth = (int) (normalWidth * hScale);
 				targetHeight = (int) (normalHeight * hScale);
 			} else {
-				float scale = (wScale < hScale ? wScale : hScale);
+				float scale = (Math.min(wScale, hScale));
 				targetWidth = (int) (normalWidth * scale);
 				targetHeight = (int) (normalHeight * scale);
 			}

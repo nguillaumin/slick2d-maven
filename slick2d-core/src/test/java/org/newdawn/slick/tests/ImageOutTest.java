@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.imageout.ImageOut;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.particles.ParticleIO;
 import org.newdawn.slick.particles.ParticleSystem;
@@ -37,16 +36,20 @@ public class ImageOutTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		this.container = container;
 		
 		try {
 			fire = ParticleIO.loadConfiguredSystem("testdata/system.xml");
 		} catch (IOException e) {
-			throw new SlickException("Failed to load particle systems", e);
+			throw new RuntimeException("Failed to load particle systems", e);
 		}
-		
-		copy = new Image(400,300);
+
+		try {
+			copy = new Image(400, 300);
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 		String[] formats = ImageOut.getSupportedFormats();
 		message = "Formats supported: ";
 		for (int i=0;i<formats.length;i++) {

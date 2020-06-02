@@ -1,8 +1,8 @@
 package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
+import org.newdawn.slick.util.Log;
 
 /**
  * A test for basic animation rendering
@@ -10,6 +10,8 @@ import org.newdawn.slick.input.sources.keymaps.USKeyboard;
  * @author kevin
  */
 public class AnimationTest extends BasicGame {
+	private static final Log LOG = new Log(Animation.class);
+
 	/** The animation loaded */
 	private Animation animation;
 	/** The limited animation loaded */
@@ -33,26 +35,31 @@ public class AnimationTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		this.container = container;
-		
-		SpriteSheet sheet = new SpriteSheet("testdata/homeranim.png", 36, 65);
-		animation = new Animation();
-		for (int i=0;i<8;i++) {
-			animation.addFrame(sheet.getSprite(i,0), 150);
+
+		try {
+			SpriteSheet sheet = new SpriteSheet("testdata/homeranim.png", 36, 65);
+			animation = new Animation();
+			for (int i=0;i<8;i++) {
+				animation.addFrame(sheet.getSprite(i,0), 150);
+			}
+			limited = new Animation();
+			for (int i=0;i<8;i++) {
+				limited.addFrame(sheet.getSprite(i,0), 150);
+			}
+			limited.stopAt(7);
+			manual = new Animation(false);
+			for (int i=0;i<8;i++) {
+				manual.addFrame(sheet.getSprite(i,0), 150);
+			}
+			pingPong = new Animation(sheet, 0,0,7,0,true,150,true);
+			pingPong.setPingPong(true);
+			container.getGraphics().setBackground(new Color(0.4f,0.6f,0.6f));
+		} catch (SlickException e) {
+			LOG.error("Caught exception: {}", e);
+			System.exit(-1);
 		}
-		limited = new Animation();
-		for (int i=0;i<8;i++) {
-			limited.addFrame(sheet.getSprite(i,0), 150);
-		}
-		limited.stopAt(7);
-		manual = new Animation(false);
-		for (int i=0;i<8;i++) {
-			manual.addFrame(sheet.getSprite(i,0), 150);
-		}
-		pingPong = new Animation(sheet, 0,0,7,0,true,150,true);
-		pingPong.setPingPong(true);
-		container.getGraphics().setBackground(new Color(0.4f,0.6f,0.6f));
 	}
 
 	/**

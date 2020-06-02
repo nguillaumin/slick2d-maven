@@ -1,7 +1,6 @@
 package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 /**
@@ -29,9 +28,13 @@ public class MusicListenerTest extends BasicGame implements MusicListener {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
+		try {
 		music = new Music("testdata/restart.ogg", false);
 		stream = new Music("testdata/restart.ogg", false);
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 		
 		music.addListener(this);
 		stream.addListener(this);

@@ -2,7 +2,6 @@ package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Polygon;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.util.FastTrig;
 
@@ -33,15 +32,20 @@ public class GraphicsTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		this.container = container;
-		
-		image = new Image("testdata/logo.tga", true);
-		
-		Image temp = new Image("testdata/palette_tool.png");
-		container.setMouseCursor(temp, 0, 0);
-		
-		container.setIcons(new String[] {"testdata/icon.tga"});
+
+		try {
+			image = new Image("testdata/logo.tga", true);
+
+			Image temp = new Image("testdata/palette_tool.png");
+			container.setMouseCursor(temp, 0, 0);
+
+			container.setIcons(new String[]{"testdata/icon.tga"});
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
+
 		container.setTargetFrameRate(100);
 		
 		poly = new Polygon();

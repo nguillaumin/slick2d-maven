@@ -2,7 +2,6 @@ package org.newdawn.slick.state.transition;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -13,36 +12,21 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author kevin
  */
 public class EmptyTransition implements Transition {
-
-	/**
-	 * @see org.newdawn.slick.state.transition.Transition#isComplete()
-	 */
 	public boolean isComplete() {
 		return true;
 	}
 
-
-	/**
-	 * @see org.newdawn.slick.state.transition.Transition#postRender(org.newdawn.slick.state.StateBasedGame, org.newdawn.slick.GameContainer, org.newdawn.slick.Graphics)
-	 */
-	public void postRender(StateBasedGame game, GameContainer container, Graphics g) throws SlickException {
+	public void postRender(StateBasedGame game, GameContainer container, Graphics g) {
 		// no op
 	}
 
-	/**
-	 * @see org.newdawn.slick.state.transition.Transition#preRender(org.newdawn.slick.state.StateBasedGame, org.newdawn.slick.GameContainer, org.newdawn.slick.Graphics)
-	 */
-	public void preRender(StateBasedGame game, GameContainer container, Graphics g) throws SlickException {
+	public void preRender(StateBasedGame game, GameContainer container, Graphics g) {
 		// no op
 	}
 
-	/**
-	 * @see org.newdawn.slick.state.transition.Transition#update(org.newdawn.slick.state.StateBasedGame, org.newdawn.slick.GameContainer, int)
-	 */
-	public void update(StateBasedGame game, GameContainer container, int delta) throws SlickException {
+	public void update(StateBasedGame game, GameContainer container, int delta) {
 		// no op
 	}
-
 
 	public void init(GameState firstState, GameState secondState) {
 		// TODO Auto-generated method stub

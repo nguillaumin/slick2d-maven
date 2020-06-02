@@ -1,7 +1,6 @@
 package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.util.Log;
 
@@ -28,9 +27,13 @@ public class SpriteSheetFontTest extends BasicGame {
    /**
     * @see org.newdawn.slick.Game#init(org.newdawn.slick.GameContainer)
     */
-   public void init(GameContainer container) throws SlickException {
-      SpriteSheet sheet = new SpriteSheet("testdata/spriteSheetFont.png", 32, 32);
-      font = new SpriteSheetFont(sheet, ' ');
+   public void init(GameContainer container) {
+      try {
+         SpriteSheet sheet = new SpriteSheet("testdata/spriteSheetFont.png", 32, 32);
+         font = new SpriteSheetFont(sheet, ' ');
+      } catch (SlickException e) {
+         throw new RuntimeException(e);
+      }
    }
 
    /**

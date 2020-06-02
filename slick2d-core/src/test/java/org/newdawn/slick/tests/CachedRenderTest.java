@@ -1,7 +1,6 @@
 package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 /**
@@ -28,7 +27,7 @@ public class CachedRenderTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(final GameContainer container) throws SlickException {
+	public void init(final GameContainer container) {
 		operations = new Runnable() {
 			public void run() {
 				for (int i=0;i<100;i++) {

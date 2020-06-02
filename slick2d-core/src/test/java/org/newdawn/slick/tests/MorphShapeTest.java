@@ -33,7 +33,7 @@ public class MorphShapeTest extends BasicGame {
 	/**
 	 * @see BasicGame#init(GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		a = new Rectangle(100,100,50,200);
 		a = a.transform(Transform.createRotateTransform(0.1f,100,100));
 		b = new Rectangle(200,100,50,200);

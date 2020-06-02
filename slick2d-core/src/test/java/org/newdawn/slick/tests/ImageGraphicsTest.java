@@ -39,14 +39,18 @@ public class ImageGraphicsTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
-		testImage = new Image("testdata/logo.png");
-		preloaded = new Image("testdata/logo.png");
-		testFont = new AngelCodeFont("testdata/hiero.fnt","testdata/hiero.png");
-		target = new Image(400,300);
-		cut = new Image(100,100);
-		gTarget = target.getGraphics();
-		offscreenPreload = preloaded.getGraphics();
+	public void init(GameContainer container) {
+		try {
+			testImage = new Image("testdata/logo.png");
+			preloaded = new Image("testdata/logo.png");
+			testFont = new AngelCodeFont("testdata/hiero.fnt", "testdata/hiero.png");
+			target = new Image(400, 300);
+			cut = new Image(100, 100);
+			gTarget = target.getGraphics();
+			offscreenPreload = preloaded.getGraphics();
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 		
 		offscreenPreload.drawString("Drawing over a loaded image", 5, 15);
 		offscreenPreload.setLineWidth(5);

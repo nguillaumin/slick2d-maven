@@ -48,7 +48,7 @@ public class AppGameContainer extends GameContainer {
 		this(game,640,480, DisplayMode.Opt.WINDOWED);
 	}
 
-	public AppGameContainer(Game game, int width, int height, DisplayMode.Opt displayType) throws SlickException {
+	public AppGameContainer(Game game, int width, int height, DisplayMode.Opt displayType) {
 		super(game);
 
 		// Setup an error callback. The default implementation
@@ -314,21 +314,16 @@ public class AppGameContainer extends GameContainer {
 		}
 	}
 
-	public void reInit() throws SlickException {
+	public void reInit() {
 		InternalTextureLoader.get().clear();
 		SoundStore.get().clear();
 		initSystem();
 		enterOrtho();
 		
-		try {
-			game.init(this);
-		} catch (SlickException e) {
-			LOG.error(e);
-			running = false;
-		}
+		game.init(this);
 	}
 
-	public void start() throws SlickException {
+	public void start() {
 		try {
 			setup();
 			
@@ -345,7 +340,7 @@ public class AppGameContainer extends GameContainer {
 		}
 	}
 	
-	protected void setup() throws SlickException {
+	protected void setup() {
 		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -380,12 +375,7 @@ public class AppGameContainer extends GameContainer {
 //			LOG.info("Controllers not available");
 //		}
 		
-		try {
-			game.init(this);
-		} catch (SlickException e) {
-			LOG.error(e);
-			running = false;
-		}
+		game.init(this);
 	}
 
 	private boolean isVisible() {

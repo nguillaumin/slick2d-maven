@@ -1,7 +1,6 @@
 package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.tiled.TiledMap;
 
@@ -45,8 +44,12 @@ public class TileMapTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
-		map = new TiledMap("testdata/testmap.tmx","testdata");
+	public void init(GameContainer container) {
+		try {
+			map = new TiledMap("testdata/testmap.tmx", "testdata");
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 		// read some properties from map and layer
 		mapName = map.getMapProperty("name", "Unknown map name");
 		monsterDifficulty = map.getLayerProperty(0, "monsters", "easy peasy");

@@ -70,7 +70,7 @@ public class BlobbyTransition implements Transition {
 	/**
 	 * @see org.newdawn.slick.state.transition.Transition#postRender(org.newdawn.slick.state.StateBasedGame, org.newdawn.slick.GameContainer, org.newdawn.slick.Graphics)
 	 */
-	public void postRender(StateBasedGame game, GameContainer container, Graphics g) throws SlickException {
+	public void postRender(StateBasedGame game, GameContainer container, Graphics g) {
 		MaskUtil.resetMask();
 	}
 
@@ -78,7 +78,7 @@ public class BlobbyTransition implements Transition {
 	 * @see org.newdawn.slick.state.transition.Transition#preRender(org.newdawn.slick.state.StateBasedGame, org.newdawn.slick.GameContainer, org.newdawn.slick.Graphics)
 	 */
 	public void preRender(StateBasedGame game, GameContainer container,
-			Graphics g) throws SlickException {
+			Graphics g) {
 		prev.render(container, game, g);
 		
 		MaskUtil.defineMask();
@@ -99,8 +99,7 @@ public class BlobbyTransition implements Transition {
 	/**
 	 * @see org.newdawn.slick.state.transition.Transition#update(org.newdawn.slick.state.StateBasedGame, org.newdawn.slick.GameContainer, int)
 	 */
-	public void update(StateBasedGame game, GameContainer container, int delta)
-			throws SlickException {
+	public void update(StateBasedGame game, GameContainer container, int delta) {
 		if (blobs.size() == 0) {
 			for (int i=0;i<blobCount;i++) {
 				blobs.add(new Blob(container));

@@ -3,7 +3,6 @@ package org.newdawn.slick.tests;
 import java.io.IOException;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.particles.ConfigurableEmitter;
 import org.newdawn.slick.particles.ParticleIO;
@@ -35,7 +34,7 @@ public class DuplicateEmitterTest extends BasicGame {
 	 * and place them nicely on the screen
 	 * @param container The surrounding game container
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		this.container = container;
 		
 		try {
@@ -59,8 +58,8 @@ public class DuplicateEmitterTest extends BasicGame {
 				// and add it to the original particle system to get the new emitter updated and rendered
 				explosionSystem.addEmitter(newOne);
 			}
-		} catch (IOException e) {
-			throw new SlickException("Failed to load particle systems", e);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 

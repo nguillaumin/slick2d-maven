@@ -3,7 +3,6 @@ package org.newdawn.slick.tests;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Path;
 import org.newdawn.slick.geom.Polygon;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.opengl.renderer.Renderer;
 
@@ -32,7 +31,7 @@ public class LineRenderTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		polygon.addPoint(100,100);
 		polygon.addPoint(200,80);
 		polygon.addPoint(320,150);

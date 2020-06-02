@@ -20,7 +20,7 @@ public interface Transition {
 	 * @param delta The amount of time passed since last update
 	 * @throws SlickException Indicates a failure occured during the update 
 	 */
-	public void update(StateBasedGame game, GameContainer container, int delta) throws SlickException;
+	public void update(StateBasedGame game, GameContainer container, int delta);
 
 	/**
 	 * Render the transition before the existing state rendering
@@ -30,7 +30,7 @@ public interface Transition {
 	 * @param g The graphics context to use when rendering the transiton
 	 * @throws SlickException Indicates a failure occured during the render 
 	 */
-	public void preRender(StateBasedGame game, GameContainer container, Graphics g) throws SlickException;
+	public void preRender(StateBasedGame game, GameContainer container, Graphics g);
 	
 	/**
 	 * Render the transition over the existing state rendering
@@ -40,7 +40,7 @@ public interface Transition {
 	 * @param g The graphics context to use when rendering the transiton
 	 * @throws SlickException Indicates a failure occured during the render 
 	 */
-	public void postRender(StateBasedGame game, GameContainer container, Graphics g) throws SlickException;
+	public void postRender(StateBasedGame game, GameContainer container, Graphics g);
 	
 	/**
 	 * Check if this transtion has been completed

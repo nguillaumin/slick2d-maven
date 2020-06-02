@@ -1,7 +1,6 @@
 package org.newdawn.slick.tests;
 	
 import org.newdawn.slick.*;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.util.Log;
 
@@ -30,10 +29,14 @@ public class FontTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.Game#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
-		font = new AngelCodeFont("testdata/demo2.fnt","testdata/demo2_00.tga");
-		font2 = new AngelCodeFont("testdata/hiero.fnt","testdata/hiero.png");
-		image = new Image("testdata/demo2_00.tga", false);
+	public void init(GameContainer container) {
+		try {
+			font = new AngelCodeFont("testdata/demo2.fnt", "testdata/demo2_00.tga");
+			font2 = new AngelCodeFont("testdata/hiero.fnt", "testdata/hiero.png");
+			image = new Image("testdata/demo2_00.tga", false);
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

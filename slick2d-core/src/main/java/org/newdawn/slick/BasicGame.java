@@ -58,7 +58,7 @@ public abstract class BasicGame implements Game, InputListener {
 	/**
 	 * @see org.newdawn.slick.Game#init(org.newdawn.slick.GameContainer)
 	 */
-	public abstract void init(GameContainer container) throws SlickException;
+	public abstract void init(GameContainer container);
 
 	/**
 	 * @see org.newdawn.slick.InputListener#keyPressed(int, char)

@@ -3,7 +3,6 @@ package org.newdawn.slick.tests;
 import java.util.ArrayList;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 /**
@@ -32,8 +31,12 @@ public class FontPerformanceTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.Game#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
-		font = new AngelCodeFont("testdata/perffont.fnt","testdata/perffont.png");
+	public void init(GameContainer container) {
+		try {
+			font = new AngelCodeFont("testdata/perffont.fnt", "testdata/perffont.png");
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 		
 		for (int j=0;j<2;j++) {
 			int lineLen = 90;

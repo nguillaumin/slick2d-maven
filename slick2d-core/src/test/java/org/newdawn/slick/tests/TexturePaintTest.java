@@ -33,13 +33,17 @@ public class TexturePaintTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		poly.addPoint(120, 120);
 		poly.addPoint(420, 100);
 		poly.addPoint(620, 420);
 		poly.addPoint(300, 320);
-	
-		image = new Image("testdata/rocks.png");
+
+		try {
+			image = new Image("testdata/rocks.png");
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 		
 		texPaint = new TexCoordGenerator() {
 			public Vector2f getCoordFor(float x, float y) {

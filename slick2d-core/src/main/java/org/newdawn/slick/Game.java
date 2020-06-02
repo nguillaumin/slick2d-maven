@@ -15,9 +15,8 @@ public interface Game {
 	 * before the game loop starts
 	 * 
 	 * @param container The container holding the game
-	 * @throws SlickException Throw to indicate an internal error
 	 */
-	public void init(GameContainer container) throws SlickException;
+	public void init(GameContainer container);
 	
 	/**
 	 * Update the game logic here. No rendering should take place in this method

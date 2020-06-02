@@ -31,12 +31,16 @@ public class MorphSVGTest extends BasicGame {
 	/**
 	 * @see BasicGame#init(GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
-		base = InkscapeLoader.load("testdata/svg/walk1.svg");
-		morph = new SVGMorph(base);
-		morph.addStep(InkscapeLoader.load("testdata/svg/walk2.svg"));
-		morph.addStep(InkscapeLoader.load("testdata/svg/walk3.svg"));
-		morph.addStep(InkscapeLoader.load("testdata/svg/walk4.svg"));
+	public void init(GameContainer container) {
+		try {
+			base = InkscapeLoader.load("testdata/svg/walk1.svg");
+			morph = new SVGMorph(base);
+			morph.addStep(InkscapeLoader.load("testdata/svg/walk2.svg"));
+			morph.addStep(InkscapeLoader.load("testdata/svg/walk3.svg"));
+			morph.addStep(InkscapeLoader.load("testdata/svg/walk4.svg"));
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

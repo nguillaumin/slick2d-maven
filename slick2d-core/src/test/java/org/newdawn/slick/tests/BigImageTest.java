@@ -1,8 +1,8 @@
 package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
+import org.newdawn.slick.util.Log;
 
 /**
  * A test for basic image rendering
@@ -10,6 +10,8 @@ import org.newdawn.slick.input.sources.keymaps.USKeyboard;
  * @author kevin
  */
 public class BigImageTest extends BasicGame {
+	private static final Log LOG = new Log(BigImageTest.class);
+
 	/** The original 1024x768 image loaded */
 	private Image original;
 	/** The image scaled */
@@ -41,13 +43,19 @@ public class BigImageTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		// force a 256 pixel limit for testing
-		original = image = new BigImage("testdata/bigimage.tga", Image.FILTER_NEAREST, 512);
-		sub = image.getSubImage(210,210,200,130);
-		scaledSub = sub.getScaledCopy(2);
-		image = image.getScaledCopy(0.3f);
-		imageX = image.getFlippedCopy(true, false);
+		try {
+			original = image = new BigImage("testdata/bigimage.tga", Image.FILTER_NEAREST, 512);
+			sub = image.getSubImage(210, 210, 200, 130);
+			scaledSub = sub.getScaledCopy(2);
+			image = image.getScaledCopy(0.3f);
+			imageX = image.getFlippedCopy(true, false);
+		} catch (SlickException e) {
+			LOG.error("Caught exception: {}", e);
+			System.exit(-1);
+		}
+
 		imageY = imageX.getFlippedCopy(true, true);
 		
 		bigSheet = new SpriteSheet(original, 16, 16);

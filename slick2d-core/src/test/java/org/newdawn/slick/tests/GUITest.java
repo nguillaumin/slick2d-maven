@@ -5,7 +5,6 @@ import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.gui.TextField;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.util.Log;
 
@@ -46,13 +45,18 @@ public class GUITest extends BasicGame implements ComponentListener {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
-		if (container instanceof AppGameContainer) {
-			app = (AppGameContainer) container;
-			app.setIcon("testdata/icon.tga");
+	public void init(GameContainer container) {
+		try {
+			if (container instanceof AppGameContainer) {
+				app = (AppGameContainer) container;
+				app.setIcon("testdata/icon.tga");
+			}
+
+			font = new AngelCodeFont("testdata/demo2.fnt", "testdata/demo2_00.tga");
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
 		}
-		
-		font = new AngelCodeFont("testdata/demo2.fnt","testdata/demo2_00.tga");
+
 		field = new TextField(container, font, 150,20,500,35, new ComponentListener() {
 			public void componentActivated(AbstractComponent source) {
 				message = "Entered1: "+field.getText();
@@ -68,10 +72,14 @@ public class GUITest extends BasicGame implements ComponentListener {
 		field2.setBorderColor(Color.red);
 		
 		this.container = container;
-		
-		image = new Image("testdata/logo.tga");
-		background = new Image("testdata/dungeontiles.gif");
-		container.setMouseCursor("testdata/cursor.tga", 0, 0);
+
+		try {
+			image = new Image("testdata/logo.tga");
+			background = new Image("testdata/dungeontiles.gif");
+			container.setMouseCursor("testdata/cursor.tga", 0, 0);
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 		
 		for (int i=0;i<4;i++) {
 			areas[i] = new MouseOverArea(container, image, 300, 100 + (i*100), 200, 90, this);

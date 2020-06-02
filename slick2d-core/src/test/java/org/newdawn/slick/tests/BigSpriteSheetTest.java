@@ -1,8 +1,8 @@
 package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
+import org.newdawn.slick.util.Log;
 
 /**
  * A test for big images used as sprites sheets
@@ -10,6 +10,8 @@ import org.newdawn.slick.input.sources.keymaps.USKeyboard;
  * @author kevin
  */
 public class BigSpriteSheetTest extends BasicGame {
+	private static final Log LOG = new Log(BigSpriteSheetTest.class);
+
 	/** The original 1024x768 image loaded */
 	private Image original;
 	/** A sprite sheet made from the big image */
@@ -27,8 +29,14 @@ public class BigSpriteSheetTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
-		original = new BigImage("testdata/bigimage.tga", Image.FILTER_NEAREST, 256);
+	public void init(GameContainer container) {
+		try {
+			original = new BigImage("testdata/bigimage.tga", Image.FILTER_NEAREST, 256);
+		} catch (SlickException e) {
+			LOG.error("Caught exception: {}", e);
+			System.exit(-1);
+		}
+
 		bigSheet = new SpriteSheet(original, 16, 16);
 	}
 

@@ -1,7 +1,6 @@
 package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 /**
@@ -39,16 +38,20 @@ public class ImageTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
-		image = tga = new Image("testdata/logo.png");
-        rotImage = new Image("testdata/logo.png");
-        rotImage = rotImage.getScaledCopy(rotImage.getWidth() / 2, rotImage.getHeight() / 2);
-        //rotImage.setCenterOfRotation(0,0);
-        
-		scaleMe = new Image("testdata/logo.tga", true, Image.FILTER_NEAREST);
-		gif = new Image("testdata/logo.gif");
-		gif.destroy();
-		gif = new Image("testdata/logo.gif");
+	public void init(GameContainer container) {
+		try {
+			image = tga = new Image("testdata/logo.png");
+			rotImage = new Image("testdata/logo.png");
+			rotImage = rotImage.getScaledCopy(rotImage.getWidth() / 2, rotImage.getHeight() / 2);
+			//rotImage.setCenterOfRotation(0,0);
+
+			scaleMe = new Image("testdata/logo.tga", true, Image.FILTER_NEAREST);
+			gif = new Image("testdata/logo.gif");
+			gif.destroy();
+			gif = new Image("testdata/logo.gif");
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 		scaled = gif.getScaledCopy(120, 120);
 		subImage = image.getSubImage(200,0,70,260);
 		rot = 0;

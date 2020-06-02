@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
 
+import com.google.common.collect.*;
 import org.lwjgl.glfw.*;
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.sources.controller.Controller;
@@ -64,8 +65,8 @@ public class Input {
 	private static final ArrayList<Controller> controllers = new ArrayList<>();
 	/** Key Pressed bindings */
 	// TODO make this a multimap so I can bind multiple keyPresses
-	public static final Map<Integer, KeyPress> keyPressBindings = new HashMap<>();
-	public static final Set<Integer> pressedKeys = new HashSet<>(KEYBOARD_SIZE);
+	public static final Multimap<Integer, KeyPress> keyPressBindings = ArrayListMultimap.create();
+	public static final Multiset<Integer> pressedKeys = HashMultiset.create(KEYBOARD_SIZE);
 
 	/** The last recorded mouse x position */
 	private int lastMouseX;
@@ -103,8 +104,6 @@ public class Input {
 	private int keyRepeatInitial;
 	/** The interval of key repeat */
 	private int keyRepeatInterval;
-	/** True if the input is currently paused */
-	private boolean paused;
 	/** The scale to apply to screen coordinates */
 	private float scaleX = 1;
 	/** The scale to apply to screen coordinates */
@@ -238,30 +237,33 @@ public class Input {
 		}
 	}
 
-	public interface KeyPress { void doAction(); }
-	public static void bindKeyPress(int boundKey, KeyPress event) {
-		keyPressBindings.put(boundKey, event);
+	public static void bindKeyPress(int boundKey, KeyPress.Action event) {
+		bindKeyPress(boundKey, true, event);
 	}
 
-	public void init() {
-		// bind key input map
+	public static void bindKeyPress(int boundKey, boolean enableRepeatPress, KeyPress.Action event) {
+		keyPressBindings.put(boundKey, KeyPress.of(enableRepeatPress, event));
+	}
+
+	private void bindKeyInput() {
 		GLFW.glfwSetKeyCallback(GAME_WINDOW, (window, key, scancode, action, mods) -> {
-			if (paused) return;
 			if (action == GLFW.GLFW_PRESS) {
-				pressedKeys.add(key);
+				if (keyPressBindings.containsKey(key)) {
+					pressedKeys.add(key);
+				}
 				LOG.trace("pressed key: " + key + " - action: " + action);
 			} else if (action == GLFW.GLFW_REPEAT) {
 				pressedKeys.add(key);
 				LOG.trace("repeated key: " + key + " - action: " + action);
 			} else if (action == GLFW.GLFW_RELEASE) {
-				pressedKeys.remove(key);
+				pressedKeys.setCount(key, 0);
 				LOG.trace("released key: " + key + " - action: " + action);
 			}
 		});
+	}
 
-		// bind mouse movement
+	private void bindMouseMovement() {
 		GLFW.glfwSetCursorPosCallback(GAME_WINDOW, (window, xpos, ypos) -> {
-			if (paused) return;
 			mouseListeners.forEach(mouseListener -> {
 				if (mouseListener.isAcceptingInput()) {
 					if (anyMouseDown()) {
@@ -274,11 +276,11 @@ public class Input {
 			lastMouseX = (int) xpos;
 			lastMouseY = (int) ypos;
 		});
+	}
 
-		// bind mouse input map
+	private void bindMouseInput() {
 		GLFW.glfwSetMouseButtonCallback(GAME_WINDOW, (window, button, action, mods) -> {
 			Map<Integer, Integer> pressedMap = new HashMap<>();
-			if (paused) return;
 			if (action == GLFW.GLFW_PRESS) {
 				mouseListeners.forEach(mouseListener ->  {
 					if (mouseListener.isAcceptingInput()) {
@@ -303,23 +305,16 @@ public class Input {
 		});
 	}
 
-	/**
-	 * Get the character representation of the key identified by the specified code
-	 * 
-	 * @param code The key code of the key to retrieve the name of
-	 * @return The name or character representation of the key requested
-	 */
+	public void init() {
+		bindKeyInput();
+		bindMouseMovement();
+		bindMouseInput();
+	}
+
 	public static String getKeyName(int code) {
 		return GLFW.glfwGetKeyName(GLFW.GLFW_KEY_UNKNOWN, code);
 	}
 	
-	/**
-	 * Check if a particular key has been pressed since this method 
-	 * was last called for the specified key
-	 * 
-	 * @param code The key code of the key to check
-	 * @return True if the key has been pressed
-	 */
 	public boolean isKeyPressed(int code) {
 		if (pressed[code]) {
 			pressed[code] = false;
@@ -329,12 +324,6 @@ public class Input {
 		return false;
 	}
 	
-	/**
-	 * Check if a mouse button has been pressed since last call
-	 * 
-	 * @param button The button to check
-	 * @return True if the button has been pressed since last call
-	 */
 	public boolean isMousePressed(int button) {
 		if (mousePressed[button]) {
 			mousePressed[button] = false;
@@ -510,8 +499,8 @@ public class Input {
 			return false;
 		}
 		
-		return ((Controller) controllers.get(controller)).getYAxisValue() > 0.5f
-			   || ((Controller) controllers.get(controller)).getPovY() > 0.5f;
+		return controllers.get(controller).getYAxisValue() > 0.5f
+			   || controllers.get(controller).getPovY() > 0.5f;
 	       
 	}
 
@@ -649,22 +638,29 @@ public class Input {
 		}
 	}
 	
-	/**
-	 * Poll the state of the input
-	 *
-	 */
+	private boolean takeAction(int key, KeyPress press) {
+		int count = pressedKeys.count(key);
+		if (count == 1) {
+			return true;
+		}
+
+		return press.repeatEnabled();
+	}
+
 	public void poll() {
-		if (!AppGameContainer.hasFocus() || paused) {
+		if (!AppGameContainer.hasFocus()) {
 			clearControlPressedRecord();
 			clearKeyPressedRecord();
 			clearMousePressedRecord();
 			pressedKeys.clear();
 		}
 
-		pressedKeys.forEach(pressed -> Optional.ofNullable(keyPressBindings.get(pressed))
-				.orElse(() -> LOG.info("No key found: {}", pressed))
-				.doAction());
-		
+		pressedKeys.elementSet().forEach(key -> Optional.ofNullable(keyPressBindings.get(key))
+				.orElse(Collections.singleton(KeyPress.notFound(key))).stream()
+				.filter(keyPress -> takeAction(key, keyPress))
+				.filter(KeyPress::doAction)
+				.findFirst().ifPresent((ignored) -> pressedKeys.add(key)));
+
 		if (doubleClickTimeout != 0) {
 			if (System.currentTimeMillis() > doubleClickTimeout) {
 				doubleClickTimeout = 0;
@@ -850,10 +846,7 @@ public class Input {
 			}
 		}
 
-		
-		Iterator all = allListeners.iterator();
-		while (all.hasNext()) {
-			ControlledInputReciever listener = (ControlledInputReciever) all.next();
+		for (ControlledInputReciever listener : allListeners) {
 			listener.inputEnded();
 		}
 		
@@ -956,34 +949,7 @@ public class Input {
 
 		throw new RuntimeException("Unknown control index");
 	}
-	
-	/**
-	 * Pauses the polling and sending of input events.
-	 */
-	public void pause() {
-		paused = true;
 
-		// Reset all polling arrays
-		clearKeyPressedRecord();
-		clearMousePressedRecord();
-		clearControlPressedRecord();
-	}
-
-	/**
-	 * Resumes the polling and sending of input events.
-	 */
-	public void resume() {
-		paused = false;
-	}
-	
-	/**
-	 * Notify listeners that the mouse button has been clicked
-	 * 
-	 * @param button The button that has been clicked 
-	 * @param x The location at which the button was clicked
-	 * @param y The location at which the button was clicked
-	 * @param clickCount The number of times the button was clicked (single or double click)
-	 */
 	private void fireMouseClicked(int button, int x, int y, int clickCount) {
 		consumed = false;
 		for (int i=0;i<mouseListeners.size();i++) {

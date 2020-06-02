@@ -38,44 +38,44 @@ public class CombinedTransition implements Transition {
 	 * @see org.newdawn.slick.state.transition.Transition#isComplete()
 	 */
 	public boolean isComplete() {
-        for (int i=0;i<transitions.size();i++) {
-            if (!((Transition) transitions.get(i)).isComplete()) {
-            	return false;
-            }
-        }
-        
-        return true;
+		for (Object transition : transitions) {
+			if (!((Transition) transition).isComplete()) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
 	 * @see org.newdawn.slick.state.transition.Transition#postRender(org.newdawn.slick.state.StateBasedGame, org.newdawn.slick.GameContainer, org.newdawn.slick.Graphics)
 	 */
-	public void postRender(StateBasedGame game, GameContainer container, Graphics g) throws SlickException {
+	public void postRender(StateBasedGame game, GameContainer container, Graphics g) {
         for (int i=transitions.size()-1;i>=0;i--) {
-            ((Transition) transitions.get(i)).postRender(game, container, g);
+        	((Transition) transitions.get(i)).postRender(game, container, g);
         }
 	}
 
 	/**
 	 * @see org.newdawn.slick.state.transition.Transition#preRender(org.newdawn.slick.state.StateBasedGame, org.newdawn.slick.GameContainer, org.newdawn.slick.Graphics)
 	 */
-	public void preRender(StateBasedGame game, GameContainer container, Graphics g) throws SlickException {
-        for (int i=0;i<transitions.size();i++) {
-            ((Transition) transitions.get(i)).postRender(game, container, g);
-        }
+	public void preRender(StateBasedGame game, GameContainer container, Graphics g) {
+		for (Object transition : transitions) {
+			((Transition) transition).postRender(game, container, g);
+		}
 	}
 
 	/**
 	 * @see org.newdawn.slick.state.transition.Transition#update(org.newdawn.slick.state.StateBasedGame, org.newdawn.slick.GameContainer, int)
 	 */
-	public void update(StateBasedGame game, GameContainer container, int delta) throws SlickException {
-        for (int i=0;i<transitions.size();i++) {
-        	Transition t = (Transition) transitions.get(i);
-        	
-        	if (!t.isComplete()) {
-        		t.update(game, container, delta);
-        	}
-        }
+	public void update(StateBasedGame game, GameContainer container, int delta) {
+		for (Object transition : transitions) {
+			Transition t = (Transition) transition;
+
+			if (!t.isComplete()) {
+				t.update(game, container, delta);
+			}
+		}
 	}
 
 	public void init(GameState firstState, GameState secondState) {

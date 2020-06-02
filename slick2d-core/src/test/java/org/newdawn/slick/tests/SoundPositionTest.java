@@ -1,7 +1,6 @@
 package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.openal.SoundStore;
 
@@ -29,12 +28,16 @@ public class SoundPositionTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		SoundStore.get().setMaxSources(32);
 		
 		myContainer = container;
-		music = new Music("testdata/kirby.ogg", true);
-		music.play();
+		try {
+			music = new Music("testdata/kirby.ogg", true);
+			music.play();
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

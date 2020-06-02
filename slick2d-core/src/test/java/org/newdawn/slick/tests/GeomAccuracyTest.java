@@ -4,8 +4,8 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Ellipse;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.RoundedRectangle;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
+import org.newdawn.slick.util.Log;
 
 /**
  * A simple graphics test for the context allowing vector based graphics
@@ -13,6 +13,8 @@ import org.newdawn.slick.input.sources.keymaps.USKeyboard;
  * @author kevin
  */
 public class GeomAccuracyTest extends BasicGame {
+	private static final Log LOG = new Log(GeomAccuracyTest.class);
+
 	/** The container holding this test */
 	private GameContainer container;
 	
@@ -47,13 +49,18 @@ public class GeomAccuracyTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		this.container = container;
 		
 		geomColor = Color.magenta;
 		overlayColor = Color.white;
-		
-		magImage = new Image(21, 21);
+
+		try {
+			magImage = new Image(21, 21);
+		} catch (SlickException e) {
+			LOG.debug("Caught exception: {}", e);
+			System.exit(-1);
+		}
 	}
 
 	/**

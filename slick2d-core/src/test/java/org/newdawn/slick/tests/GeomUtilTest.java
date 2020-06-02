@@ -11,7 +11,6 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.geom.Vector2f;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 /**
@@ -94,7 +93,7 @@ public class GeomUtilTest extends BasicGame implements GeomUtilListener {
 	/**
 	 * @see BasicGame#init(GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		util.setListener(this);
 		init();
 	}

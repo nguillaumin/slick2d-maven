@@ -1,7 +1,6 @@
 package org.newdawn.slick.tests;
 	
 import org.newdawn.slick.*;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 /**
@@ -25,9 +24,13 @@ public class PureFontTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.Game#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
-		image = new Image("testdata/sky.jpg");
-		font = new AngelCodeFont("testdata/hiero.fnt","testdata/hiero.png");
+	public void init(GameContainer container) {
+		try {
+			image = new Image("testdata/sky.jpg");
+			font = new AngelCodeFont("testdata/hiero.fnt", "testdata/hiero.png");
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

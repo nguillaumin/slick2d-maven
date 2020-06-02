@@ -23,8 +23,12 @@ public class DistanceFieldTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
-		font = new AngelCodeFont("testdata/distance.fnt", "testdata/distance-dis.png");
+	public void init(GameContainer container) {
+		try {
+			font = new AngelCodeFont("testdata/distance.fnt", "testdata/distance-dis.png");
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 		container.getGraphics().setBackground(Color.black);
 	}
 

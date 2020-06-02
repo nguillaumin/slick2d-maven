@@ -3,7 +3,6 @@ package org.newdawn.slick.tests;
 import java.io.IOException;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.util.Bootstrap;
 import org.newdawn.slick.util.ResourceLoader;
@@ -53,16 +52,16 @@ public class NavMeshTest extends BasicGame implements PathFindingContext {
 
 	/**
 	 * Initialise resources and the map data
-	 * 
-	 * @param container the container the game is running in 
+	 *
+	 * @param container the container the game is running in
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		container.setShowFPS(false);
 
 		try {
 			dataMap = new DataMap("testdata/map.dat");
 		} catch (IOException e) {
-			throw new SlickException("Failed to load map data", e);
+			throw new RuntimeException("Failed to load map data", e);
 		}
 		builder = new NavMeshBuilder();
 		navMesh = builder.build(dataMap);

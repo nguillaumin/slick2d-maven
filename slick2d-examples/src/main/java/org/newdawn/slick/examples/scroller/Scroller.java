@@ -6,8 +6,6 @@ import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.util.Log;
 
-import java.io.File;
-
 /**
  * An example to show scrolling around a tilemap smoothly. This seems to have caused confusion
  * a couple of times so here's "a" way to do it.
@@ -67,40 +65,44 @@ public class Scroller extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		// load the sprites and tiles, note that underneath the texture
 		// will be shared between the sprite sheet and tilemap
-		SpriteSheet sheet = new SpriteSheet("testdata/scroller/sprites.png",32,32);
-		// load the tilemap created the TileD tool
-		map = new TiledMap("testdata/scroller/map.tmx");
+		try {
+			SpriteSheet sheet = new SpriteSheet("testdata/scroller/sprites.png", 32, 32);
+			// load the tilemap created the TileD tool
+			map = new TiledMap("testdata/scroller/map.tmx");
 
-		// build a collision map based on tile properties in the TileD map
-		blocked = new boolean[map.getWidth()][map.getHeight()];
-		for (int x=0;x<map.getWidth();x++) {
-			for (int y=0;y<map.getHeight();y++) {
-				int tileID = map.getTileId(x, y, 0);
-				String value = map.getTileProperty(tileID, "blocked", "false");
-				if ("true".equals(value)) {
-					blocked[x][y] = true;
+			// build a collision map based on tile properties in the TileD map
+			blocked = new boolean[map.getWidth()][map.getHeight()];
+			for (int x = 0; x < map.getWidth(); x++) {
+				for (int y = 0; y < map.getHeight(); y++) {
+					int tileID = map.getTileId(x, y, 0);
+					String value = map.getTileProperty(tileID, "blocked", "false");
+					if ("true".equals(value)) {
+						blocked[x][y] = true;
+					}
 				}
 			}
-		}
 
-		// caculate some layout values for rendering the tilemap. How many tiles
-		// do we need to render to fill the screen in each dimension and how far is
-		// it from the centre of the screen
-		widthInTiles = container.getWidth() / TILE_SIZE;
-		heightInTiles = container.getHeight() / TILE_SIZE;
-		topOffsetInTiles = heightInTiles / 2;
-		leftOffsetInTiles = widthInTiles / 2;
+			// caculate some layout values for rendering the tilemap. How many tiles
+			// do we need to render to fill the screen in each dimension and how far is
+			// it from the centre of the screen
+			widthInTiles = container.getWidth() / TILE_SIZE;
+			heightInTiles = container.getHeight() / TILE_SIZE;
+			topOffsetInTiles = heightInTiles / 2;
+			leftOffsetInTiles = widthInTiles / 2;
 
-		// create the player sprite based on a set of sprites from the sheet loaded
-		// above (tank tracks moving)
-		player = new Animation();
-		for (int frame=0;frame<7;frame++) {
-			player.addFrame(sheet.getSprite(frame,1), 150);
+			// create the player sprite based on a set of sprites from the sheet loaded
+			// above (tank tracks moving)
+			player = new Animation();
+			for (int frame = 0; frame < 7; frame++) {
+				player.addFrame(sheet.getSprite(frame, 1), 150);
+			}
+			player.setAutoUpdate(false);
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
 		}
-		player.setAutoUpdate(false);
 
 		// update the vector of movement based on the initial angle
 		updateMovementVector();
@@ -199,7 +201,7 @@ public class Scroller extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.Game#render(org.newdawn.slick.GameContainer, org.newdawn.slick.Graphics)
 	 */
-	public void render(GameContainer container, Graphics g) throws SlickException {
+	public void render(GameContainer container, Graphics g) {
 		// draw the appropriate section of the tilemap based on the centre (hence the -(TANK_SIZE/2)) of
 		// the player
 		int playerTileX = (int) playerX;
@@ -252,20 +254,7 @@ public class Scroller extends BasicGame {
 	 * @param argv The argument passed on the command line (if any)
 	 */
 	public static void main(String[] argv) {
-		File JGLLib = new File("./natives");
-		System.setProperty("org.lwjgl.librarypath", JGLLib.getAbsolutePath());
-		System.setProperty(
-				"net.java.games.input.librarypath",
-				JGLLib.getAbsolutePath()
-		);
-		try {
-			// create a new container for our example game. This container
-			// just creates a normal native window for rendering OpenGL accelerated
-			// elements to
-			AppGameContainer container = new AppGameContainer(new Scroller(), 800, 600, DisplayMode.Opt.WINDOWED);
-			container.start();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		AppGameContainer container = new AppGameContainer(new Scroller(), 800, 600, DisplayMode.Opt.WINDOWED);
+		container.start();
 	}
 }

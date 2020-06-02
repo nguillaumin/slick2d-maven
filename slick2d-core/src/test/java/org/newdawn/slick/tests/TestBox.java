@@ -3,7 +3,6 @@ package org.newdawn.slick.tests;
 import java.util.ArrayList;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.opengl.SlickCallable;
 import org.newdawn.slick.util.Log;
@@ -77,10 +76,10 @@ public class TestBox extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer c) throws SlickException {
+	public void init(GameContainer c) {
 		if (games.size() == 0) {
 			currentGame = new BasicGame("NULL") {
-				public void init(GameContainer container) throws SlickException {
+				public void init(GameContainer container) {
 				}
 
 				public void update(GameContainer container, int delta) throws SlickException {

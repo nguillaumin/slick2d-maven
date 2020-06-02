@@ -5,13 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.CanvasGameContainer;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.input.Input;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 /**
@@ -45,12 +39,16 @@ public class CanvasContainerTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
-		image = tga = new Image("testdata/logo.tga");
-		scaleMe = new Image("testdata/logo.tga", true, Image.FILTER_NEAREST);
-		gif = new Image("testdata/logo.gif");
-		scaled = gif.getScaledCopy(120, 120);
-		subImage = image.getSubImage(200,0,70,260);
+	public void init(GameContainer container) {
+		try {
+			image = tga = new Image("testdata/logo.tga");
+			scaleMe = new Image("testdata/logo.tga", true, Image.FILTER_NEAREST);
+			gif = new Image("testdata/logo.gif");
+			scaled = gif.getScaledCopy(120, 120);
+			subImage = image.getSubImage(200, 0, 70, 260);
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 		rot = 0;
 	}
 

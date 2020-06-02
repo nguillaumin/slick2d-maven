@@ -148,13 +148,13 @@ public abstract class BasicGameState implements GameState {
 	/**
 	 * @see org.newdawn.slick.state.GameState#enter(org.newdawn.slick.GameContainer, org.newdawn.slick.state.StateBasedGame)
 	 */
-	public void enter(GameContainer container, StateBasedGame game) throws SlickException {
+	public void enter(GameContainer container, StateBasedGame game) {
 	}
 
 	/**
 	 * @see org.newdawn.slick.state.GameState#leave(org.newdawn.slick.GameContainer, org.newdawn.slick.state.StateBasedGame)
 	 */
-	public void leave(GameContainer container, StateBasedGame game) throws SlickException {
+	public void leave(GameContainer container, StateBasedGame game) {
 	}
 
 	/**

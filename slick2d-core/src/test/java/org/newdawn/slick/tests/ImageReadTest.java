@@ -1,6 +1,7 @@
 package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
+import org.newdawn.slick.util.Log;
 
 /**
  * A test for reading image data from a teture
@@ -8,6 +9,8 @@ import org.newdawn.slick.*;
  * @author kevin
  */
 public class ImageReadTest extends BasicGame {
+	private static final Log LOG = new Log(ImageReadTest.class);
+
 	/** The image loaded to be read */
 	private Image image;
 	/** The four pixels read */
@@ -25,12 +28,17 @@ public class ImageReadTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
-		image = new Image("testdata/testcard.png");
-		read[0] = image.getColor(0, 0);
-		read[1] = image.getColor(30, 40);
-		read[2] = image.getColor(55, 70);
-		read[3] = image.getColor(80, 90);
+	public void init(GameContainer container) {
+		try {
+			image = new Image("testdata/testcard.png");
+			read[0] = image.getColor(0, 0);
+			read[1] = image.getColor(30, 40);
+			read[2] = image.getColor(55, 70);
+			read[3] = image.getColor(80, 90);
+		} catch (SlickException e) {
+			LOG.error("Caught exception: {}", image);
+			System.exit(-1);
+		}
 	}
 
 	/**

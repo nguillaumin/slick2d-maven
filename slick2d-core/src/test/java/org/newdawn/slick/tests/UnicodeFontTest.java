@@ -26,11 +26,15 @@ public class UnicodeFontTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		container.setShowFPS(false);
 
 		// unicodeFont = new UnicodeFont(Font.decode("Arial Unicode MS"), 25, false, false);
-		unicodeFont = new UnicodeFont("testdata/Lato-Thin.ttf", 48, false, false);
+		try {
+			unicodeFont = new UnicodeFont("testdata/Lato-Thin.ttf", 48, false, false);
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 //		unicodeFont.setPaddingBottom(10);
 //		unicodeFont.setPaddingRight(10);
 //		unicodeFont.setPaddingAdvanceX(-10);

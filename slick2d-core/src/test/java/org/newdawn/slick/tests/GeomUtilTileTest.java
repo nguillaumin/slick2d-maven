@@ -347,7 +347,7 @@ public class GeomUtilTileTest extends BasicGame implements GeomUtilListener {
 	/**
 	 * @see BasicGame#init(GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		util.setListener(this);
 		init();
 		//container.setVSync(true);

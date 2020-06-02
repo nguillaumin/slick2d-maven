@@ -1,7 +1,6 @@
 package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.particles.ParticleSystem;
 import org.newdawn.slick.particles.effects.FireEmitter;
@@ -27,9 +26,13 @@ public class ParticleTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
-		Image image = new Image("testdata/particle.tga", true);
-		system = new ParticleSystem(image);
+	public void init(GameContainer container) {
+		try {
+			Image image = new Image("testdata/particle.tga", true);
+			system = new ParticleSystem(image);
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 		
 		system.addEmitter(new FireEmitter(400,300,45));
 		system.addEmitter(new FireEmitter(200,300,60));

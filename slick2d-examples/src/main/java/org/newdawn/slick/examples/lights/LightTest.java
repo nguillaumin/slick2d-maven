@@ -60,20 +60,24 @@ public class LightTest extends BasicGame {
 
 	/**
 	 * Initialise our resources for the example
-	 * 
+	 *
 	 * @param container The game container the game is running in
 	 */
-	public void init(GameContainer container) throws SlickException {
-		tiles = new SpriteSheet("testdata/tiles.png", 32,32);
+	public void init(GameContainer container) {
+		try {
+			tiles = new SpriteSheet("testdata/tiles.png", 32, 32);
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 		generateMap();
 		bindControls();
 	}
 
 	private void bindControls() {
 		// toggle the lighting on/off
-		Input.bindKeyPress(USKeyboard.KEY_L, () -> lightingOn = !lightingOn);
+		Input.bindKeyPress(USKeyboard.KEY_L, false, () -> lightingOn = !lightingOn);
 		// change light color
-		Input.bindKeyPress(USKeyboard.KEY_C, () -> {
+		Input.bindKeyPress(USKeyboard.KEY_C, false, () -> {
 			colouredLights = !colouredLights;
 			updateLightMap();
 		});

@@ -47,7 +47,7 @@ public abstract class CrossStateTransition implements Transition {
 	/**
 	 * @see org.newdawn.slick.state.transition.Transition#postRender(org.newdawn.slick.state.StateBasedGame, org.newdawn.slick.GameContainer, org.newdawn.slick.Graphics)
 	 */
-	public void postRender(StateBasedGame game, GameContainer container, Graphics g) throws SlickException {
+	public void postRender(StateBasedGame game, GameContainer container, Graphics g) {
 		preRenderSecondState(game, container, g);
 		secondState.render(container, game, g);
 		postRenderSecondState(game, container, g);
@@ -56,14 +56,14 @@ public abstract class CrossStateTransition implements Transition {
 	/**
 	 * @see org.newdawn.slick.state.transition.Transition#preRender(org.newdawn.slick.state.StateBasedGame, org.newdawn.slick.GameContainer, org.newdawn.slick.Graphics)
 	 */
-	public void preRender(StateBasedGame game, GameContainer container, Graphics g) throws SlickException {
+	public void preRender(StateBasedGame game, GameContainer container, Graphics g) {
 		preRenderFirstState(game, container, g);
 	}
 
 	/**
 	 * @see org.newdawn.slick.state.transition.Transition#update(org.newdawn.slick.state.StateBasedGame, org.newdawn.slick.GameContainer, int)
 	 */
-	public void update(StateBasedGame game, GameContainer container, int delta) throws SlickException {
+	public void update(StateBasedGame game, GameContainer container, int delta) {
 	}
 
 	/**
@@ -75,7 +75,7 @@ public abstract class CrossStateTransition implements Transition {
 	 * @param g The graphic context used to render
 	 * @throws SlickException Indicates a failure to setup the rendering state - throw for anything that goes wrong
 	 */
-	public void preRenderFirstState(StateBasedGame game, GameContainer container, Graphics g) throws SlickException {
+	public void preRenderFirstState(StateBasedGame game, GameContainer container, Graphics g) {
 	}
 	
 	/**
@@ -87,7 +87,7 @@ public abstract class CrossStateTransition implements Transition {
 	 * @param g The graphic context used to render
 	 * @throws SlickException Indicates a failure to setup the rendering state - throw for anything that goes wrong
 	 */
-	public void preRenderSecondState(StateBasedGame game, GameContainer container, Graphics g) throws SlickException {
+	public void preRenderSecondState(StateBasedGame game, GameContainer container, Graphics g) {
 	}
 
 	/**
@@ -99,7 +99,7 @@ public abstract class CrossStateTransition implements Transition {
 	 * @param g The graphic context used to render
 	 * @throws SlickException Indicates a failure to setup the rendering state - throw for anything that goes wrong
 	 */	
-	public void postRenderSecondState(StateBasedGame game, GameContainer container, Graphics g) throws SlickException {
+	public void postRenderSecondState(StateBasedGame game, GameContainer container, Graphics g) {
 	}
 	
 }

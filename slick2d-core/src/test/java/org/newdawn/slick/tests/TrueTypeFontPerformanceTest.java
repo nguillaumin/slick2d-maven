@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.util.ArrayList;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 /**
@@ -36,7 +35,7 @@ public class TrueTypeFontPerformanceTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.Game#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		awtFont = new java.awt.Font("Verdana", Font.PLAIN, 16);
 		font = new TrueTypeFont(awtFont, false);
 

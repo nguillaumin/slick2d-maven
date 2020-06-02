@@ -23,10 +23,14 @@ public class CopyAreaAlphaTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
-		textureMap = new Image("testdata/grass.png");
-		container.getGraphics().setBackground(Color.black);
-		copy = new Image(100,100);
+	public void init(GameContainer container) {
+		try {
+			textureMap = new Image("testdata/grass.png");
+			container.getGraphics().setBackground(Color.black);
+			copy = new Image(100, 100);
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

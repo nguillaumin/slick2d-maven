@@ -2,6 +2,7 @@ package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Polygon;
+import org.newdawn.slick.util.Log;
 
 /**
  * Lame test
@@ -9,6 +10,8 @@ import org.newdawn.slick.geom.Polygon;
  * @author kevin
  */
 public class LameTest extends BasicGame {
+	private static final Log LOG = new Log(LameTest.class);
+
 	/** The poly being drawn */
 	private Polygon poly = new Polygon();
 	/** The image being textured */
@@ -24,13 +27,17 @@ public class LameTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		poly.addPoint(100, 100);
 		poly.addPoint(120, 100);
 		poly.addPoint(120, 120);
 		poly.addPoint(100, 120);
-	
-		image = new Image("testdata/rocks.png");
+
+		try {
+			image = new Image("testdata/rocks.png");
+		} catch (SlickException e) {
+			LOG.error("");
+		}
 	}
 
 	/**

@@ -6,13 +6,13 @@ import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
+import org.newdawn.slick.util.Log;
 
 /**
  * A simple test state to display an image and rotate it
@@ -20,6 +20,8 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
  * @author kevin
  */
 public class TestState2 extends BasicGameState {
+	private static final Log LOG = new Log(TestState2.class);
+
 	/** The ID given to this state */
 	public static final int ID = 2;
 	/** The font to write the message with */
@@ -41,10 +43,15 @@ public class TestState2 extends BasicGameState {
 	/**
 	 * @see org.newdawn.slick.state.BasicGameState#init(org.newdawn.slick.GameContainer, org.newdawn.slick.state.StateBasedGame)
 	 */
-	public void init(GameContainer container, StateBasedGame game) throws SlickException {
+	public void init(GameContainer container, StateBasedGame game) {
 		this.game = game;
-		font = new AngelCodeFont("testdata/demo2.fnt","testdata/demo2_00.tga");
-		image = new Image("testdata/logo.tga");
+
+		try {
+			font = new AngelCodeFont("testdata/demo2.fnt", "testdata/demo2_00.tga");
+			image = new Image("testdata/logo.tga");
+		} catch (SlickException e) {
+			LOG.error("Caught exception: {}", e);
+		}
 	}
 
 	/**

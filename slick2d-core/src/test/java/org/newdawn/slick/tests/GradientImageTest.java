@@ -5,7 +5,6 @@ import org.newdawn.slick.fills.GradientFill;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 /**
@@ -41,11 +40,15 @@ public class GradientImageTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		this.container = container;
-		
-		image1 = new Image("testdata/grass.png");
-		image2 = new Image("testdata/rocks.png");
+
+		try {
+			image1 = new Image("testdata/grass.png");
+			image2 = new Image("testdata/rocks.png");
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 		
 		fill = new GradientFill(-64,0,new Color(1,1,1,1f),64,0,new Color(0,0,0,0));
 		shape = new Rectangle(336,236,128,128);

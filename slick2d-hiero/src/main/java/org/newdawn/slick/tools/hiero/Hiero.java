@@ -209,7 +209,7 @@ public class Hiero extends JFrame {
 		game = new BasicGame("Hiero") {
 			String sampleText;
 
-			public void init (final GameContainer container) throws SlickException {
+			public void init (final GameContainer container) {
 				container.setShowFPS(false);
 				container.setVerbose(false);
 				container.setTargetFrameRate(60);

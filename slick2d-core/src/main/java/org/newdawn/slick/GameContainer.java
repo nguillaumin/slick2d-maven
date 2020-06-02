@@ -195,7 +195,8 @@ public abstract class GameContainer implements GUIContext {
 	public void setAlwaysRender (boolean alwaysRender) {
 		this.alwaysRender = alwaysRender;
 	}
-	
+
+	// TODO is this actually broken?
 	public static int getBuildVersion() {
 		try {
 			Properties props = new Properties();
@@ -206,7 +207,7 @@ public abstract class GameContainer implements GUIContext {
 			
 			return build;
 		} catch (Exception e) {
-			LOG.error("Unable to determine Slick build number ", e);
+			LOG.error("Unable to determine Slick build number");
 			return -1;
 		}
 	}
@@ -487,7 +488,7 @@ public abstract class GameContainer implements GUIContext {
 		lastGame = game;
 	}
 	
-	protected void initSystem() throws SlickException {
+	protected void initSystem() {
 		initGL();
 		setMusicVolume(1.0f);
 		setSoundVolume(1.0f);

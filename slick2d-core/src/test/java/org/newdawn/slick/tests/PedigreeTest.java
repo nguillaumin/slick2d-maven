@@ -1,9 +1,8 @@
 package org.newdawn.slick.tests;
 
-import java.io.IOException;
+import java.rmi.server.ExportException;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.particles.ConfigurableEmitter;
 import org.newdawn.slick.particles.ParticleIO;
@@ -38,18 +37,17 @@ public class PedigreeTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		this.container = container;
 		
 		try {
 			fire = ParticleIO.loadConfiguredSystem("testdata/system.xml");
 			trail = ParticleIO.loadConfiguredSystem("testdata/smoketrail.xml");
-			
-		} catch (IOException e) {
-			throw new SlickException("Failed to load particle systems", e);
+			image = new Image("testdata/rocket.png");
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to load particle systems", e);
 		}
-		image = new Image("testdata/rocket.png");
-	
+
 		spawnRocket();
 	}
 

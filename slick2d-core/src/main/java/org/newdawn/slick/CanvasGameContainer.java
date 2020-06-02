@@ -58,15 +58,9 @@ public class CanvasGameContainer extends Canvas {
 	 */
 	public void start() {
 		SwingUtilities.invokeLater(() -> {
-			try {
-				Input.disableControllers();
-
-				container.setup();
-				scheduleUpdate();
-			} catch (SlickException e) {
-				e.printStackTrace();
-				System.exit(0);
-			}
+			Input.disableControllers();
+			container.setup();
+			scheduleUpdate();
 		});
 	}
 	
@@ -78,12 +72,10 @@ public class CanvasGameContainer extends Canvas {
 			return;
 		}
 		
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				container.gameLoop();
-				container.checkDimensions();
-				scheduleUpdate();
-			}
+		SwingUtilities.invokeLater(() -> {
+			container.gameLoop();
+			container.checkDimensions();
+			scheduleUpdate();
 		});
 	}
 	/**

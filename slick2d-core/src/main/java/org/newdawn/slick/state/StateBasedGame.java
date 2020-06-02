@@ -47,13 +47,13 @@ public abstract class StateBasedGame implements Game, InputListener {
 			public int getID() {
 				return -1;
 			}
-			public void init(GameContainer container, StateBasedGame game) throws SlickException {
+			public void init(GameContainer container, StateBasedGame game) {
 			}
-			public void render(StateBasedGame game, Graphics g) throws SlickException {
+			public void render(StateBasedGame game, Graphics g) {
 			}
-			public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+			public void update(GameContainer container, StateBasedGame game, int delta) {
 			}
-			public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
+			public void render(GameContainer container, StateBasedGame game, Graphics g) {
 			}
 		};
 	}
@@ -61,9 +61,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	/**
 	 * @see org.newdawn.slick.ControlledInputReciever#inputStarted()
 	 */
-	public void inputStarted() {
-		
-	}
+	public void inputStarted() {}
 	
 	/**
 	 * Get the number of states that have been added to this game
@@ -159,7 +157,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public final void init(GameContainer container) throws SlickException {
+	public final void init(GameContainer container) {
 		this.container = container;
 		initStatesList(container);
 		
@@ -180,9 +178,8 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * Initialise the list of states making up this game
 	 * 
 	 * @param container The container holding the game
-	 * @throws SlickException Indicates a failure to initialise the state based game resources
 	 */
-	public abstract void initStatesList(GameContainer container) throws SlickException;
+	public abstract void initStatesList(GameContainer container);
 	
 	/**
 	 * @see org.newdawn.slick.Game#render(org.newdawn.slick.GameContainer, org.newdawn.slick.Graphics)
@@ -213,9 +210,8 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * 
 	 * @param container The container in which the game is hosted
 	 * @param g The graphics context on which to draw
-	 * @throws SlickException Indicates a failure within render
 	 */
-	protected void preRenderState(GameContainer container, Graphics g) throws SlickException {
+	protected void preRenderState(GameContainer container, Graphics g) {
 		// NO-OP
 	}
 	
@@ -225,16 +221,15 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * 
 	 * @param container The container in which the game is hosted
 	 * @param g The graphics context on which to draw
-	 * @throws SlickException Indicates a failure within render
 	 */
-	protected void postRenderState(GameContainer container, Graphics g) throws SlickException {
+	protected void postRenderState(GameContainer container, Graphics g) {
 		// NO-OP
 	}
 	
 	/**
 	 * @see org.newdawn.slick.BasicGame#update(org.newdawn.slick.GameContainer, int)
 	 */
-	public final void update(GameContainer container, int delta) throws SlickException {
+	public final void update(GameContainer container, int delta) {
 		preUpdateState(container, delta);
 		
 		if (leaveTransition != null) {
@@ -274,9 +269,8 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * 
 	 * @param container The container in which the game is hosted
 	 * @param delta The amount of time in milliseconds since last update
-	 * @throws SlickException Indicates a failure within render
 	 */
-	protected void preUpdateState(GameContainer container, int delta) throws SlickException {
+	protected void preUpdateState(GameContainer container, int delta) {
 		// NO-OP
 	}
 	
@@ -288,7 +282,7 @@ public abstract class StateBasedGame implements Game, InputListener {
 	 * @param delta The amount of time in milliseconds since last update
 	 * @throws SlickException Indicates a failure within render
 	 */
-	protected void postUpdateState(GameContainer container, int delta) throws SlickException {
+	protected void postUpdateState(GameContainer container, int delta) {
 		// NO-OP
 	}
 	

@@ -19,7 +19,7 @@ public class ImageMemTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		try {
             Image img = new Image(2400, 2400);
             img.getGraphics();

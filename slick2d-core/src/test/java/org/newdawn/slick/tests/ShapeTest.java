@@ -9,7 +9,6 @@ import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.RoundedRectangle;
 import org.newdawn.slick.geom.Shape;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.opengl.renderer.Renderer;
 
@@ -64,7 +63,7 @@ public class ShapeTest extends BasicGame {
     /**
      * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
      */
-    public void init(GameContainer container) throws SlickException {
+    public void init(GameContainer container) {
         shapes = new ArrayList();
         rect = new Rectangle(10, 10, 100, 80);
         shapes.add(rect);

@@ -26,7 +26,7 @@ public class PolygonTest extends BasicGame {
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container) {
 		poly = new Polygon();
 		poly.addPoint(300, 100);
 		poly.addPoint(320, 200);

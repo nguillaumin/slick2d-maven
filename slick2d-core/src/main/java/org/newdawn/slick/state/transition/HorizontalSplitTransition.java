@@ -63,7 +63,7 @@ public class HorizontalSplitTransition implements Transition {
 	/**
 	 * @see org.newdawn.slick.state.transition.Transition#postRender(org.newdawn.slick.state.StateBasedGame, org.newdawn.slick.GameContainer, org.newdawn.slick.Graphics)
 	 */
-	public void postRender(StateBasedGame game, GameContainer container, Graphics g) throws SlickException {
+	public void postRender(StateBasedGame game, GameContainer container, Graphics g) {
 		g.translate(-offset, 0);
 		g.setClip((int)-offset,0,container.getWidth()/2,container.getHeight());
 		if (background != null) {
@@ -95,15 +95,13 @@ public class HorizontalSplitTransition implements Transition {
 	/**
 	 * @see org.newdawn.slick.state.transition.Transition#preRender(org.newdawn.slick.state.StateBasedGame, org.newdawn.slick.GameContainer, org.newdawn.slick.Graphics)
 	 */
-	public void preRender(StateBasedGame game, GameContainer container,
-			Graphics g) throws SlickException {
+	public void preRender(StateBasedGame game, GameContainer container, Graphics g) {
 	}
 
 	/**
 	 * @see org.newdawn.slick.state.transition.Transition#update(org.newdawn.slick.state.StateBasedGame, org.newdawn.slick.GameContainer, int)
 	 */
-	public void update(StateBasedGame game, GameContainer container, int delta)
-			throws SlickException {
+	public void update(StateBasedGame game, GameContainer container, int delta) {
 		offset += delta * 1f;
 		if (offset > container.getWidth() / 2) {
 			finish = true;

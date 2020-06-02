@@ -4,7 +4,6 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.TextField;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 
 /**
@@ -36,8 +35,12 @@ public class SavedStateTest extends BasicGame implements ComponentListener {
 	/**
 	 * @see org.newdawn.slick.Game#init(org.newdawn.slick.GameContainer)
 	 */
-	public void init(GameContainer container) throws SlickException {
-		state = new SavedState("testdata");
+	public void init(GameContainer container) {
+		try {
+			state = new SavedState("testdata");
+		} catch (SlickException e) {
+			throw new RuntimeException(e);
+		}
 		nameValue = state.getString("name","DefaultName");
 		ageValue = (int) state.getNumber("age",64);
 		
