@@ -66,6 +66,8 @@ public abstract class BasicGame implements Game, InputListener {
 	public void keyPressed(int key, char c) {
 	}
 
+	public void bindControls() {}
+
 	/**
 	 * @see org.newdawn.slick.InputListener#keyReleased(int, char)
 	 */

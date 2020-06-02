@@ -281,6 +281,7 @@ public class Animation implements Renderable {
 	 * Restart the animation from the beginning
 	 */
 	public void restart() {
+		LOG.info("restarting...");
 		if (frames.size() == 0) {
 			return;
 		}

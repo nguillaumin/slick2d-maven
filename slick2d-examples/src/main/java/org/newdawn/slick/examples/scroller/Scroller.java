@@ -116,21 +116,21 @@ public class Scroller extends BasicGame {
 	private void bindInput() {
 		// check the controls, left/right adjust the rotation of the tank, up/down
 		// move backwards and forwards
-		Input.bindKeyPress(USKeyboard.KEY_LEFT, () -> {
+		Input.bindKeyPress(USKeyboard.KEY_LEFT, true, () -> {
 			ang -= lastDelta * TANK_ROTATE_SPEED;
 			updateMovementVector();
 		});
-		Input.bindKeyPress(USKeyboard.KEY_RIGHT, () -> {
+		Input.bindKeyPress(USKeyboard.KEY_RIGHT, true, () -> {
 			ang += lastDelta * TANK_ROTATE_SPEED;
 			updateMovementVector();
 		});
-		Input.bindKeyPress(USKeyboard.KEY_UP, () -> {
+		Input.bindKeyPress(USKeyboard.KEY_UP, true, () -> {
 			if (tryMove(dirX * lastDelta * TANK_MOVE_SPEED, dirY * lastDelta * TANK_MOVE_SPEED)) {
 				// if we managed to move update the animation
 				player.update(lastDelta);
 			}
 		});
-		Input.bindKeyPress(USKeyboard.KEY_DOWN, () -> {
+		Input.bindKeyPress(USKeyboard.KEY_DOWN, true, () -> {
 			if (tryMove(-dirX * lastDelta * TANK_MOVE_SPEED, -dirY * lastDelta * TANK_MOVE_SPEED)) {
 				// if we managed to move update the animation
 				player.update(lastDelta);
@@ -254,7 +254,7 @@ public class Scroller extends BasicGame {
 	 * @param argv The argument passed on the command line (if any)
 	 */
 	public static void main(String[] argv) {
-		AppGameContainer container = new AppGameContainer(new Scroller(), 800, 600, DisplayMode.Opt.WINDOWED);
+		AppGameContainer container = new AppGameContainer(new Scroller(), 800, 600, DisplayMode.Opt.WINDOWED, 1);
 		container.start();
 	}
 }

@@ -46,12 +46,10 @@ public class AppGameContainer extends GameContainer {
 
 	private boolean initialized = false;
 
-	public AppGameContainer(Game game, int width, int height, DisplayMode.Opt displayType, boolean trash) throws SlickException {
-		this(game,width, height, displayType);
-	}
-
 	public AppGameContainer(Game game, int width, int height, DisplayMode.Opt displayType) {
 		super(game);
+		game.bindControls();
+		LOG.info("Controls bound.");
 
 		// Setup an error callback. The default implementation
 		// will print the error message in System.err.

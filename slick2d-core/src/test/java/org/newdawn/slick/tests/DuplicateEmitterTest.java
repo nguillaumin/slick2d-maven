@@ -93,13 +93,9 @@ public class DuplicateEmitterTest extends BasicGame {
 	 * @param argv The arguments to pass into the test, not used here
 	 */
 	public static void main(String[] argv) {
-		try {
-			AppGameContainer container = new AppGameContainer(new DuplicateEmitterTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
-			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
-			container.start();
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
+		AppGameContainer container = new AppGameContainer(new DuplicateEmitterTest(), 800, 600, DisplayMode.Opt.WINDOWED);
+		container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
+		container.start();
 	}
 
 }

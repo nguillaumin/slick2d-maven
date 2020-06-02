@@ -204,13 +204,9 @@ public class GeomUtilTest extends BasicGame implements GeomUtilListener {
 	 * @param argv The arguments passed to the test
 	 */
 	public static void main(String[] argv) {
-		try {
-			AppGameContainer container = new AppGameContainer(new GeomUtilTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
-			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
-			container.start();
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
+		AppGameContainer container = new AppGameContainer(new GeomUtilTest(), 800, 600, DisplayMode.Opt.WINDOWED);
+		container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
+		container.start();
 	}
 
 	public void pointExcluded(float x, float y) {

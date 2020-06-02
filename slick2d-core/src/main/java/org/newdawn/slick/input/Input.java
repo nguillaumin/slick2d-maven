@@ -238,10 +238,11 @@ public class Input {
 	}
 
 	public static void bindKeyPress(int boundKey, KeyPress.Action event) {
-		bindKeyPress(boundKey, true, event);
+		bindKeyPress(boundKey, false, event);
 	}
 
 	public static void bindKeyPress(int boundKey, boolean enableRepeatPress, KeyPress.Action event) {
+		LOG.info("Bound key: {} - repeatEnabled: {}", boundKey, enableRepeatPress);
 		keyPressBindings.put(boundKey, KeyPress.of(enableRepeatPress, event));
 	}
 
@@ -820,27 +821,6 @@ public class Input {
 						controllerPressed[i][c] = true;
 						controls[i][c] = true;
 						fireControlPress(c, i);
-					}
-				}
-			}
-		}
-		
-		if (keyRepeat) {
-			for (int i=0;i<1024;i++) {
-				if (pressed[i] && (nextRepeat[i] != 0)) {
-					if (System.currentTimeMillis() > nextRepeat[i]) {
-						nextRepeat[i] = System.currentTimeMillis() + keyRepeatInterval;
-						consumed = false;
-						for (int j=0;j<keyListeners.size();j++) {
-							KeyListener listener = keyListeners.get(j);
-
-							if (listener.isAcceptingInput()) {
-								listener.keyPressed(i, keys[i]);
-								if (consumed) {
-									break;
-								}
-							}
-						}
 					}
 				}
 			}

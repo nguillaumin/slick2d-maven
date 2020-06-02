@@ -75,22 +75,18 @@ public class ScalableTest extends BasicGame {
 //		}
 
 		// maintain aspect ratio
-		try {
-			ScalableGame game = new ScalableGame(new ScalableTest(),1024,568,true) {
+		ScalableGame game = new ScalableGame(new ScalableTest(),1024,568,true) {
 
-				protected void renderOverlay(GameContainer container, Graphics g) {
-					g.setColor(Color.white);
-					g.drawString("Outside The Game", 350, 10);
-					g.drawString(container.getInput().getMouseX()+","+container.getInput().getMouseY(), 400, 20);
-				}
-				
-			};
-			
-			AppGameContainer container = new AppGameContainer(game, 800, 600, DisplayMode.Opt.WINDOWED, false);
-			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
-			container.start();
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
+			protected void renderOverlay(GameContainer container, Graphics g) {
+				g.setColor(Color.white);
+				g.drawString("Outside The Game", 350, 10);
+				g.drawString(container.getInput().getMouseX()+","+container.getInput().getMouseY(), 400, 20);
+			}
+
+		};
+
+		AppGameContainer container = new AppGameContainer(game, 800, 600, DisplayMode.Opt.WINDOWED);
+		container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
+		container.start();
 	}
 }

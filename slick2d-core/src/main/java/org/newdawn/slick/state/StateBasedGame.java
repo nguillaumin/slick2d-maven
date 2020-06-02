@@ -58,14 +58,13 @@ public abstract class StateBasedGame implements Game, InputListener {
 		};
 	}
 
-	/**
-	 * @see org.newdawn.slick.ControlledInputReciever#inputStarted()
-	 */
+	public void bindControls() {}
+
 	public void inputStarted() {}
 	
 	/**
 	 * Get the number of states that have been added to this game
-	 * 
+	 *
 	 * @return The number of states that have been added to this game
 	 */
 	public int getStateCount() {

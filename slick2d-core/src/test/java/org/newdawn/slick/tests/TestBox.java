@@ -3,6 +3,7 @@ package org.newdawn.slick.tests;
 import java.util.ArrayList;
 
 import org.newdawn.slick.*;
+import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.opengl.SlickCallable;
 import org.newdawn.slick.util.Log;
@@ -45,6 +46,7 @@ public class TestBox extends BasicGame {
 	 * Move to the next game
 	 */
 	private void nextGame() {
+		LOG.info("Loading next game...");
 		if (index == -1) {
 			return;
 		}
@@ -56,6 +58,20 @@ public class TestBox extends BasicGame {
 	
 		startGame();
 	}
+
+	private void previousGame() {
+		LOG.info("Loading previous game...");
+		if (index == -1) {
+			return;
+		}
+
+		index--;
+		if (index < 0) {
+			index=0;
+		}
+
+		startGame();
+	}
 	
 	/**
 	 * Start a particular game
@@ -65,6 +81,7 @@ public class TestBox extends BasicGame {
 			currentGame = (BasicGame) ((Class) games.get(index)).newInstance();
 			container.getGraphics().setBackground(Color.black);
 			currentGame.init(container);
+			currentGame.bindControls();
 			currentGame.render(container, container.getGraphics());
 		} catch (Exception e) {
 			LOG.error(e);
@@ -72,7 +89,13 @@ public class TestBox extends BasicGame {
 		
 		container.setTitle(currentGame.getTitle());
 	}
-	
+
+	@Override
+	public void bindControls() {
+		Input.bindKeyPress(USKeyboard.KEY_ENTER, false, this::nextGame);
+		Input.bindKeyPress(USKeyboard.KEY_BACK, false, this::previousGame);
+	}
+
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
@@ -184,17 +207,6 @@ public class TestBox extends BasicGame {
 	}
 
 	/**
-	 * @see org.newdawn.slick.BasicGame#keyPressed(int, char)
-	 */
-	public void keyPressed(int key, char c) {
-		currentGame.keyPressed(key, c);
-		
-		if (key == USKeyboard.KEY_ENTER) {
-			nextGame();
-		}
-	}
-
-	/**
 	 * @see org.newdawn.slick.BasicGame#keyReleased(int, char)
 	 */
 	public void keyReleased(int key, char c) {
@@ -235,36 +247,32 @@ public class TestBox extends BasicGame {
 	 * @param argv The arguments to pass into the test
 	 */
 	public static void main(String[] argv) {
-		try {
-			TestBox box = new TestBox();
-			box.addGame(AnimationTest.class);
-			box.addGame(AntiAliasTest.class);
-			box.addGame(BigImageTest.class);
-			box.addGame(ClipTest.class);
-			box.addGame(DuplicateEmitterTest.class);
-			box.addGame(FlashTest.class);
-			box.addGame(FontPerformanceTest.class);
-			box.addGame(FontTest.class);
-			box.addGame(GeomTest.class);
-			box.addGame(GradientTest.class);
-			box.addGame(GraphicsTest.class);
-			box.addGame(ImageBufferTest.class);
-			box.addGame(ImageReadTest.class);
-			box.addGame(ImageTest.class);
-			box.addGame(KeyRepeatTest.class);
-			box.addGame(MusicListenerTest.class);
-			box.addGame(PackedSheetTest.class);
-			box.addGame(PedigreeTest.class);
-			box.addGame(PureFontTest.class);
-			box.addGame(ShapeTest.class);
-			box.addGame(SoundTest.class);
-			box.addGame(SpriteSheetFontTest.class);
-			box.addGame(TransparentColorTest.class);
-			
-			AppGameContainer container = new AppGameContainer(box, 800, 600, DisplayMode.Opt.WINDOWED, false);
-			container.start();
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
+		TestBox box = new TestBox();
+		box.addGame(AnimationTest.class);
+		box.addGame(AntiAliasTest.class);
+		box.addGame(BigImageTest.class);
+		box.addGame(ClipTest.class);
+		box.addGame(DuplicateEmitterTest.class);
+		box.addGame(FlashTest.class);
+		box.addGame(FontPerformanceTest.class);
+		box.addGame(FontTest.class);
+		box.addGame(GeomTest.class);
+		box.addGame(GradientTest.class);
+		box.addGame(GraphicsTest.class);
+		box.addGame(ImageBufferTest.class);
+		box.addGame(ImageReadTest.class);
+		box.addGame(ImageTest.class);
+		box.addGame(KeyRepeatTest.class);
+		box.addGame(MusicListenerTest.class);
+		box.addGame(PackedSheetTest.class);
+		box.addGame(PedigreeTest.class);
+		box.addGame(PureFontTest.class);
+		box.addGame(ShapeTest.class);
+		box.addGame(SoundTest.class);
+		box.addGame(SpriteSheetFontTest.class);
+		box.addGame(TransparentColorTest.class);
+
+		AppGameContainer container = new AppGameContainer(box, 800, 600, DisplayMode.Opt.WINDOWED);
+		container.start();
 	}
 }

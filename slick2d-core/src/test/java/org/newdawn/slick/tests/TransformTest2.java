@@ -36,7 +36,7 @@ public class TransformTest2 extends BasicGame {
    public TransformTest2() {
       super("Transform Test");
    }
-   
+
    /**
     * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
     */
@@ -154,12 +154,8 @@ public class TransformTest2 extends BasicGame {
     * @param argv The arguments passed to the test
     */
    public static void main(String[] argv) {
-      try {
-         AppGameContainer container = new AppGameContainer(new TransformTest2(), 800, 600, DisplayMode.Opt.WINDOWED, false);
-         container.setDisplayMode(640,480, DisplayMode.Opt.WINDOWED);
-         container.start();
-      } catch (SlickException e) {
-         e.printStackTrace();
-      }
+      AppGameContainer container = new AppGameContainer(new TransformTest2(), 800, 600, DisplayMode.Opt.WINDOWED);
+      container.setDisplayMode(640,480, DisplayMode.Opt.WINDOWED);
+      container.start();
    }
 } 

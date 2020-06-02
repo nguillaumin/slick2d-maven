@@ -119,7 +119,7 @@ public class ImageTest extends BasicGame {
 				exitMe = true;
 			}
 			
-			AppGameContainer container = new AppGameContainer(new ImageTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
+			AppGameContainer container = new AppGameContainer(new ImageTest(), 800, 600, DisplayMode.Opt.WINDOWED);
 			container.setForceExit(!sharedContextTest);
 			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
@@ -127,7 +127,7 @@ public class ImageTest extends BasicGame {
 			if (sharedContextTest) {
 				System.out.println("Exit first instance");
 				exitMe = false;
-				container = new AppGameContainer(new ImageTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
+				container = new AppGameContainer(new ImageTest(), 800, 600, DisplayMode.Opt.WINDOWED);
 				container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 				container.start();
 			}

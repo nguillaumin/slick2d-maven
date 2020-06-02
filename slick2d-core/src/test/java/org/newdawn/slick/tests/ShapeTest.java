@@ -274,13 +274,9 @@ public class ShapeTest extends BasicGame {
      * @param argv The arguments passed to the test
      */
     public static void main(String[] argv) {
-        try {
-        	Renderer.setRenderer(Renderer.VERTEX_ARRAY_RENDERER);
-            AppGameContainer container = new AppGameContainer(new ShapeTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
-            container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
-            container.start();
-        } catch (SlickException e) {
-            e.printStackTrace();
-        }
+        Renderer.setRenderer(Renderer.VERTEX_ARRAY_RENDERER);
+        AppGameContainer container = new AppGameContainer(new ShapeTest(), 800, 600, DisplayMode.Opt.WINDOWED);
+        container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
+        container.start();
     }
 }

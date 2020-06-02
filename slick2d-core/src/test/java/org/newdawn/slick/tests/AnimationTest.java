@@ -1,6 +1,7 @@
 package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
+import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.util.Log;
 
@@ -31,7 +32,13 @@ public class AnimationTest extends BasicGame {
 	public AnimationTest() {
 		super("Animation Test");
 	}
-	
+
+	@Override
+	public void bindControls() {
+		Input.bindKeyPress(USKeyboard.KEY_ESCAPE, container::exit);
+		Input.bindKeyPress(USKeyboard.KEY_SPACE, limited::restart);
+	}
+
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
@@ -60,6 +67,8 @@ public class AnimationTest extends BasicGame {
 			LOG.error("Caught exception: {}", e);
 			System.exit(-1);
 		}
+
+		bindControls();
 	}
 
 	/**
@@ -99,24 +108,14 @@ public class AnimationTest extends BasicGame {
 	 * @param argv The arguments to pass into the test
 	 */
 	public static void main(String[] argv) {
-		try {
-			AppGameContainer container = new AppGameContainer(new AnimationTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
-			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
-			container.start();
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
+		AppGameContainer container = new AppGameContainer(new AnimationTest(), 800, 600, DisplayMode.Opt.WINDOWED);
+		container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
+		container.start();
 	}
 
 	/**
 	 * @see org.newdawn.slick.BasicGame#keyPressed(int, char)
 	 */
 	public void keyPressed(int key, char c) {
-		if (key == USKeyboard.KEY_ESCAPE) {
-			container.exit();
-		}
-		if (key == USKeyboard.KEY_SPACE) {
-			limited.restart();
-		}
 	}
 }

@@ -58,7 +58,9 @@ public class ScalableGame implements Game {
 		this.normalHeight = normalHeight;
 		this.maintainAspect = maintainAspect;
 	}
-	
+
+	public void bindControls() {}
+
 	/**
 	 * @see org.newdawn.slick.BasicGame#init(org.newdawn.slick.GameContainer)
 	 */
