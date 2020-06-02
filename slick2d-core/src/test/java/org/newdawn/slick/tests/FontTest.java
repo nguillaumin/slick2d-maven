@@ -77,11 +77,7 @@ public class FontTest extends BasicGame {
 			System.exit(0);
 		}
 		if (key == USKeyboard.KEY_SPACE) {
-			try {
-				container.setDisplayMode(640, 480, DisplayMode.Opt.WINDOWED);
-			} catch (SlickException e) {
-				LOG.error(e);
-			}
+			container.setDisplayMode(640, 480, DisplayMode.Opt.WINDOWED);
 		}
 	}
 	
@@ -95,7 +91,7 @@ public class FontTest extends BasicGame {
 	 */
 	public static void main(String[] argv) {
 		try {
-			container = new AppGameContainer(new FontTest());
+			container = new AppGameContainer(new FontTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
 			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {

@@ -106,7 +106,7 @@ public class GradientTest extends BasicGame {
 		try {
 			Renderer.setRenderer(Renderer.VERTEX_ARRAY_RENDERER);
 			
-			AppGameContainer container = new AppGameContainer(new GradientTest());
+			AppGameContainer container = new AppGameContainer(new GradientTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
 			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {

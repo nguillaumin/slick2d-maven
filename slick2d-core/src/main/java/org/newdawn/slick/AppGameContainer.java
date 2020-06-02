@@ -44,8 +44,10 @@ public class AppGameContainer extends GameContainer {
 	/** Alpha background supported */
 	protected boolean alphaSupport = false;
 
-	public AppGameContainer(Game game) throws SlickException {
-		this(game,640,480, DisplayMode.Opt.WINDOWED);
+	private boolean initialized = false;
+
+	public AppGameContainer(Game game, int width, int height, DisplayMode.Opt displayType, boolean trash) throws SlickException {
+		this(game,width, height, displayType);
 	}
 
 	public AppGameContainer(Game game, int width, int height, DisplayMode.Opt displayType) {
@@ -64,7 +66,7 @@ public class AppGameContainer extends GameContainer {
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
-		makeNewWindow(width,height, displayType);
+		setDisplayMode(width,height, displayType);
 
 		// Setup a key callback. It will be called every time a key is pressed, repeated or released.
 		glfwSetKeyCallback(GAME_WINDOW, (window, key, scancode, action, mods) -> {
@@ -133,11 +135,15 @@ public class AppGameContainer extends GameContainer {
 		DisplayMode.setDisplayMode(width, height, displayOption);
 	}
 
-	public void setDisplayMode(int width, int height, DisplayMode.Opt displayOption) throws SlickException {
+	public void setDisplayMode(int width, int height, DisplayMode.Opt displayOption) {
 		makeNewWindow(width, height, displayOption);
 
-		initGL();
-		enterOrtho();
+		if (!initialized) {
+//			initGL();
+//			enterOrtho();
+			initialized = true;
+		}
+
 
 		// TODO what does this do?
 		//		if (targetDisplayMode.getBitsPerPixel() == 16) {

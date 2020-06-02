@@ -117,7 +117,7 @@ public class InkscapeTest extends BasicGame {
 			Renderer.setRenderer(Renderer.VERTEX_ARRAY_RENDERER);
 			Renderer.setLineStripRenderer(Renderer.QUAD_BASED_LINE_STRIP_RENDERER);
 			
-			AppGameContainer container = new AppGameContainer(new InkscapeTest());
+			AppGameContainer container = new AppGameContainer(new InkscapeTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
 			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {

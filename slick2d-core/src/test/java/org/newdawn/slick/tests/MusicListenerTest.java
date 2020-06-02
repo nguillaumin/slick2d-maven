@@ -97,7 +97,7 @@ public class MusicListenerTest extends BasicGame implements MusicListener {
 	 */
 	public static void main(String[] argv) {
 		try {
-			AppGameContainer container = new AppGameContainer(new MusicListenerTest());
+			AppGameContainer container = new AppGameContainer(new MusicListenerTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
 			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {

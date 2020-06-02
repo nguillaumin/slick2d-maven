@@ -122,11 +122,7 @@ public class GUITest extends BasicGame implements ComponentListener {
 		}
 		if (key == USKeyboard.KEY_F1) {
 			if (app != null) {
-				try {
-					app.setDisplayMode(640,480, DisplayMode.Opt.WINDOWED);
-				} catch (SlickException e) {
-					LOG.error(e);
-				}
+				app.setDisplayMode(640,480, DisplayMode.Opt.WINDOWED);
 			}
 		}
 	}
@@ -138,7 +134,7 @@ public class GUITest extends BasicGame implements ComponentListener {
 	 */
 	public static void main(String[] argv) {
 		try {
-			AppGameContainer container = new AppGameContainer(new GUITest());
+			AppGameContainer container = new AppGameContainer(new GUITest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
 			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {

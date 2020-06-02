@@ -88,7 +88,7 @@ public class CurveTest extends BasicGame {
 	 */
 	public static void main(String argv[]) {
 		try {
-			AppGameContainer container = new AppGameContainer(new CurveTest());
+			AppGameContainer container = new AppGameContainer(new CurveTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
 			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {

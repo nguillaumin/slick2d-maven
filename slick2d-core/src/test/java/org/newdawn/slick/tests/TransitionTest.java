@@ -1,7 +1,6 @@
 package org.newdawn.slick.tests;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.input.Input;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -154,7 +153,7 @@ public class TransitionTest extends StateBasedGame {
 	public static void main(String[] argv) {
 		try {
 			AppGameContainer container = new AppGameContainer(
-					new TransitionTest());
+					new TransitionTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
 			container.setDisplayMode(800, 600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {

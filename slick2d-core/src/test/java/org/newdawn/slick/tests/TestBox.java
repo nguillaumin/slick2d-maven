@@ -261,8 +261,7 @@ public class TestBox extends BasicGame {
 			box.addGame(SpriteSheetFontTest.class);
 			box.addGame(TransparentColorTest.class);
 			
-			AppGameContainer container = new AppGameContainer(box);
-			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
+			AppGameContainer container = new AppGameContainer(box, 800, 600, DisplayMode.Opt.WINDOWED, false);
 			container.start();
 		} catch (SlickException e) {
 			e.printStackTrace();

@@ -61,7 +61,7 @@ public class LameTest extends BasicGame {
 	 */
 	public static void main(String[] argv) {
 		try {
-			AppGameContainer container = new AppGameContainer(new LameTest());
+			AppGameContainer container = new AppGameContainer(new LameTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
 			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {

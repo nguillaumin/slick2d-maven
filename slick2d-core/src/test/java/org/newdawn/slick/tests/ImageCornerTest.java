@@ -83,7 +83,7 @@ public class ImageCornerTest extends BasicGame {
 		boolean sharedContextTest = false;
 		
 		try {
-			AppGameContainer container = new AppGameContainer(new ImageCornerTest());
+			AppGameContainer container = new AppGameContainer(new ImageCornerTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
 			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {

@@ -152,7 +152,7 @@ public class ImageGraphicsTest extends BasicGame {
 		try {
 			GraphicsFactory.setUseFBO(false);
 			
-			AppGameContainer container = new AppGameContainer(new ImageGraphicsTest());
+			AppGameContainer container = new AppGameContainer(new ImageGraphicsTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
 			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {

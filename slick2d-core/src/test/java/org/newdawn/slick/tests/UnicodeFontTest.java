@@ -88,7 +88,7 @@ public class UnicodeFontTest extends BasicGame {
 	 */
 	public static void main(String[] args) throws SlickException, IOException {
 		Input.disableControllers();
-		AppGameContainer container = new AppGameContainer(new UnicodeFontTest());
+		AppGameContainer container = new AppGameContainer(new UnicodeFontTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
 		container.setDisplayMode(512, 600, DisplayMode.Opt.WINDOWED);
 		container.setTargetFrameRate(20);
 		container.start();

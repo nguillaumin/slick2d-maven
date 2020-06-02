@@ -231,7 +231,7 @@ public class SlickCallableTest extends BasicGame {
 	 */
 	public static void main(String[] argv) {
 		try {
-			AppGameContainer container = new AppGameContainer(new SlickCallableTest());
+			AppGameContainer container = new AppGameContainer(new SlickCallableTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
 			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {

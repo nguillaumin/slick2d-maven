@@ -87,7 +87,7 @@ public class LineRenderTest extends BasicGame {
 			Renderer.setLineStripRenderer(Renderer.QUAD_BASED_LINE_STRIP_RENDERER);
 			Renderer.getLineStripRenderer().setLineCaps(true);
 			
-			AppGameContainer container = new AppGameContainer(new LineRenderTest());
+			AppGameContainer container = new AppGameContainer(new LineRenderTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
 			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {

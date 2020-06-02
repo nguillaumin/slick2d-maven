@@ -39,7 +39,7 @@ public class StateBasedTest extends StateBasedGame {
 	 */
 	public static void main(String[] argv) {
 		try {
-			AppGameContainer container = new AppGameContainer(new StateBasedTest());
+			AppGameContainer container = new AppGameContainer(new StateBasedTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
 			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {

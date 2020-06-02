@@ -96,7 +96,7 @@ public class TransformTest extends BasicGame {
 	 */
 	public static void main(String[] argv) {
 		try {
-			AppGameContainer container = new AppGameContainer(new TransformTest());
+			AppGameContainer container = new AppGameContainer(new TransformTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
 			container.setDisplayMode(640,480, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {

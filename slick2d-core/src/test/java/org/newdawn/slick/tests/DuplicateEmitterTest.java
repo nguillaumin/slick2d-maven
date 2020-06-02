@@ -1,7 +1,5 @@
 package org.newdawn.slick.tests;
 
-import java.io.IOException;
-
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.particles.ConfigurableEmitter;
@@ -96,7 +94,7 @@ public class DuplicateEmitterTest extends BasicGame {
 	 */
 	public static void main(String[] argv) {
 		try {
-			AppGameContainer container = new AppGameContainer(new DuplicateEmitterTest());
+			AppGameContainer container = new AppGameContainer(new DuplicateEmitterTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
 			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {

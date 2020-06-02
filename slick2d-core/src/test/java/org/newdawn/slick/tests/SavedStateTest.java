@@ -85,7 +85,7 @@ public class SavedStateTest extends BasicGame implements ComponentListener {
 	 */
 	public static void main(String[] argv) {
 		try {
-			container = new AppGameContainer(new SavedStateTest());
+			container = new AppGameContainer(new SavedStateTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
 			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {

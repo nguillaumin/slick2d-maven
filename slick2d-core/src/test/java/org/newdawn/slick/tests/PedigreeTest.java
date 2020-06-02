@@ -1,7 +1,5 @@
 package org.newdawn.slick.tests;
 
-import java.rmi.server.ExportException;
-
 import org.newdawn.slick.*;
 import org.newdawn.slick.input.sources.keymaps.USKeyboard;
 import org.newdawn.slick.particles.ConfigurableEmitter;
@@ -99,7 +97,7 @@ public class PedigreeTest extends BasicGame {
 	 */
 	public static void main(String[] argv) {
 		try {
-			AppGameContainer container = new AppGameContainer(new PedigreeTest());
+			AppGameContainer container = new AppGameContainer(new PedigreeTest(), 800, 600, DisplayMode.Opt.WINDOWED, false);
 			container.setDisplayMode(800,600, DisplayMode.Opt.WINDOWED);
 			container.start();
 		} catch (SlickException e) {

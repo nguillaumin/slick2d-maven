@@ -152,14 +152,10 @@ public class CanvasGameContainer extends Canvas {
 		 */
 		public void checkDimensions() {
 			if ((width != CanvasGameContainer.this.getWidth()) ||
-			    (height != CanvasGameContainer.this.getHeight())) {
+					(height != CanvasGameContainer.this.getHeight())) {
 				
-				try {
-					setDisplayMode(CanvasGameContainer.this.getWidth(), 
-								   CanvasGameContainer.this.getHeight(), DisplayMode.Opt.WINDOWED);
-				} catch (SlickException e) {
-					LOG.error(e);
-				}
+				setDisplayMode(CanvasGameContainer.this.getWidth(),
+						CanvasGameContainer.this.getHeight(), DisplayMode.Opt.WINDOWED);
 			}
 		}
 	}
